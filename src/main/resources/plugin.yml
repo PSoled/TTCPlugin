@@ -1,0 +1,23 @@
+name: TTC-Soled
+version: 1.0
+main: com.totalcraft.soled.Main
+author: PlayerSoled
+description: Um Plugin Brabo
+
+commands:
+  rankup:
+    description: Executa o comando de Rankup
+    usage: /rankup
+    executor: com.totalcraft.soled.Rankup
+
+  module:
+    description: Executa o comando de Module
+    permission: ttcplugin.admin
+    usage: /module
+    executor: com.totalcraft.soled.Modules
+
+  mina:
+    description: Executa o comando de Iniciar a Mina
+    permission: ttcplugin.admin
+    usage: /mina
+    executor: com.totalcraft.soled.EventoMina
