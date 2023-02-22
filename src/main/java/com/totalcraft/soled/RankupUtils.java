@@ -1,40 +1,45 @@
 package com.totalcraft.soled;
 
 import org.bukkit.entity.Player;
+import ru.tehkode.permissions.PermissionManager;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
+import ru.tehkode.permissions.events.PermissionEntityEvent;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.bukkit.Bukkit.getPlayer;
+import static org.bukkit.Bukkit.getServer;
+
 public class RankupUtils {
 
     List<String> listGroups = Arrays.asList("Civil", "VipAdvanced", "VipHybrid", "VipUltimate", "VipQuantum", "VipDragon", "VipTotal");
-    List<String> ranksList = Arrays.asList("rank.civil", "rank.pedra", "rank.carvao", "rank.ferro", "rank.ouro", "rank.diamante", "rank.esmeralda", "rank.netherstar");
+    List<String> ranksList = Arrays.asList("rankCivil", "rankPedra", "rankCarvao", "rankFerro", "rankOuro", "rankDiamante", "rankEsmeralda", "rankNetherstar");
 
     public Map<String, String> listRanksTags() {
         Map<String, String> rankTags = new HashMap<>();
-        rankTags.put("rank.pedra", "&7[Pedra]");
-        rankTags.put("rank.carvao", "&8[Carvão]");
-        rankTags.put("rank.ferro", "&f[Ferro]");
-        rankTags.put("rank.ouro", "&6[Ouro]");
-        rankTags.put("rank.diamante", "&b[Diamante]");
-        rankTags.put("rank.esmeralda", "&a[Esmeralda]");
-        rankTags.put("rank.netherstar", "&d[NetherStar]");
+        rankTags.put("rankPedra", "&b=&f[&7Pedra&f]&b=-");
+        rankTags.put("rankCarvao", "&b=&f[&8Carvão&f]&b=-");
+        rankTags.put("rankFerro", "&b=&f[&fFerro&f]&b=-");
+        rankTags.put("rankOuro", "&b=&f[&eOuro&f]&b=-");
+        rankTags.put("rankDiamante", "&b=&f[&bDiamante&f]&b=-");
+        rankTags.put("rankEsmeralda", "&b=&f[&aEsmeralda&f]&b=-");
+        rankTags.put("rankNetherstar", "&b=&f[&dNetherStar&f]&b=-");
         return rankTags;
     }
 
     public Map<String, Integer> listPriceitem() {
         Map<String, Integer> itemCost = new HashMap<>();
-        itemCost.put("rank.pedra", 1);
-        itemCost.put("rank.carvao", 1);
-        itemCost.put("rank.ferro", 1);
-        itemCost.put("rank.ouro", 1);
-        itemCost.put("rank.diamante", 2);
-        itemCost.put("rank.esmeralda", 2);
-        itemCost.put("rank.netherstar", 3);
+        itemCost.put("rankPedra", 1);
+        itemCost.put("rankCarvao", 1);
+        itemCost.put("rankFerro", 1);
+        itemCost.put("rankOuro", 1);
+        itemCost.put("rankDiamante", 2);
+        itemCost.put("rankEsmeralda", 2);
+        itemCost.put("rankNetherstar", 3);
         return itemCost;
     }
 
@@ -54,14 +59,14 @@ public class RankupUtils {
                 return ranks;
             }
         }
-        return "rank.civil";
+        return "rankCivil";
     }
 
     public String getNextRank(Player player, List<String> ranksList) {
         String currentRank = getCurrentRank(player, ranksList);
         int index = ranksList.indexOf(currentRank);
         if (index == ranksList.size() - 1) {
-            return "rank.netherstar";
+            return "rankNetherstar";
         }
         return ranksList.get(index + 1);
     }
@@ -75,7 +80,8 @@ public class RankupUtils {
         user.removePermission(rank);
         user.addPermission(nextRank);
 
-        user.removePermission("ChestShop.profit." + group + "." + rank);
+        user.removePermission("ChestShop.profit." + group + rank);
+        user.removePermission("ChestShop.profit." + group);
     }
 
     public String getGroup(Player player, List<String> listGroups) {
@@ -94,11 +100,32 @@ public class RankupUtils {
         for (String group : listGroups) {
             if (!group.equals(currentGroup)) {
                 for (String rank : ranksList) {
-                    String permission = "ChestShop.profit." + group + "." + rank;
-                    if (user.has(permission)) {
-                        user.removePermission(permission);
-                    }
+                    String permissionRank = "ChestShop.profit." + group + rank;
+                    String permission = "ChestShop.profit." + group;
+                    user.removePermission(permissionRank);
+                    user.removePermission(permission);
                 }
+            }
+        }
+    }
+
+    public void eventSetRank(String playerName) {
+        Player player = getPlayer(playerName);
+        PermissionManager permissionManager = PermissionsEx.getPermissionManager();
+        PermissionUser user = permissionManager.getUser(playerName);
+        String newGroup = user.getGroups()[0].getName();
+        if (ranksList.stream().anyMatch(user::has) && listGroups.stream().anyMatch(user::inGroup)) {
+            String currentRank = getCurrentRank(player, ranksList);
+            String newPermission = "ChestShop.profit." + newGroup + currentRank;
+            if (!user.has(newPermission)) {
+                user.addPermission(newPermission);
+                removeAllPerms(player, ranksList, listGroups);
+            }
+        } else if (ranksList.stream().noneMatch(user::has) && listGroups.stream().anyMatch(user::inGroup)) {
+            String newPermission = "ChestShop.profit." + newGroup;
+            if (!user.has(newPermission)) {
+                user.addPermission(newPermission);
+                removeAllPerms(player, ranksList, listGroups);
             }
         }
     }
@@ -106,5 +133,4 @@ public class RankupUtils {
     public int getRankNumber(String currentRank, List<String> ranksList) {
         return ranksList.indexOf(currentRank) + 1;
     }
-
 }

@@ -10,14 +10,17 @@ commands:
     usage: /rankup
     executor: com.totalcraft.soled.Rankup
 
+  tagrank:
+    description: Executa o comando de set Tag Rank
+    usage: /tagrank
+    executor: com.totalcraft.soled.TagRank
+
   module:
     description: Executa o comando de Module
-    permission: ttcplugin.admin
     usage: /module
     executor: com.totalcraft.soled.Modules
 
   mina:
     description: Executa o comando de Iniciar a Mina
-    permission: ttcplugin.admin
     usage: /mina
     executor: com.totalcraft.soled.EventoMina
