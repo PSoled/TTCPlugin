@@ -88,7 +88,8 @@ public class prefixMsgs {
                 "\n&c/mina start &b(Opcional): &e<Segundos> <Minutos>" +
                 "\n&cObs: &fO start Mina por padrão é 120 Segundos para Iniciar e 5 Minutos de duração" +
                 "\n&c/mina stop &eParar todo Evento Mina" +
-                "\n&c/mina reset &eResetar blocos da Mina");
+                "\n&c/mina reset &eResetar blocos da Mina" +
+                "\n&c/mina stats &eVer Status da Mina");
 
         if (!(sender instanceof Player)) {
             return msg;

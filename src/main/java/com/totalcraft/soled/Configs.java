@@ -9,8 +9,7 @@ import java.util.List;
 public class Configs {
     public static File configFile;
     public static YamlConfiguration config;
-    private Modules modules;
-    private Main main;
+    private final Main main;
     public static boolean rankupModule;
     public static boolean eventGroupChangeModule;
     public static String worldLocatinaMina = "spawn";
@@ -62,32 +61,31 @@ public class Configs {
 
         config.set("blocksReset", blocks);
         config.options().copyDefaults(true);
+        saveConfig();
+
+        Modules modules = new Modules();
+        modules.setMainInstance(this);
+    }
+
+    public void saveConfig() {
         try {
             config.save(configFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        modules = new Modules();
-        modules.setMainInstance(this);
     }
 
     public void setRankupModule(boolean value) {
         rankupModule = value;
         config.set("rankupModule", value);
-        try {
-            config.save(configFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        saveConfig();
     }
 
     public void setEventGroupChangeModule(boolean value) {
         eventGroupChangeModule = value;
         config.set("eventGroupChangeModule", value);
-        try {
-            config.save(configFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        saveConfig();
     }
+
+
 }

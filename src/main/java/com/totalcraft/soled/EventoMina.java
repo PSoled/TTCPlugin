@@ -12,30 +12,38 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
+import ru.tehkode.permissions.PermissionUser;
+import ru.tehkode.permissions.bukkit.PermissionsEx;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.totalcraft.soled.Utils.getDelayTps;
 import static com.totalcraft.soled.prefixMsgs.*;
 
 public class EventoMina extends JavaPlugin implements Listener {
     Utils utils = new Utils();
-    public boolean eventoAtivo = false;
-    public boolean eventoStop = false;
-    public Location locationEvento = new Location(Bukkit.getWorld(Configs.worldLocatinaMina), Configs.xLocatinaMina, Configs.yLocatinaMina, Configs.zLocatinaMina);
-    HashMap<String, Location> playerLocations = new HashMap<>();
+    public static boolean eventoAtivo;
+    public boolean eventoStop;
     public int timeLeft = 120;
     public int minaDuration = 5;
+    public Location locationEvento = new Location(Bukkit.getWorld(Configs.worldLocatinaMina), Configs.xLocatinaMina, Configs.yLocatinaMina, Configs.zLocatinaMina);
+    static HashMap<String, Location> playerLocations = new HashMap<>();
+    public static List<String> minaPlayers = new ArrayList<>();
+    public List<Player> mPlayers = new ArrayList<>();
+    static ItemStack pickaxe = EventoMinaUtils.createPickaxe(5, 3, 3);
+    Material vajra = Material.getMaterial(30477);
+    Material godPick = Material.getMaterial(4386);
+    Material godStaff = Material.getMaterial(4388);
     int vTimeLeft = timeLeft;
     int vMinaDuration = minaDuration;
-    List<Player> minaPlayers = new ArrayList<>();
-    ItemStack pickaxe = EventoMinaUtils.createPickaxe(5, 3, 3);
-    Material vajra = Material.getMaterial(30477);
     private BukkitTask questionTask;
-    private boolean bQuestionTask = false;
-    int question = 20;
+    private boolean bQuestionTask;
+    private BukkitTask tpsTask;
+    int question = 10;
     private BukkitTask verificationPlayer;
     private final Plugin plugin;
 
@@ -52,6 +60,7 @@ public class EventoMina extends JavaPlugin implements Listener {
                 case "reset":
                 case "entrar":
                 case "sair":
+                case "stats":
                     break;
                 default:
                     sender.sendMessage(getCommandsMina(sender));
@@ -90,20 +99,19 @@ public class EventoMina extends JavaPlugin implements Listener {
                 sender.sendMessage(getPmTTC("&cNenhum dos dois valores pode ser 0 BOBÃO"));
                 return true;
             }
-
+            tpsTask = new Utils.TpsTask().runTaskTimer(plugin, 1L, 1L);
             sender.sendMessage(getPmTTC("Evento Mina irá iniciar em " + question + " Segundos"));
             sender.sendMessage("");
             sender.sendMessage(getPmTTC("Tempo para iniciar Mina foi setado para &b" + vTimeLeft + " Segundos"));
             sender.sendMessage(getPmTTC("Tempo de duração da Mina foi setado para &b" + vMinaDuration + " Minutos"));
             sender.sendMessage("");
             sender.sendMessage(getPmTTC("&cSe deseja mudar os valores use /mina stop e veja /mina"));
-
             bQuestionTask = true;
             questionTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
                 if (question <= 0) {
                     eventoAtivo = true;
                     startEventomina();
-                    question = 20;
+                    question = 10;
                     bQuestionTask = false;
                     questionTask.cancel();
                     return;
@@ -111,14 +119,15 @@ public class EventoMina extends JavaPlugin implements Listener {
                     sender.sendMessage("");
                     sender.sendMessage(getPmTTC("&cEvento mina parado"));
                     sender.sendMessage("");
-                    question = 20;
+                    question = 10;
                     eventoStop = false;
                     bQuestionTask = false;
                     questionTask.cancel();
+                    tpsTask.cancel();
                     return;
                 }
                 question--;
-            }, 0L, 20L);
+            }, 20L, 20L);
         }
         if (command.getName().
                 equalsIgnoreCase("mina") && args.length > 0 && args[0].
@@ -142,8 +151,8 @@ public class EventoMina extends JavaPlugin implements Listener {
                     }
                 }
             }
-
-            minaPlayers.add(player);
+            minaPlayers.add(player.getName());
+            mPlayers.add(player);
             playerLocations.put(player.getName(), player.getLocation());
             player.teleport(locationEvento);
 
@@ -155,22 +164,26 @@ public class EventoMina extends JavaPlugin implements Listener {
                     verificationPlayer.cancel();
                     return;
                 }
-                Iterator<Player> it = minaPlayers.iterator();
+                Iterator<Player> it = mPlayers.iterator();
                 while (it.hasNext()) {
                     Player minaPlayer = it.next();
-                    if (minaPlayer.isFlying() && utils.getAdm(sender)) {
+                    if (minaPlayer == null) {
+                        continue;
+                    }
+                    PermissionUser user = PermissionsEx.getUser(minaPlayer);
+                    if (minaPlayer.isFlying() && !user.has("ttcplugin.admin")) {
                         minaPlayer.setFlying(false);
                         minaPlayer.sendMessage(getPmTTC("&cSeu fly foi desativado no evento"));
                     }
                     for (ItemStack item : minaPlayer.getInventory().getContents()) {
-                        if (item == null || item.getType() != vajra) {
+                        if (item == null || (item.getType() != vajra && item.getType() != godPick && item.getType() != godStaff)) {
                             continue;
                         }
                         Bukkit.getScheduler().runTask(plugin, () -> {
                             Bukkit.getServer().dispatchCommand(minaPlayer, "mina sair");
                             it.remove();
                         });
-                        Bukkit.broadcastMessage(getPmTTC("&cO Player &f" + minaPlayer.getName() + " &Ctentou usar vajra no Evento Mina Rs"));
+                        Bukkit.broadcastMessage(getPmTTC(minaPlayer.getName() + " &Ctentou usar itens errados no Evento Mina Rs"));
                         break;
                     }
                 }
@@ -188,6 +201,9 @@ public class EventoMina extends JavaPlugin implements Listener {
                 sender.sendMessage(getPmTTC("&cEvento mina não está ocorrendo, Bobão"));
                 return true;
             }
+            Bukkit.broadcastMessage("");
+            Bukkit.broadcastMessage(getPmTTC("&lO Evento Mina foi para por um ADM"));
+            Bukkit.broadcastMessage("");
             eventoStop();
         }
         if (command.getName().
@@ -206,7 +222,7 @@ public class EventoMina extends JavaPlugin implements Listener {
             }
             Player player = (Player) sender;
             PlayerInventory inventory = player.getInventory();
-            if (!minaPlayers.contains(player)) {
+            if (!minaPlayers.contains(player.getName())) {
                 sender.sendMessage(getPmTTC("&cQuer sair do evento que você não está ???"));
                 return true;
             }
@@ -218,7 +234,8 @@ public class EventoMina extends JavaPlugin implements Listener {
                 }
             }
             sender.sendMessage(getPmTTC("&fVocê saiu do Evento Mina"));
-            minaPlayers.remove(player);
+            minaPlayers.remove(player.getName());
+            mPlayers.remove(player);
 
             player.teleport(playerLocations.get(player.getName()));
         }
@@ -231,6 +248,26 @@ public class EventoMina extends JavaPlugin implements Listener {
             }
             EventoMinaUtils.placeRandomBlocks();
             sender.sendMessage(getPmTTC("&f&lMina Resetada"));
+        }
+        if (command.getName().
+                equalsIgnoreCase("mina") && args.length > 0 && args[0].
+                equalsIgnoreCase("stats")) {
+
+            if (utils.getAdm(sender)) {
+                sender.sendMessage(getPmNotAdm());
+                return true;
+            }
+            if (!eventoAtivo) {
+                sender.sendMessage(getPmTTC("&cO evento não está ocorrendo"));
+                return true;
+
+            }
+            DecimalFormat df = new DecimalFormat("#.##");
+            double tps = 20 / Utils.tps;
+            sender.sendMessage(getPmTTC("&bStatus do Evento Mina\n" +
+                    "\n&eJogadores no Evento: &a" + minaPlayers.size() +
+                    "\n&eVelocidade dos Delay: &a" + df.format(tps) + "x" +
+                    "\n&eTps do Server: &a" + Utils.tps));
         }
         return true;
     }
@@ -260,7 +297,7 @@ public class EventoMina extends JavaPlugin implements Listener {
             Bukkit.broadcastMessage("");
 
             vTimeLeft -= 30;
-        }, 0L, 20L * 30);
+        }, 0L, getDelayTps(20 * 30));
     }
 
     public void eventoMina() {
@@ -294,14 +331,15 @@ public class EventoMina extends JavaPlugin implements Listener {
             Bukkit.broadcastMessage("");
 
             vMinaDuration--;
-        }, 20L * 60, 20L * 60);
+        }, getDelayTps(20 * 60), getDelayTps(20 * 60));
     }
 
     public void eventoStop() {
         eventoStop = true;
         if (eventoAtivo) {
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "rg flag mina build -w spawn deny");
-            for (Player player : minaPlayers) {
+
+            for (Player player : mPlayers) {
                 player.teleport(playerLocations.get(player.getName()));
                 PlayerInventory inventory = player.getInventory();
                 inventory.remove(Material.COOKED_BEEF);
@@ -312,7 +350,9 @@ public class EventoMina extends JavaPlugin implements Listener {
                     }
                 }
             }
+            playerLocations.clear();
             minaPlayers.clear();
+            mPlayers.clear();
             vTimeLeft = timeLeft;
             vMinaDuration = minaDuration;
             eventoAtivo = false;
@@ -323,6 +363,7 @@ public class EventoMina extends JavaPlugin implements Listener {
             if (startMinaTask != null) {
                 startMinaTask.cancel();
             }
+            tpsTask.cancel();
             eventoStop = false;
         }
     }

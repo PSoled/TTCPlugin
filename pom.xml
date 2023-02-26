@@ -76,12 +76,5 @@
             <systemPath>${basedir}/libs/PermissionsEx.jar</systemPath>
         </dependency>
 
-        <dependency>
-            <groupId>com.sk89q</groupId>
-            <artifactId>worldedit</artifactId>
-            <version>5.5.7</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/libs/worldedit-5.5.7.jar</systemPath>
-        </dependency>
     </dependencies>
 </project>

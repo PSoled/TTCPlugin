@@ -9,7 +9,8 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import java.util.List;
 
-import static com.totalcraft.soled.prefixMsgs.*;
+import static com.totalcraft.soled.prefixMsgs.getPmConsole;
+import static com.totalcraft.soled.prefixMsgs.getPmTTC;
 
 public class TagRank implements CommandExecutor {
     RankupUtils rankupUtils = new RankupUtils();
@@ -20,6 +21,7 @@ public class TagRank implements CommandExecutor {
         if (!(sender instanceof Player)) {
             sender.sendMessage(getPmConsole());
         }
+        assert sender instanceof Player;
         Player player = (Player) sender;
         PermissionUser user = PermissionsEx.getUser(player);
         boolean hasRank = false;
@@ -48,4 +50,5 @@ public class TagRank implements CommandExecutor {
         }
         return true;
     }
+
 }
