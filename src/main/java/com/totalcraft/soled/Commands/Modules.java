@@ -1,13 +1,16 @@
-package com.totalcraft.soled;
+package com.totalcraft.soled.Commands;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import com.totalcraft.soled.Configs.MainConfig;
+import com.totalcraft.soled.Utils.Utils;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-import static com.totalcraft.soled.prefixMsgs.*;
+import static com.totalcraft.soled.Utils.PrefixMsgs.*;
 
 public class Modules implements CommandExecutor {
     Utils utils = new Utils();
@@ -15,9 +18,9 @@ public class Modules implements CommandExecutor {
     public static String rankup = "Comando";
     public static String groupchange = "Evento";
 
-    private static Configs mainInstance;
+    private static MainConfig mainInstance;
 
-    public static void setMainInstance(Configs mainInstance) {
+    public static void setMainInstance(MainConfig mainInstance) {
         Modules.mainInstance = mainInstance;
     }
 
@@ -40,14 +43,16 @@ public class Modules implements CommandExecutor {
             mainInstance.setEventGroupChangeModule(false); // Usa a referência para a instância de Main
             sender.sendMessage(getPmCommandAdm(groupchange, "groupchange", false));
         });
-        put(("list"), () -> sender.sendMessage(getlistModule()));
+        put(("list"), () -> sender.sendMessage(getListModule()));
     }};
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (utils.getAdm(sender)) {
-            sender.sendMessage(getPmNotAdm());
-            return true;
+        if (sender instanceof Player) {
+            if (utils.getAdm(sender)) {
+                sender.sendMessage(getPmNotAdm());
+                return true;
+            }
         }
         if (cmd.getName().equalsIgnoreCase("module")) {
             this.sender = sender;

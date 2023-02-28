@@ -1,5 +1,6 @@
-package com.totalcraft.soled;
+package com.totalcraft.soled.Utils;
 
+import com.totalcraft.soled.Configs.MainConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -14,13 +15,13 @@ public class EventoMinaUtils {
 
 
     public static void placeRandomBlocks() {
-        World world = Bukkit.getWorld(Configs.worldLocatinaMina);
-        int x1 = Configs.x1Reset;
-        int y1 = Configs.y1Reset;
-        int z1 = Configs.z1Reset;
-        int x2 = Configs.x2Reset;
-        int y2 = Configs.y2Reset;
-        int z2 = Configs.z2Reset;
+        World world = Bukkit.getWorld(MainConfig.worldLocatinaMina);
+        int x1 = MainConfig.x1Reset;
+        int y1 = MainConfig.y1Reset;
+        int z1 = MainConfig.z1Reset;
+        int x2 = MainConfig.x2Reset;
+        int y2 = MainConfig.y2Reset;
+        int z2 = MainConfig.z2Reset;
         Location loc1 = new Location(world, x1, y1, z1);
         Location loc2 = new Location(world, x2, y2, z2);
         int minX = Math.min(x1, x2);
@@ -39,13 +40,13 @@ public class EventoMinaUtils {
                     if (loc1.distance(loc) <= loc1.distance(loc2)) {
                         // Escolher um bloco aleatório com base em suas porcentagens de chance
                         int totalChance = 0;
-                        for (String block : Configs.blocks) {
+                        for (String block : MainConfig.blocks) {
                             String[] blockData = block.split(":");
                             totalChance += Integer.parseInt(blockData[2]);
                         }
                         int randomChance = random.nextInt(totalChance) + 1;
                         Material material;
-                        for (String block : Configs.blocks) {
+                        for (String block : MainConfig.blocks) {
                             String[] blockData = block.split(":");
                             randomChance -= Integer.parseInt(blockData[2]);
                             if (randomChance <= 0) {

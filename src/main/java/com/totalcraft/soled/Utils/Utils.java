@@ -1,7 +1,6 @@
-package com.totalcraft.soled;
+package com.totalcraft.soled.Utils;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import ru.tehkode.permissions.PermissionUser;
@@ -10,17 +9,9 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 public class Utils {
 
     public boolean getAdm(CommandSender sender) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-            PermissionUser user = PermissionsEx.getUser(player);
-            if (user.has("ttcplugin.admin") || sender.isOp()) {
-                return false;
-            }
-        }
-        return !(sender instanceof ConsoleCommandSender);
-    }
-    public static long getDelayTps(int delay) {
-        return (long) (delay / 20 * tps);
+        Player player = (Player) sender;
+        PermissionUser user = PermissionsEx.getUser(player);
+        return !user.has("ttcplugin.admin") && !sender.isOp();
     }
     public static double tps;
     public static class TpsTask extends BukkitRunnable {

@@ -1,10 +1,9 @@
-package com.totalcraft.soled;
+package com.totalcraft.soled.Utils;
 
 import org.bukkit.entity.Player;
 import ru.tehkode.permissions.PermissionManager;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
-import ru.tehkode.permissions.events.PermissionEntityEvent;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,12 +11,11 @@ import java.util.List;
 import java.util.Map;
 
 import static org.bukkit.Bukkit.getPlayer;
-import static org.bukkit.Bukkit.getServer;
 
 public class RankupUtils {
 
     List<String> listGroups = Arrays.asList("Civil", "VipAdvanced", "VipHybrid", "VipUltimate", "VipQuantum", "VipDragon", "VipTotal");
-    List<String> ranksList = Arrays.asList("rankCivil", "rankPedra", "rankCarvao", "rankFerro", "rankOuro", "rankDiamante", "rankEsmeralda", "rankNetherstar");
+    public List<String> ranksList = Arrays.asList("rankCivil", "rankPedra", "rankCarvao", "rankFerro", "rankOuro", "rankDiamante", "rankEsmeralda", "rankNetherstar");
 
     public Map<String, String> listRanksTags() {
         Map<String, String> rankTags = new HashMap<>();

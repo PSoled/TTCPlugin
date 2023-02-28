@@ -1,5 +1,7 @@
-package com.totalcraft.soled;
+package com.totalcraft.soled.Commands;
 
+import com.totalcraft.soled.Configs.MainConfig;
+import com.totalcraft.soled.Utils.RankupUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -13,7 +15,7 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 import java.util.List;
 import java.util.Objects;
 
-import static com.totalcraft.soled.prefixMsgs.*;
+import static com.totalcraft.soled.Utils.PrefixMsgs.*;
 
 public class Rankup implements CommandExecutor {
     RankupUtils rankupUtils = new RankupUtils();
@@ -27,7 +29,7 @@ public class Rankup implements CommandExecutor {
             ItemStack shopUpgrade = new ItemStack(Material.getMaterial(4358), itemCostRank, (short) 0);
             String anuncioRank = getPmRankupRank(player.getName(), rankupUtils.getRankNumber(rankupUtils.getCurrentRank(player, ranksList), ranksList));
             {
-                if (Configs.rankupModule) {
+                if (MainConfig.rankupModule) {
                     if (Objects.equals(rankupUtils.getCurrentRank(player, ranksList), "rankNetherstar")) {
                         sender.sendMessage(getPmRankMax());
                     } else {

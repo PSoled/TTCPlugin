@@ -1,5 +1,6 @@
-package com.totalcraft.soled;
+package com.totalcraft.soled.Commands;
 
+import com.totalcraft.soled.Utils.RankupUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -9,8 +10,8 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import java.util.List;
 
-import static com.totalcraft.soled.prefixMsgs.getPmConsole;
-import static com.totalcraft.soled.prefixMsgs.getPmTTC;
+import static com.totalcraft.soled.Utils.PrefixMsgs.getPmConsole;
+import static com.totalcraft.soled.Utils.PrefixMsgs.getPmTTC;
 
 public class TagRank implements CommandExecutor {
     RankupUtils rankupUtils = new RankupUtils();

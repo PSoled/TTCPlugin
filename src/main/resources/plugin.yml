@@ -5,22 +5,27 @@ author: PlayerSoled
 description: Um Plugin Brabo
 
 commands:
+  ttcsoled:
+    description: Executa o comando Principal do Plugin
+    usage: /ttcsoled
+    executor: com.totalcraft.soled.Commands.CommandsPlugin
+
   rankup:
     description: Executa o comando de Rankup
     usage: /rankup
-    executor: com.totalcraft.soled.Rankup
+    executor: com.totalcraft.soled.Commands.Rankup
 
   tagrank:
     description: Executa o comando de set Tag Rank
     usage: /tagrank
-    executor: com.totalcraft.soled.TagRank
+    executor: com.totalcraft.soled.Commands.TagRank
 
   module:
     description: Executa o comando de Module
     usage: /module
-    executor: com.totalcraft.soled.Modules
+    executor: com.totalcraft.soled.Commands.Modules
 
   mina:
     description: Executa o comando de Iniciar a Mina
     usage: /mina
-    executor: com.totalcraft.soled.EventoMina
+    executor: com.totalcraft.soled.Commands.EventoMina

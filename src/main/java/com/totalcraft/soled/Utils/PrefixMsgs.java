@@ -1,5 +1,7 @@
-package com.totalcraft.soled;
+package com.totalcraft.soled.Utils;
 
+import com.totalcraft.soled.Commands.Modules;
+import com.totalcraft.soled.Configs.MainConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -7,7 +9,7 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.Map;
 
-public class prefixMsgs {
+public class PrefixMsgs {
     static Utils utils = new Utils();
 
     public static String getPmTTC(String message) {
@@ -65,10 +67,10 @@ public class prefixMsgs {
         return null;
     }
 
-    public static String getlistModule() {
+    public static String getListModule() {
         Map<String, String[]> moduleStatus = new HashMap<>();
-        moduleStatus.put(ChatColor.BLUE + Modules.rankup, new String[]{"Rankup", Configs.rankupModule ? ChatColor.GREEN + " On" : ChatColor.RED + " Off"});
-        moduleStatus.put(ChatColor.DARK_AQUA + Modules.groupchange, new String[]{"Groupchange", Configs.eventGroupChangeModule ? ChatColor.GREEN + " On" : ChatColor.RED + " Off"});
+        moduleStatus.put(ChatColor.BLUE + Modules.rankup, new String[]{"Rankup", MainConfig.rankupModule ? ChatColor.GREEN + " On" : ChatColor.RED + " Off"});
+        moduleStatus.put(ChatColor.DARK_AQUA + Modules.groupchange, new String[]{"Groupchange", MainConfig.eventGroupChangeModule ? ChatColor.GREEN + " On" : ChatColor.RED + " Off"});
 
         StringBuilder sb = new StringBuilder();
         sb.append(getPmTTC("&bLista dos modules que podem desativar e ativar\n\n"));
@@ -99,6 +101,13 @@ public class prefixMsgs {
                     "\n&a/mina entrar &eEntrar no Evento Mina" +
                     "\n&a/mina sair &eSair do Evento Mina");
         }
+        return msg;
+    }
+
+    public static String getCommandsPlugin() {
+        String msg = getPmTTC("&fLista de comandos do Plugin\n" +
+                "\n&c/ttcsoled reload &eRenicia o Plugin TTCSoled" +
+                "\n&c/ttcsoled restartserver &eRenicia o Server");
         return msg;
     }
 }

@@ -1,12 +1,14 @@
-package com.totalcraft.soled;
+package com.totalcraft.soled.Configs;
 
+import com.totalcraft.soled.Commands.Modules;
+import com.totalcraft.soled.Main;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class Configs {
+public class MainConfig {
     public static File configFile;
     public static YamlConfiguration config;
     private final Main main;
@@ -15,7 +17,8 @@ public class Configs {
     public static String worldLocatinaMina = "spawn";
     public static int xLocatinaMina, yLocatinaMina, zLocatinaMina, x1Reset, x2Reset, y1Reset, y2Reset, z1Reset, z2Reset;
     public static List<String> blocks;
-    public Configs(Main main) {
+
+    public MainConfig(Main main) {
         this.main = main;
     }
 
@@ -30,10 +33,44 @@ public class Configs {
                 "\nBlocos que serão setados no reset da Mina em Id:MetaData:%" +
                 "\n");
 
+        configModule();
+        configMina();
+
+        config.options().copyDefaults(true);
+        saveConfig();
+
+        Modules modules = new Modules();
+        modules.setMainInstance(this);
+    }
+
+    public static void saveConfig() {
+        try {
+            config.save(configFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setRankupModule(boolean value) {
+        rankupModule = value;
+        config.set("rankupModule", value);
+        saveConfig();
+    }
+
+    public void setEventGroupChangeModule(boolean value) {
+        eventGroupChangeModule = value;
+        config.set("eventGroupChangeModule", value);
+        saveConfig();
+    }
+
+    public void configModule() {
         rankupModule = config.getBoolean("rankupModule");
         eventGroupChangeModule = config.getBoolean("eventGroupChangeModule");
         config.addDefault("rankupModule", rankupModule);
         config.addDefault("eventGroupChangeModule", eventGroupChangeModule);
+    }
+
+    public void configMina() {
         worldLocatinaMina = config.getString("worldLocationMina");
         if (worldLocatinaMina == null) {
             worldLocatinaMina = "spawn";
@@ -58,34 +95,6 @@ public class Configs {
         config.addDefault("x2Reset", x2Reset);
         config.addDefault("y2Reset", y2Reset);
         config.addDefault("z2Reset", z2Reset);
-
         config.set("blocksReset", blocks);
-        config.options().copyDefaults(true);
-        saveConfig();
-
-        Modules modules = new Modules();
-        modules.setMainInstance(this);
     }
-
-    public void saveConfig() {
-        try {
-            config.save(configFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void setRankupModule(boolean value) {
-        rankupModule = value;
-        config.set("rankupModule", value);
-        saveConfig();
-    }
-
-    public void setEventGroupChangeModule(boolean value) {
-        eventGroupChangeModule = value;
-        config.set("eventGroupChangeModule", value);
-        saveConfig();
-    }
-
-
 }
