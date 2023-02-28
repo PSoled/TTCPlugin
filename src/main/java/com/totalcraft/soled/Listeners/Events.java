@@ -1,6 +1,7 @@
 package com.totalcraft.soled.Listeners;
 
 import com.totalcraft.soled.Commands.EventoMina;
+import com.totalcraft.soled.Configs.BflyData;
 import com.totalcraft.soled.Configs.MainConfig;
 import com.totalcraft.soled.Utils.RankupUtils;
 import org.bukkit.Bukkit;
@@ -8,12 +9,14 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitScheduler;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.events.PermissionEntityEvent;
 
@@ -26,6 +29,11 @@ import static com.totalcraft.soled.Utils.PrefixMsgs.getPmTTC;
 public class Events implements Listener {
     RankupUtils rankupUtils = new RankupUtils();
     List<String> playerQuitMina = new ArrayList<>();
+
+    private final Plugin plugin;
+    public Events(Plugin plugin) {
+        this.plugin = plugin;
+    }
 
     public void registerEvents(Plugin plugin) {
         EventoMina eventoMina = new EventoMina(plugin);
@@ -75,6 +83,23 @@ public class Events implements Listener {
             EventoMina.minaPlayers.remove(playerName);
         }
     }
+
+    @EventHandler
+    public void PlayerChangedWorld(PlayerChangedWorldEvent event) {
+        Player player = event.getPlayer();
+        String name = player.getName();
+        if (BflyData.listPlayer.containsKey(name)) {
+            String world = player.getWorld().getName();
+            if (!world.equals("spawn")) {
+                BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+                scheduler.scheduleSyncDelayedTask(plugin, (Runnable) () -> {
+                    player.setAllowFlight(true);
+                    player.setFlying(true);
+                }, 40L);
+            }
+        }
+    }
 }
+
 
 

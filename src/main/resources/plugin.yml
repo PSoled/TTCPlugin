@@ -29,3 +29,13 @@ commands:
     description: Executa o comando de Iniciar a Mina
     usage: /mina
     executor: com.totalcraft.soled.Commands.EventoMina
+
+  sfly:
+   description: Executa o comando de Comprar o Fly
+   usage: /sfly
+   executor: com.totalcraft.soled.Commands.Bfly
+
+  jail:
+    description: Executa o comando de dar Jail
+    usage: /jail
+    executor: com.totalcraft.soled.Commands.Jail

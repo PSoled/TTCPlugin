@@ -1,6 +1,7 @@
 package com.totalcraft.soled;
 
 import com.totalcraft.soled.Commands.*;
+import com.totalcraft.soled.Configs.BflyData;
 import com.totalcraft.soled.Configs.MainConfig;
 import com.totalcraft.soled.Listeners.Events;
 import org.bukkit.Bukkit;
@@ -13,6 +14,8 @@ public class Main extends JavaPlugin implements Listener {
     public void onLoad() {
         MainConfig mainConfig = new MainConfig(this);
         mainConfig.setConfigs();
+        BflyData bflySave = new BflyData(this);
+        bflySave.loadFlyData();
     }
 
     @Override
@@ -25,12 +28,20 @@ public class Main extends JavaPlugin implements Listener {
         getCommand("tagrank").setExecutor(new TagRank());
         getCommand("mina").setExecutor(new EventoMina(this));
         getCommand("module").setExecutor(new Modules());
+        getCommand("sfly").setExecutor(new Bfly());
+        getCommand("jail").setExecutor(new Jail());
 
+        Bfly.bflyTime();
         getServer().getPluginManager().registerEvents(this, this);
-        getServer().getPluginManager().registerEvents(new Events(), this);
-        Events events = new Events();
+        getServer().getPluginManager().registerEvents(new Events(this), this);
+        Events events = new Events(this);
         Bukkit.getPluginManager().registerEvents(events, this);
         events.registerEvents(this);
+    }
+
+    @Override
+    public void onDisable() {
+        Bfly.cancelBflyTime();
     }
 }
 

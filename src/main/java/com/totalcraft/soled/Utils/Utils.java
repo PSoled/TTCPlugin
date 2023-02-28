@@ -11,7 +11,7 @@ public class Utils {
     public boolean getAdm(CommandSender sender) {
         Player player = (Player) sender;
         PermissionUser user = PermissionsEx.getUser(player);
-        return !user.has("ttcplugin.admin") && !sender.isOp();
+        return !user.has("ttcsoled.admin") && !sender.isOp();
     }
     public static double tps;
     public static class TpsTask extends BukkitRunnable {

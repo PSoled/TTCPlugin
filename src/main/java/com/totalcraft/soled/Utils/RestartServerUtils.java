@@ -16,8 +16,8 @@ public class RestartServerUtils {
     public void restartServer() {
         scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
             if (timeRestart == 0) {
-                scheduledFuture.cancel(true);
-                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"kickall " + getPmTTC("&e&lReniciando-o-Servidor"));
+                scheduledFuture.cancel(false);
+                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"kickall Reniciando-o-Servidor");
                 Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "save-all");
                 timeRestart();
                 return;
@@ -35,9 +35,9 @@ public class RestartServerUtils {
     }
 
     public void timeRestart() {
-        scheduledFuture = scheduler.schedule(() -> {
+        scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "save-all");
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "restart");
-        }, 90, TimeUnit.SECONDS);
+        },90, 90, TimeUnit.SECONDS);
     }
 }

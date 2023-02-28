@@ -114,7 +114,7 @@ public class EventoMina extends JavaPlugin implements Listener {
                 bQuestionTask = true;
                 scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
                     if (question <= 0) {
-                        scheduledFuture.cancel(true);
+                        scheduledFuture.cancel(false);
                         eventoAtivo = true;
                         startEventomina();
                         question = 10;
@@ -127,7 +127,7 @@ public class EventoMina extends JavaPlugin implements Listener {
                         question = 10;
                         eventoStop = false;
                         bQuestionTask = false;
-                        scheduledFuture.cancel(true);
+                        scheduledFuture.cancel(false);
                         return;
                     }
                     question--;
@@ -274,13 +274,13 @@ public class EventoMina extends JavaPlugin implements Listener {
     public void startEventomina() {
         scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
             if (vTimeLeft <= 0) {
-                scheduledFuture.cancel(true);
+                scheduledFuture.cancel(false);
                 vMinaDuration--;
                 eventoMina();
                 return;
             }
             if (!eventoAtivo) {
-                scheduledFuture.cancel(true);
+                scheduledFuture.cancel(false);
                 return;
             }
             Bukkit.broadcastMessage("");
@@ -313,11 +313,11 @@ public class EventoMina extends JavaPlugin implements Listener {
                 Bukkit.broadcastMessage(getPmTTC("&lEvento Mina Finalizado !!!"));
                 Bukkit.broadcastMessage("");
                 eventoStop();
-                scheduledFuture.cancel(true);
+                scheduledFuture.cancel(false);
                 return;
             }
             if (!eventoAtivo) {
-                scheduledFuture.cancel(true);
+                scheduledFuture.cancel(false);
                 return;
             }
 
@@ -355,7 +355,7 @@ public class EventoMina extends JavaPlugin implements Listener {
             vMinaDuration = minaDuration;
             eventoAtivo = false;
             EventoMinaUtils.placeRandomBlocks();
-            scheduledFuture.cancel(true);
+            scheduledFuture.cancel(false);
             eventoStop = false;
         }
     }

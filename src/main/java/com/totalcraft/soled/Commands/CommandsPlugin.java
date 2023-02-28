@@ -41,6 +41,7 @@ public class CommandsPlugin implements CommandExecutor {
                 Plugin plugin = pluginManager.getPlugin("TTC-Soled");
                 pluginManager.disablePlugin(plugin);
                 pluginManager.enablePlugin(plugin);
+
                 sender.sendMessage(getPmTTC("&f&lPlugin reniciado com Sucesso"));
             }
             if (args.length > 0 && args[0].equalsIgnoreCase("restartserver")) {
