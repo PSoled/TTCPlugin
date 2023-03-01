@@ -28,6 +28,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import static com.totalcraft.soled.Utils.PrefixMsgs.*;
+import static org.bukkit.Sound.*;
 
 public class EventoMina extends JavaPlugin implements Listener {
     Utils utils = new Utils();
@@ -38,7 +39,7 @@ public class EventoMina extends JavaPlugin implements Listener {
     public Location locationEvento = new Location(Bukkit.getWorld(MainConfig.worldLocatinaMina), MainConfig.xLocatinaMina, MainConfig.yLocatinaMina, MainConfig.zLocatinaMina);
     HashMap<String, Location> playerLocations = new HashMap<>();
     public static List<String> minaPlayers = new ArrayList<>();
-    public List<Player> mPlayers = new ArrayList<>();
+    List<Player> mPlayers = new ArrayList<>();
     public static ItemStack pickaxe = EventoMinaUtils.createPickaxe(5, 3, 3);
     Material vajra = Material.getMaterial(30477);
     Material godPick = Material.getMaterial(4386);
@@ -279,9 +280,8 @@ public class EventoMina extends JavaPlugin implements Listener {
                 eventoMina();
                 return;
             }
-            if (!eventoAtivo) {
-                scheduledFuture.cancel(true);
-                return;
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.playSound(player.getLocation(), ORB_PICKUP, 1, 1);
             }
             Bukkit.broadcastMessage("");
             Bukkit.broadcastMessage(getPmTTC("&lEvento Mina Recheada Irá Iniciar !!!"));
@@ -297,6 +297,9 @@ public class EventoMina extends JavaPlugin implements Listener {
     }
 
     public void eventoMina() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.playSound(player.getLocation(), LEVEL_UP, 1, 1);
+        }
         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "rg flag mina build -w spawn allow");
         Bukkit.broadcastMessage("");
         Bukkit.broadcastMessage(getPmTTC("&lEvento Mina Iniciado !!!"));
@@ -306,21 +309,19 @@ public class EventoMina extends JavaPlugin implements Listener {
 
         scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
             if (vMinaDuration <= 0) {
-
-                Bukkit.broadcastMessage("");
-                Bukkit.broadcastMessage(getPmTTC("&lEvento Mina Finalizado !!!"));
-                Bukkit.broadcastMessage(getPmTTC("&lEvento Mina Finalizado !!!"));
-                Bukkit.broadcastMessage(getPmTTC("&lEvento Mina Finalizado !!!"));
-                Bukkit.broadcastMessage("");
+                scheduledFuture.cancel(true);
                 eventoStop();
-                scheduledFuture.cancel(true);
-                return;
-            }
-            if (!eventoAtivo) {
-                scheduledFuture.cancel(true);
+                Bukkit.broadcastMessage("");
+                Bukkit.broadcastMessage(getPmTTC("&lEvento Mina Finalizado !!!"));
+                Bukkit.broadcastMessage(getPmTTC("&lEvento Mina Finalizado !!!"));
+                Bukkit.broadcastMessage(getPmTTC("&lEvento Mina Finalizado !!!"));
+                Bukkit.broadcastMessage("");
                 return;
             }
 
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.playSound(player.getLocation(), ORB_PICKUP, 1, 1);
+            }
             Bukkit.broadcastMessage("");
             Bukkit.broadcastMessage(getPmTTC((vMinaDuration == 1 ? "&f&lFalta " : "&f&lFaltam ") + vMinaDuration + (vMinaDuration == 1 ? " &b&lMinuto " : " &b&lMinutos ") + "&f&lPara"));
             Bukkit.broadcastMessage(getPmTTC("&lTerminar o Evento Mina !!!"));
@@ -347,6 +348,7 @@ public class EventoMina extends JavaPlugin implements Listener {
                         inventory.clear(i);
                     }
                 }
+                player.playSound(player.getLocation(), EXPLODE, 1, 1);
             }
             playerLocations.clear();
             minaPlayers.clear();

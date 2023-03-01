@@ -107,7 +107,8 @@ public class PrefixMsgs {
     public static String getCommandsPlugin() {
         String msg = getPmTTC("&fLista de comandos do Plugin\n" +
                 "\n&c/ttcsoled reload &eRenicia o Plugin TTCSoled" +
-                "\n&c/ttcsoled restartserver &eRenicia o Server");
+                "\n&c/ttcsoled restartserver &eRenicia o Server" +
+                "\n&c/ttc som &e<Player> <Som>");
         return msg;
     }
 }

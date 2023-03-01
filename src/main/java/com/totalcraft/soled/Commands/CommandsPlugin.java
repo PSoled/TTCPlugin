@@ -2,6 +2,8 @@ package com.totalcraft.soled.Commands;
 
 import com.totalcraft.soled.Utils.RestartServerUtils;
 import com.totalcraft.soled.Utils.Utils;
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -31,6 +33,7 @@ public class CommandsPlugin implements CommandExecutor {
             switch (args.length > 0 ? args[0].toLowerCase() : "") {
                 case "reload":
                 case "restartserver":
+                case "som":
                     break;
                 default:
                     sender.sendMessage(getCommandsPlugin());
@@ -46,6 +49,24 @@ public class CommandsPlugin implements CommandExecutor {
             }
             if (args.length > 0 && args[0].equalsIgnoreCase("restartserver")) {
                 restartServerUtils.restartServer();
+            }
+
+            if (args.length > 0 && args[0].equalsIgnoreCase("som")) {
+                if (args.length != 3) {
+                    sender.sendMessage(getPmTTC("&cUse: /ttcsoled som <Player> <Som>"));
+                    return true;
+                }
+                Player player = Bukkit.getPlayer(args[1]);
+                if (player == null) {
+                    sender.sendMessage(getPmTTC("&cEste Player não está online!"));
+                    return true;
+                }
+                try {
+                    Sound som = Sound.valueOf(args[2]);
+                    player.playSound(player.getLocation(), som, 1, 1);
+                } catch (IllegalArgumentException e) {
+                    player.sendMessage(getPmTTC("&cO som &b" + args[2] + " &cnão existe no Minecraft."));
+                }
             }
             return true;
         }
