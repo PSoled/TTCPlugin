@@ -14,6 +14,8 @@ public class MainConfig {
     private final Main main;
     public static boolean rankupModule;
     public static boolean eventGroupChangeModule;
+    public static String worldJail = "spawn";
+    public static int jailLocationX, jailLocationY, jailLocationZ;
     public static String worldLocatinaMina = "spawn";
     public static int xLocatinaMina, yLocatinaMina, zLocatinaMina, x1Reset, x2Reset, y1Reset, y2Reset, z1Reset, z2Reset;
     public static List<String> blocks;
@@ -31,10 +33,12 @@ public class MainConfig {
                 "\nLocalização da mina de Mundo e X Y Z" +
                 "\nLocalização de X Y Z a X Y Z do Reset da mina" +
                 "\nBlocos que serão setados no reset da Mina em Id:MetaData:%" +
+                "\nLocalização do Jail de Mundo e X Y Z" +
                 "\n");
 
         configModule();
         configMina();
+        configJail();
 
         config.options().copyDefaults(true);
         saveConfig();
@@ -96,5 +100,19 @@ public class MainConfig {
         config.addDefault("y2Reset", y2Reset);
         config.addDefault("z2Reset", z2Reset);
         config.set("blocksReset", blocks);
+    }
+
+    public void configJail() {
+        worldJail = config.getString("JailWorld");
+        jailLocationX = config.getInt("JailLocationX");
+        jailLocationY = config.getInt("JailLocationY");
+        jailLocationZ = config.getInt("JailLocationZ");
+        if (worldJail == null) {
+            worldJail = "spawn";
+        }
+        config.addDefault("JailWorld", worldJail);
+        config.addDefault("JailLocationX", jailLocationX);
+        config.addDefault("JailLocationY", jailLocationY);
+        config.addDefault("JailLocationZ", jailLocationZ);
     }
 }

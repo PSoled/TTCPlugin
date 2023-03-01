@@ -30,13 +30,13 @@ public class Bfly extends Main implements CommandExecutor {
         Economy economy = Bukkit.getServicesManager().getRegistration(Economy.class).getProvider();
 
         if (cmd.getName().equalsIgnoreCase("sfly")) {
-            if (BflyData.listPlayer.containsKey(playerName)) {
+            if (BflyData.flyListPlayer.containsKey(playerName)) {
                 if (!player.isFlying()) {
                     player.setAllowFlight(true);
                     player.setFlying(true);
                     player.sendMessage(getPmTTC("&aSeu Fly foi reativado"));
                 }
-                player.sendMessage(getPmTTC("&eVocê ainda tem " + BflyData.listPlayer.get(playerName)+ " Minutos de Fly"));
+                player.sendMessage(getPmTTC("&eVocê ainda tem " + BflyData.flyListPlayer.get(playerName)+ " Minutos de Fly"));
                 return true;
             }
 
@@ -45,7 +45,7 @@ public class Bfly extends Main implements CommandExecutor {
                 player.sendMessage(getPmTTC("&aVocê comprou Fly por 1 Hora Por 2000"));
                 player.setAllowFlight(true);
                 player.setFlying(true);
-                BflyData.listPlayer.put(playerName, 60);
+                BflyData.flyListPlayer.put(playerName, 60);
                 BflyData.saveFlyData();
 
                 return true;
@@ -61,18 +61,18 @@ public class Bfly extends Main implements CommandExecutor {
     static ScheduledFuture<?> scheduledFuture;
     public static void bflyTime() {
         scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
-            for (String name : BflyData.listPlayer.keySet()) {
-                int valor = BflyData.listPlayer.get(name);
+            for (String name : BflyData.flyListPlayer.keySet()) {
+                int valor = BflyData.flyListPlayer.get(name);
                 if (valor < 1) {
                     Player player = Bukkit.getPlayer(name);
-                    BflyData.listPlayer.remove(name);
+                    BflyData.flyListPlayer.remove(name);
                     player.sendMessage(getPmTTC("&c&lO tempo do seu fly acabou!"));
                     player.setFlying(false);
                     player.setAllowFlight(false);
                     BflyData.saveFlyData();
                 } else {
                     valor--;
-                    BflyData.listPlayer.put(name, valor);
+                    BflyData.flyListPlayer.put(name, valor);
                     BflyData.saveFlyData();
                 }
             }

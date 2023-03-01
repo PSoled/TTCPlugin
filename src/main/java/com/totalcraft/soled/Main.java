@@ -2,6 +2,7 @@ package com.totalcraft.soled;
 
 import com.totalcraft.soled.Commands.*;
 import com.totalcraft.soled.Configs.BflyData;
+import com.totalcraft.soled.Configs.JailData;
 import com.totalcraft.soled.Configs.MainConfig;
 import com.totalcraft.soled.Listeners.Events;
 import org.bukkit.Bukkit;
@@ -16,6 +17,8 @@ public class Main extends JavaPlugin implements Listener {
         mainConfig.setConfigs();
         BflyData bflySave = new BflyData(this);
         bflySave.loadFlyData();
+        JailData jailData = new JailData(this);
+        jailData.loadJailData();
     }
 
     @Override
@@ -30,7 +33,9 @@ public class Main extends JavaPlugin implements Listener {
         getCommand("module").setExecutor(new Modules());
         getCommand("sfly").setExecutor(new Bfly());
         getCommand("jail").setExecutor(new Jail());
+        getCommand("unjail").setExecutor(new UnJail());
 
+        Jail.jailTime();
         Bfly.bflyTime();
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new Events(this), this);
@@ -42,6 +47,9 @@ public class Main extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         Bfly.cancelBflyTime();
+        Jail.canceljailTime();
+        BflyData.saveFlyData();
+        JailData.saveJailData();
     }
 }
 

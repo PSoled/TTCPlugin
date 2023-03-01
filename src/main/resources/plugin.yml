@@ -39,3 +39,9 @@ commands:
     description: Executa o comando de dar Jail
     usage: /jail
     executor: com.totalcraft.soled.Commands.Jail
+
+  unjail:
+    description: Executa o comando de dar UnJail
+    usage: /unjail
+    executor: com.totalcraft.soled.Commands.UnJail
+

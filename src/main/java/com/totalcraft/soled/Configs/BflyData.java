@@ -15,7 +15,7 @@ public class BflyData {
     }
     public static File flyFile;
     public static YamlConfiguration flyConfig;
-    public static HashMap<String, Integer> listPlayer = new HashMap<>();
+    public static HashMap<String, Integer> flyListPlayer = new HashMap<>();
 
     public void loadFlyData() {
         flyFile = new File(main.getDataFolder(), "fly.yml");
@@ -23,16 +23,16 @@ public class BflyData {
 
         for (String playerName : flyConfig.getKeys(false)) {
             int timeLeft = flyConfig.getInt(playerName);
-            listPlayer.put(playerName, timeLeft);
+            flyListPlayer.put(playerName, timeLeft);
         }
     }
     public static void saveFlyData() {
         for (String key : flyConfig.getKeys(false)) {
-            if (!BflyData.listPlayer.containsKey(key)) {
+            if (!BflyData.flyListPlayer.containsKey(key)) {
                 flyConfig.set(key, null);
             }
         }
-        for (Map.Entry<String, Integer> entry : BflyData.listPlayer.entrySet()) {
+        for (Map.Entry<String, Integer> entry : flyListPlayer.entrySet()) {
             flyConfig.set(entry.getKey(), entry.getValue());
         }
 

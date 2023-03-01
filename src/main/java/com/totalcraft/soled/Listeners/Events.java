@@ -1,7 +1,9 @@
 package com.totalcraft.soled.Listeners;
 
 import com.totalcraft.soled.Commands.EventoMina;
+import com.totalcraft.soled.Commands.Jail;
 import com.totalcraft.soled.Configs.BflyData;
+import com.totalcraft.soled.Configs.JailData;
 import com.totalcraft.soled.Configs.MainConfig;
 import com.totalcraft.soled.Utils.RankupUtils;
 import org.bukkit.Bukkit;
@@ -72,6 +74,13 @@ public class Events implements Listener {
             }
             player.sendMessage(getPmTTC("&cVocê saiu durante Evento Mina"));
         }
+
+        if (JailData.jailListPlayer.containsKey(playerName)) {
+            Player player = event.getPlayer();
+            player.teleport(Jail.locationJail);
+            int time = JailData.jailListPlayer.get(playerName);
+            player.sendMessage(getPmTTC("&cVocê deve ainda " + time + " Horas de pena"));
+        }
     }
 
 
@@ -88,11 +97,11 @@ public class Events implements Listener {
     public void PlayerChangedWorld(PlayerChangedWorldEvent event) {
         Player player = event.getPlayer();
         String name = player.getName();
-        if (BflyData.listPlayer.containsKey(name)) {
+        if (BflyData.flyListPlayer.containsKey(name)) {
             String world = player.getWorld().getName();
             if (!world.equals("spawn")) {
                 BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-                scheduler.scheduleSyncDelayedTask(plugin, (Runnable) () -> {
+                scheduler.scheduleSyncDelayedTask(plugin, () -> {
                     player.setAllowFlight(true);
                     player.setFlying(true);
                 }, 40L);
