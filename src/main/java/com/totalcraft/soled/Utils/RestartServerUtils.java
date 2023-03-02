@@ -15,11 +15,12 @@ public class RestartServerUtils {
     ScheduledFuture<?> scheduledFuture;
     int timeRestart = 60;
     public void restartServer() {
+        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "whitelist on");
         scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
-            if (timeRestart < 1) {
+            if (timeRestart < 10) {
+                scheduledFuture.cancel(true);
                 Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"kickall Reniciando-O-Servidor");
                 Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "save-all");
-                scheduledFuture.cancel(false);
                 timeRestart();
                 return;
             }
@@ -47,7 +48,7 @@ public class RestartServerUtils {
     public void timeRestart() {
         scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "save-all");
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "restart");
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "stop");
         },90, 90, TimeUnit.SECONDS);
     }
 

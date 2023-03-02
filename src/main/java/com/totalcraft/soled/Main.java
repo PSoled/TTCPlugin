@@ -5,7 +5,6 @@ import com.totalcraft.soled.Configs.BflyData;
 import com.totalcraft.soled.Configs.JailData;
 import com.totalcraft.soled.Configs.MainConfig;
 import com.totalcraft.soled.Listeners.Events;
-import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.*;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -39,9 +38,6 @@ public class Main extends JavaPlugin implements Listener {
         Bfly.bflyTime();
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new Events(this), this);
-        Events events = new Events(this);
-        Bukkit.getPluginManager().registerEvents(events, this);
-        events.registerEvents(this);
     }
 
     @Override

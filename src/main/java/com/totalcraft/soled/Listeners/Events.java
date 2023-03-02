@@ -14,12 +14,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
 import ru.tehkode.permissions.PermissionUser;
+import ru.tehkode.permissions.bukkit.PermissionsEx;
 import ru.tehkode.permissions.events.PermissionEntityEvent;
 
 import java.util.ArrayList;
@@ -27,20 +29,16 @@ import java.util.List;
 
 import static com.totalcraft.soled.Commands.EventoMina.pickaxe;
 import static com.totalcraft.soled.Utils.PrefixMsgs.getPmTTC;
+import static org.bukkit.Sound.*;
 
 public class Events implements Listener {
     RankupUtils rankupUtils = new RankupUtils();
     List<String> playerQuitMina = new ArrayList<>();
 
     private final Plugin plugin;
+
     public Events(Plugin plugin) {
         this.plugin = plugin;
-    }
-
-    public void registerEvents(Plugin plugin) {
-        EventoMina eventoMina = new EventoMina(plugin);
-        Bukkit.getPluginManager().registerEvents(eventoMina, plugin);
-        Bukkit.getServer().getPluginManager().registerEvents(eventoMina, plugin);
     }
 
     @EventHandler
@@ -55,11 +53,16 @@ public class Events implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+        PermissionUser user = PermissionsEx.getUser(event.getPlayer());
+        if (!user.has("ttcsoled.admin")) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.playSound(player.getLocation(), NOTE_PLING, 1, 1);
+            }
+        }
         if (MainConfig.eventGroupChangeModule) {
             String playerName = event.getPlayer().getName();
             rankupUtils.eventSetRank(playerName);
         }
-
         String playerName = event.getPlayer().getName();
         if (playerQuitMina.contains(playerName)) {
             Player player = event.getPlayer();
@@ -76,16 +79,25 @@ public class Events implements Listener {
         }
 
         if (JailData.jailListPlayer.containsKey(playerName)) {
-            Player player = event.getPlayer();
-            player.teleport(Jail.locationJail);
-            int time = JailData.jailListPlayer.get(playerName);
-            player.sendMessage(getPmTTC("&cVocê deve ainda " + time + " Horas de pena"));
+            BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+            scheduler.scheduleSyncDelayedTask(plugin, () -> {
+                Player player = event.getPlayer();
+                player.teleport(Jail.locationJail);
+                int time = JailData.jailListPlayer.get(playerName);
+                player.sendMessage(getPmTTC("&cVocê deve ainda " + time + " Horas de pena"));
+            }, 40L);
         }
     }
 
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
+        PermissionUser user = PermissionsEx.getUser(event.getPlayer());
+        if (!user.has("ttcsoled.admin")) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.playSound(player.getLocation(), NOTE_BASS_DRUM, 1, 1);
+            }
+        }
         String playerName = event.getPlayer().getName();
         if (EventoMina.minaPlayers.contains(playerName)) {
             playerQuitMina.add(playerName);
@@ -107,6 +119,12 @@ public class Events implements Listener {
                 }, 40L);
             }
         }
+    }
+
+    @EventHandler
+    public void onTeleport(PlayerTeleportEvent event) {
+        Player player = event.getPlayer();
+        player.playSound(player.getLocation(), LEVEL_UP, 1, 1);
     }
 }
 

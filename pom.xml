@@ -63,9 +63,9 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>
-            <version>1.5.2-R1.0</version>
+            <version>1.5.2-R1.1</version>
             <scope>system</scope>
-            <systemPath>${basedir}/libs/craftbukkit.jar</systemPath>
+            <systemPath>${basedir}/libs/MCPCTotal-1.5.2-R1.1-SNAPSHOT.jar</systemPath>
         </dependency>
 
         <dependency>

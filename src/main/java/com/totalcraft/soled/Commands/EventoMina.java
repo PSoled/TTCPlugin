@@ -22,17 +22,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 import static com.totalcraft.soled.Utils.PrefixMsgs.*;
 import static org.bukkit.Sound.*;
 
 public class EventoMina extends JavaPlugin implements Listener {
     Utils utils = new Utils();
-    public static boolean eventoAtivo;
+    public boolean eventoAtivo;
     public boolean eventoStop;
     public int timeLeft = 120;
     public int minaDuration = 5;
@@ -52,6 +49,7 @@ public class EventoMina extends JavaPlugin implements Listener {
     private BukkitTask verificationPlayer;
     int question = 10;
     private final Plugin plugin;
+
     public EventoMina(Plugin plugin) {
         this.plugin = plugin;
     }
@@ -159,7 +157,7 @@ public class EventoMina extends JavaPlugin implements Listener {
                 mPlayers.add(player);
                 playerLocations.put(player.getName(), player.getLocation());
                 player.teleport(locationEvento);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 12000, 2));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 7200, 2));
 
                 player.getInventory().addItem(pickaxe);
                 player.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 64));
@@ -310,15 +308,14 @@ public class EventoMina extends JavaPlugin implements Listener {
         scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
             if (vMinaDuration <= 0) {
                 scheduledFuture.cancel(true);
+                Bukkit.broadcastMessage("");
+                Bukkit.broadcastMessage(getPmTTC("&lEvento Mina Finalizado !!!"));
+                Bukkit.broadcastMessage(getPmTTC("&lEvento Mina Finalizado !!!"));
+                Bukkit.broadcastMessage(getPmTTC("&lEvento Mina Finalizado !!!"));
+                Bukkit.broadcastMessage("");
                 eventoStop();
-                Bukkit.broadcastMessage("");
-                Bukkit.broadcastMessage(getPmTTC("&lEvento Mina Finalizado !!!"));
-                Bukkit.broadcastMessage(getPmTTC("&lEvento Mina Finalizado !!!"));
-                Bukkit.broadcastMessage(getPmTTC("&lEvento Mina Finalizado !!!"));
-                Bukkit.broadcastMessage("");
                 return;
             }
-
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.playSound(player.getLocation(), ORB_PICKUP, 1, 1);
             }
@@ -333,12 +330,10 @@ public class EventoMina extends JavaPlugin implements Listener {
     }
 
     public void eventoStop() {
+        System.out.println("A");
         eventoStop = true;
         if (eventoAtivo) {
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "rg flag mina build -w spawn deny");
-
             for (Player player : mPlayers) {
-                player.removePotionEffect(PotionEffectType.INVISIBILITY);
                 player.teleport(playerLocations.get(player.getName()));
                 PlayerInventory inventory = player.getInventory();
                 inventory.remove(Material.COOKED_BEEF);
@@ -350,6 +345,8 @@ public class EventoMina extends JavaPlugin implements Listener {
                 }
                 player.playSound(player.getLocation(), EXPLODE, 1, 1);
             }
+            System.out.println("C");
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "rg flag mina build -w spawn deny");
             playerLocations.clear();
             minaPlayers.clear();
             mPlayers.clear();
@@ -357,8 +354,8 @@ public class EventoMina extends JavaPlugin implements Listener {
             vMinaDuration = minaDuration;
             eventoAtivo = false;
             EventoMinaUtils.placeRandomBlocks();
-            scheduledFuture.cancel(true);
             eventoStop = false;
+            scheduledFuture.cancel(true);
         }
     }
 }
