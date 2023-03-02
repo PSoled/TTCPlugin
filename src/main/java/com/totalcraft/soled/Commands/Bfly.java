@@ -26,7 +26,6 @@ public class Bfly extends Main implements CommandExecutor {
         }
         Player player = (Player) sender;
         String playerName = player.getName();
-        String moneytake = "money take " + playerName + " " + 2000;
         Economy economy = Bukkit.getServicesManager().getRegistration(Economy.class).getProvider();
 
         if (cmd.getName().equalsIgnoreCase("sfly")) {
@@ -41,7 +40,7 @@ public class Bfly extends Main implements CommandExecutor {
             }
 
             if (economy.has(playerName, 2000)) {
-                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), moneytake);
+                economy.withdrawPlayer(playerName, 2000);
                 player.sendMessage(getPmTTC("&aVocê comprou Fly por 1 Hora Por 2000"));
                 player.setAllowFlight(true);
                 player.setFlying(true);

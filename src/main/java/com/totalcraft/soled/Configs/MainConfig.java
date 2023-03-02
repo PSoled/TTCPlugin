@@ -12,8 +12,7 @@ public class MainConfig {
     public static File configFile;
     public static YamlConfiguration config;
     private final Main main;
-    public static boolean rankupModule;
-    public static boolean eventGroupChangeModule;
+    public static boolean rankupModule, eventGroupChangeModule, venderModule;
     public static String worldJail = "spawn";
     public static int jailLocationX, jailLocationY, jailLocationZ;
     public static String worldLocatinaMina = "spawn";
@@ -43,11 +42,10 @@ public class MainConfig {
         config.options().copyDefaults(true);
         saveConfig();
 
-        Modules modules = new Modules();
-        modules.setMainInstance(this);
+        Modules.setMainInstance(this);
     }
 
-    public static void saveConfig() {
+    public void saveConfig() {
         try {
             config.save(configFile);
         } catch (IOException e) {
@@ -55,9 +53,16 @@ public class MainConfig {
         }
     }
 
+
     public void setRankupModule(boolean value) {
         rankupModule = value;
         config.set("rankupModule", value);
+        saveConfig();
+    }
+
+    public void setVenderModule(boolean value) {
+        venderModule = value;
+        config.set("venderModule", value);
         saveConfig();
     }
 
@@ -69,8 +74,10 @@ public class MainConfig {
 
     public void configModule() {
         rankupModule = config.getBoolean("rankupModule");
+        venderModule = config.getBoolean("venderModule");
         eventGroupChangeModule = config.getBoolean("eventGroupChangeModule");
         config.addDefault("rankupModule", rankupModule);
+        config.addDefault("venderModule", venderModule);
         config.addDefault("eventGroupChangeModule", eventGroupChangeModule);
     }
 

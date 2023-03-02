@@ -16,6 +16,7 @@ public class Modules implements CommandExecutor {
     Utils utils = new Utils();
 
     public static String rankup = "Comando";
+    public static String vender = "Comando";
     public static String groupchange = "Evento";
 
     private static MainConfig mainInstance;
@@ -28,20 +29,28 @@ public class Modules implements CommandExecutor {
 
     private final Map<String, Runnable> moduleFunctions = new HashMap<String, Runnable>() {{
         put("rankup on", () -> {
-            mainInstance.setRankupModule(true); // Usa a referência para a instância de Main
+            mainInstance.setRankupModule(true);
             sender.sendMessage(getPmCommandAdm(rankup, "/rankup", true));
         });
         put("rankup off", () -> {
-            mainInstance.setRankupModule(false); // Usa a referência para a instância de Main
+            mainInstance.setRankupModule(false);
             sender.sendMessage(getPmCommandAdm(rankup, "/rankup", false));
         });
         put("groupchange on", () -> {
-            mainInstance.setEventGroupChangeModule(true); // Usa a referência para a instância de Main
+            mainInstance.setEventGroupChangeModule(true);
             sender.sendMessage(getPmCommandAdm(groupchange, "groupchange", true));
         });
         put("groupchange off", () -> {
-            mainInstance.setEventGroupChangeModule(false); // Usa a referência para a instância de Main
+            mainInstance.setEventGroupChangeModule(false);
             sender.sendMessage(getPmCommandAdm(groupchange, "groupchange", false));
+        });
+        put("vender on", () -> {
+            mainInstance.setVenderModule(true);
+            sender.sendMessage(getPmCommandAdm(vender, "/vender", true));
+        });
+        put("vender off", () -> {
+            mainInstance.setVenderModule(false);
+            sender.sendMessage(getPmCommandAdm(vender, "/vender", false));
         });
         put(("list"), () -> sender.sendMessage(getListModule()));
     }};

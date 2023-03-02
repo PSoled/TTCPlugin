@@ -45,3 +45,7 @@ commands:
     usage: /unjail
     executor: com.totalcraft.soled.Commands.UnJail
 
+  vender:
+    description: Executa o comando de Vender
+    usage: /vender
+    executor: com.totalcraft.soled.Commands.Vender

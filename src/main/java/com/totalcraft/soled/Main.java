@@ -4,6 +4,7 @@ import com.totalcraft.soled.Commands.*;
 import com.totalcraft.soled.Configs.BflyData;
 import com.totalcraft.soled.Configs.JailData;
 import com.totalcraft.soled.Configs.MainConfig;
+import com.totalcraft.soled.Configs.PriceItems;
 import com.totalcraft.soled.Listeners.Events;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.*;
@@ -14,10 +15,16 @@ public class Main extends JavaPlugin implements Listener {
     public void onLoad() {
         MainConfig mainConfig = new MainConfig(this);
         mainConfig.setConfigs();
+
         BflyData bflySave = new BflyData(this);
         bflySave.loadFlyData();
+
         JailData jailData = new JailData(this);
         jailData.loadJailData();
+
+        PriceItems priceItems = new PriceItems(this);
+        priceItems.getConfigPrice();
+        PriceItems.saveConfigPrice();
     }
 
     @Override
@@ -33,6 +40,7 @@ public class Main extends JavaPlugin implements Listener {
         getCommand("sfly").setExecutor(new Bfly());
         getCommand("jail").setExecutor(new Jail());
         getCommand("unjail").setExecutor(new UnJail());
+        getCommand("vender").setExecutor(new Vender());
 
         Jail.jailTime();
         Bfly.bflyTime();

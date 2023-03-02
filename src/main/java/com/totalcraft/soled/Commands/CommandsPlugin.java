@@ -34,6 +34,7 @@ public class CommandsPlugin implements CommandExecutor {
                 case "reload":
                 case "restartserver":
                 case "som":
+                case "teste":
                     break;
                 default:
                     sender.sendMessage(getCommandsPlugin());
@@ -68,7 +69,10 @@ public class CommandsPlugin implements CommandExecutor {
                     player.sendMessage(getPmTTC("&cO som &b" + args[2] + " &cnão existe no Minecraft."));
                 }
             }
-            return true;
+
+            if (args.length > 0 && args[0].equalsIgnoreCase("teste")) {
+                Bukkit.reload();
+            }
         }
         return true;
     }

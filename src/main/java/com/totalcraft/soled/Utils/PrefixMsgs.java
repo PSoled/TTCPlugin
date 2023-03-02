@@ -1,6 +1,5 @@
 package com.totalcraft.soled.Utils;
 
-import com.totalcraft.soled.Commands.Modules;
 import com.totalcraft.soled.Configs.MainConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -69,15 +68,16 @@ public class PrefixMsgs {
 
     public static String getListModule() {
         Map<String, String[]> moduleStatus = new HashMap<>();
-        moduleStatus.put(ChatColor.BLUE + Modules.rankup, new String[]{"Rankup", MainConfig.rankupModule ? ChatColor.GREEN + " On" : ChatColor.RED + " Off"});
-        moduleStatus.put(ChatColor.DARK_AQUA + Modules.groupchange, new String[]{"Groupchange", MainConfig.eventGroupChangeModule ? ChatColor.GREEN + " On" : ChatColor.RED + " Off"});
+        moduleStatus.put("Rankup", new String[]{ChatColor.BLUE + "Comando " + ChatColor.YELLOW + "Rankup", MainConfig.rankupModule ? ChatColor.GREEN + " On" : ChatColor.RED + " Off"});
+        moduleStatus.put("Vender", new String[]{ChatColor.BLUE + "Comando " + ChatColor.YELLOW + "Vender", MainConfig.venderModule ? ChatColor.GREEN + " On" : ChatColor.RED + " Off"});
+        moduleStatus.put("EventoGroupChange", new String[]{ChatColor.DARK_AQUA + "Evento " + ChatColor.YELLOW + " Groupchange", MainConfig.eventGroupChangeModule ? ChatColor.GREEN + " On" : ChatColor.RED + " Off"});
 
         StringBuilder sb = new StringBuilder();
         sb.append(getPmTTC("&bLista dos modules que podem desativar e ativar\n\n"));
 
         for (String module : moduleStatus.keySet()) {
             String[] moduleData = moduleStatus.get(module);
-            sb.append(module).append(ChatColor.YELLOW).append(" ").append(moduleData[0]).append(moduleData[1]).append("\n");
+            sb.append(moduleData[0]).append(moduleData[1]).append("\n");
         }
 
         return sb.toString();
@@ -105,10 +105,27 @@ public class PrefixMsgs {
     }
 
     public static String getCommandsPlugin() {
-        String msg = getPmTTC("&fLista de comandos do Plugin\n" +
+        return getPmTTC("&fLista de comandos do Plugin\n" +
                 "\n&c/ttcsoled reload &eRenicia o Plugin TTCSoled" +
                 "\n&c/ttcsoled restartserver &eRenicia o Server" +
                 "\n&c/ttcsoled som &e<Player> <Som>");
+    }
+
+    public static String getCommandsVender(CommandSender sender) {
+        String msg = getPmTTC("&fLista de comandos do Vender\n" +
+                "\n&a/vender itens &eVender seus itens" +
+                "\n&a/vender itens netherstar &eVender itens do rank NetherStar" +
+                "\n&c/vender setitem &eSeta valor para um item");
+
+        if (!(sender instanceof Player)) {
+            return msg;
+        }
+        if (utils.getAdm(sender)) {
+            msg = getPmTTC("&fLista de comandos do Vender\n" +
+                    "\n&a/vender itens &eVender seus itens" +
+                    "\n&a/vender itens netherstar &eVender itens do rank NetherStar");
+        }
         return msg;
     }
+
 }
