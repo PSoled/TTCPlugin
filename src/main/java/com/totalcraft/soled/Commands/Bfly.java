@@ -78,6 +78,8 @@ public class Bfly extends Main implements CommandExecutor {
         }, 60, 60, TimeUnit.SECONDS);
     }
     public static void cancelBflyTime() {
-        scheduledFuture.cancel(false);
+        if (scheduledFuture != null) {
+            scheduledFuture.cancel(false);
+        }
     }
 }

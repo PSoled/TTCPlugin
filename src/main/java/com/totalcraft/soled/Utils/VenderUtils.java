@@ -1,13 +1,20 @@
 package com.totalcraft.soled.Utils;
 
+import com.totalcraft.soled.Commands.Vender;
 import com.totalcraft.soled.Configs.PriceItems;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
+import static com.totalcraft.soled.Utils.PrefixMsgs.getPmTTC;
 
 public class VenderUtils {
     public static Map<String, Double> priceItems = new HashMap<>();
@@ -27,9 +34,37 @@ public class VenderUtils {
         return priceItemsNether;
     }
 
-    public double getAmount(Player player, Map<String, Double> items) {
-        double totalValue = 0.0;
+    public static double getAmount(Player player, Map<String, Double> items) {
+        PermissionUser user = PermissionsEx.getUser(player);
         Map<Integer, ItemStack> removeItems = new HashMap<>();
+        double totalNether = 0;
+        double totalValue = 0.0;
+        if (user.has("rankNetherstar")) {
+            for (int i = 0; i < player.getInventory().getSize(); i++) {
+                ItemStack stack = player.getInventory().getItem(i);
+                if (stack != null) {
+                    int id = stack.getTypeId();
+                    int meta = stack.getDurability();
+                    String key = id + ":" + meta;
+                    double value = priceItemsNether().getOrDefault(key, 0.0);
+                    if (value > 0) {
+                        int count = stack.getAmount();
+                        double itemValue = count * value;
+                        totalNether += itemValue;
+                        if (count <= stack.getMaxStackSize()) {
+                            removeItems.put(i, stack.clone());
+                        } else {
+                            ItemStack splitStack = stack.clone();
+                            splitStack.setAmount(stack.getMaxStackSize());
+                            removeItems.put(i, splitStack);
+                            stack.setAmount(count - stack.getMaxStackSize());
+                        }
+                    }
+                }
+            }
+            removeItems.forEach((slot, item) -> player.getInventory().setItem(slot, null));
+            totalValue += totalNether;
+        }
         for (int i = 0; i < player.getInventory().getSize(); i++) {
             ItemStack stack = player.getInventory().getItem(i);
             if (stack != null) {
@@ -56,7 +91,7 @@ public class VenderUtils {
         return totalValue;
     }
 
-    public Map<String, Integer> listProfit() {
+    public static Map<String, Integer> listProfit() {
         Map<String, Integer> listProfit = new HashMap<>();
         String profit = "ChestShop.profit.";
         listProfit.put(profit + "Civilrankpedra", 3);
@@ -118,7 +153,7 @@ public class VenderUtils {
         return listProfit;
     }
 
-    public int getProfit(Player player) {
+    public static int getProfit(Player player) {
         PermissionUser user = PermissionsEx.getUser(player);
         for (String key : listProfit().keySet()) {
             if (user.has(key)) {
@@ -126,5 +161,51 @@ public class VenderUtils {
             }
         }
         return 0;
+    }
+
+    static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    static ScheduledFuture<?> scheduledFuture, cancelTask;
+    public static void venderAuto(Player player, Map<String, Double> list) {
+        player.sendMessage(getPmTTC("&eVender auto " + (list.equals(VenderUtils.priceItems) ?  "normal" : "&dNetherStar") + " &aAtivado"));
+        if (cancelTask == null) {
+            cancelTaskVender();
+        }
+        if (scheduledFuture == null) {
+            scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
+                Iterator<Map.Entry<String, Integer>> it = Vender.playerVender.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry<String, Integer> entry = it.next();
+                    Player playerObjeto = Bukkit.getPlayer(entry.getKey());
+                    if (entry.getValue() >= 15) {
+                        it.remove();
+                        playerObjeto.sendMessage(getPmTTC("&cVender Auto desativado após 15 Segundos Inativo"));
+                    }
+
+                    double valor;
+                    valor = getAmount(playerObjeto, list);
+
+                    if (valor == 0) {
+                        entry.setValue(entry.getValue() + 1);
+                    }
+
+                    double profit = getProfit(playerObjeto);
+                    double total = (valor * profit / 100) + valor;
+                    if (total > 0) {
+                        entry.setValue(0);
+                        String valorTotal = String.format("%s", Vender.formatter.format(total));
+                        playerObjeto.sendMessage(getPmTTC("&aVocê vendeu os itens no seu inventário por &e" + valorTotal + " &aReais!"));
+                    }
+                }
+            }, 0, 1, TimeUnit.SECONDS);
+        }
+    }
+
+    public static void cancelTaskVender() {
+        cancelTask = scheduler.scheduleAtFixedRate(() -> {
+            if (Vender.playerVender == null) {
+                scheduledFuture.cancel(true);
+                cancelTask.cancel(true);
+            }
+        }, 0, 1, TimeUnit.SECONDS);
     }
 }

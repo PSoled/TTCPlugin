@@ -112,7 +112,9 @@ public class Jail implements CommandExecutor {
     }
 
     public static void canceljailTime() {
-        scheduledFuture.cancel(false);
+        if (scheduledFuture != null) {
+            scheduledFuture.cancel(false);
+        }
     }
 }
 

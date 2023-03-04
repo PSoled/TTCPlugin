@@ -12,13 +12,19 @@ import org.bukkit.entity.Player;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
+import java.text.DecimalFormat;
+import java.util.HashMap;
+
 import static com.totalcraft.soled.Utils.PrefixMsgs.*;
 
 
 public class Vender implements CommandExecutor {
+
     Utils utils = new Utils();
     VenderUtils venderUtils = new VenderUtils();
     Economy economy = Bukkit.getServicesManager().getRegistration(Economy.class).getProvider();
+    public static DecimalFormat formatter = new DecimalFormat("#,##0.###");
+    public static HashMap<String, Integer> playerVender = new HashMap<>();
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -26,6 +32,7 @@ public class Vender implements CommandExecutor {
             switch (args.length > 0 ? args[0].toLowerCase() : "") {
                 case "itens":
                 case "setitem":
+                case "auto":
                     break;
                 default:
                     sender.sendMessage(getCommandsVender(sender));
@@ -47,29 +54,21 @@ public class Vender implements CommandExecutor {
                     player.sendMessage(getPmTTC("&cVocê não tem acesso ao /vender"));
                     return true;
                 }
-                double valor = 0;
-                double valornether = 0;
+                double valor;
 
-                if (args.length > 1 && args[1].equalsIgnoreCase("netherstar")) {
-                    if (user.has("rankNetherstar")) {
-                        valornether = venderUtils.getAmount(player, VenderUtils.priceItemsNether());
-                    } else {
-                        player.sendMessage(getPmTTC("&cVocê não é Rank Nether Star!"));
-                        return true;
-                    }
-                } else {
-                    valor = venderUtils.getAmount(player, VenderUtils.priceItems);
-                }
-                if (valor == 0 && valornether == 0) {
+                valor = VenderUtils.getAmount(player, VenderUtils.priceItems);
+
+                if (valor == 0) {
                     player.sendMessage(getPmTTC("&cVocê não tem itens para vender"));
                     return true;
                 }
 
                 String playerName = player.getName();
-                double profit = venderUtils.getProfit(player);
-                double total = (valor * profit / 100) + valor + (valornether * profit / 100) + valornether;
+                double profit = VenderUtils.getProfit(player);
+                double total = (valor * profit / 100) + valor;
                 economy.depositPlayer(playerName, total);
-                player.sendMessage(getPmTTC("&aVocê vendeu os itens no seu inventário por &e" + total + " &aReais!"));
+                String valorTotal = String.format("%s", formatter.format(total));
+                player.sendMessage(getPmTTC("&aVocê vendeu os itens no seu inventário por &e" + valorTotal + " &aReais!"));
             }
 
 
@@ -93,6 +92,30 @@ public class Vender implements CommandExecutor {
                     venderUtils.addItem(id, meta, valor);
                     sender.sendMessage(getPmTTC("&bValor do item setado no /vender"));
                 }
+            }
+            if (args.length > 0 && args[0].equalsIgnoreCase("auto")) {
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage(getPmConsole());
+                    return true;
+                }
+                if (!MainConfig.venderModule) {
+                    sender.sendMessage(getPmTTC("&cComando /vender Desativado"));
+                    return true;
+                }
+                Player player = (Player) sender;
+                PermissionUser user = PermissionsEx.getUser(player);
+
+                if (!user.has("ttcsoled.vender")) {
+                    player.sendMessage(getPmTTC("&cVocê não tem acesso ao /vender"));
+                    return true;
+                }
+                if (playerVender.containsKey(player.getName())) {
+                    player.sendMessage(getPmTTC("&cVocê já está com o vender auto Ativado"));
+                    return true;
+                }
+
+                playerVender.put(player.getName(), 0);
+                VenderUtils.venderAuto(player, VenderUtils.priceItems);
             }
         }
         return true;

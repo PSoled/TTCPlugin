@@ -9,53 +9,46 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import static org.bukkit.Sound.NOTE_PLING;
+import static com.totalcraft.soled.Utils.PrefixMsgs.getPmTTC;
 
 public class RestartServerUtils {
-    ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    ScheduledFuture<?> scheduledFuture;
     int timeRestart = 60;
+    ScheduledExecutorService restartScheduler = Executors.newScheduledThreadPool(1);
+    ScheduledFuture<?> restartFuture;
+
     public void restartServer() {
         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "whitelist on");
-        scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
+        restartFuture = restartScheduler.scheduleAtFixedRate(() -> {
             if (timeRestart < 20) {
-                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"kickall Reniciando-O-Servidor");
-                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "save-all");
-                timeRestart();
+                restartFuture.cancel(true);
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    player.kickPlayer(getPmTTC("&cReniciando o Servidor"));
+                }
+                restartFuture = restartScheduler.schedule(() -> {
+                    Bukkit.reload();
+                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "save-all");
+                    restartFuture.cancel(true);
+                    restartFuture = restartScheduler.schedule(() -> {
+                        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "restart");
+                        restartFuture.cancel(true);
+                    }, 60, TimeUnit.SECONDS);
+                }, 30, TimeUnit.SECONDS);
                 return;
             }
 
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.playSound(player.getLocation(), NOTE_PLING, 1, 1);
             }
-            String announce = "anunciar &0&l------------------------------------";
-            String anunciar = "anunciar &c&lReniciando o Server em &f&l" + timeRestart + " Segundos";
-            waitTicks(200);
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), announce);
-            waitTicks(200);
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), announce);
-            waitTicks(200);
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), anunciar);
-            waitTicks(200);
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), announce);
-            waitTicks(200);
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), announce);
+
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "anunciar &f&l------------------------------------");
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "anunciar &f&l------------------------------------");
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "anunciar &c&lReniciando o Server em &f&l" + timeRestart + " Segundos");
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "anunciar &f&l------------------------------------");
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "anunciar &f&l------------------------------------");
 
             timeRestart -= 20;
         }, 0, 20, TimeUnit.SECONDS);
     }
-
-    public void timeRestart() {
-        scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "save-all");
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "restart");
-        },90, 90, TimeUnit.SECONDS);
-    }
-
-    public void waitTicks(int ms) {
-        try {
-            Thread.sleep(ms);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
+
+

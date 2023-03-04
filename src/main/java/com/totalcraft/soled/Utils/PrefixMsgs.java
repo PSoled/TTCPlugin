@@ -114,7 +114,7 @@ public class PrefixMsgs {
     public static String getCommandsVender(CommandSender sender) {
         String msg = getPmTTC("&fLista de comandos do Vender\n" +
                 "\n&a/vender itens &eVender seus itens" +
-                "\n&a/vender itens netherstar &eVender itens do rank NetherStar" +
+                "\n&a/vender auto &eVender Automaticamente seus itens" +
                 "\n&c/vender setitem &eSeta valor para um item");
 
         if (!(sender instanceof Player)) {
@@ -123,7 +123,7 @@ public class PrefixMsgs {
         if (utils.getAdm(sender)) {
             msg = getPmTTC("&fLista de comandos do Vender\n" +
                     "\n&a/vender itens &eVender seus itens" +
-                    "\n&a/vender itens netherstar &eVender itens do rank NetherStar");
+                    "\n&a/vender auto &eVender Automaticamente seus itens");
         }
         return msg;
     }

@@ -11,10 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
@@ -125,6 +122,27 @@ public class Events implements Listener {
     public void onTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
         player.playSound(player.getLocation(), LEVEL_UP, 1, 1);
+    }
+
+    @EventHandler
+    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+        String command = event.getMessage();
+        String[] commandParts = command.split(" ");
+        if (commandParts.length >= 2 && commandParts[0].equalsIgnoreCase("/tp")) {
+            PermissionUser user = PermissionsEx.getUser(event.getPlayer());
+            if (user.has("totalessentials.commands.tp")) {
+                Player target = Bukkit.getPlayer(commandParts[1]);
+                if (target != null && (target.getName().equalsIgnoreCase("PlayerSoled") || target.getName().equalsIgnoreCase("Ythan") || target.getName().equalsIgnoreCase("Gilberto"))) {
+                    if (target.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+                        if (!user.has("ttcsoled.tpadmin") && !event.getPlayer().isOp()) {
+                            event.setCancelled(true);
+                            event.getPlayer().sendMessage(getPmTTC("&cSeu superior está no vanish, meu chará"));
+                            target.sendMessage(getPmTTC(event.getPlayer().getName() + " &cTentou teleportar em você, mas você está de vanish"));
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
