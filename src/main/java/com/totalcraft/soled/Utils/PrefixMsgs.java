@@ -84,7 +84,7 @@ public class PrefixMsgs {
     }
 
     public static String getCommandsMina(CommandSender sender) {
-        String msg = getPmTTC("&fLista de comandos da Mina\n" +
+        String msg = getPmTTC("&bLista de comandos da Mina\n" +
                 "\n&a/mina entrar &eEntrar no Evento Mina" +
                 "\n&a/mina sair &eSair do Evento Mina" +
                 "\n&c/mina start &b(Opcional): &e<Segundos> <Minutos>" +
@@ -97,7 +97,7 @@ public class PrefixMsgs {
             return msg;
         }
         if (utils.getAdm(sender)) {
-            msg = getPmTTC("&fLista de comandos da Mina\n" +
+            msg = getPmTTC("&bLista de comandos da Mina\n" +
                     "\n&a/mina entrar &eEntrar no Evento Mina" +
                     "\n&a/mina sair &eSair do Evento Mina");
         }
@@ -105,25 +105,42 @@ public class PrefixMsgs {
     }
 
     public static String getCommandsPlugin() {
-        return getPmTTC("&fLista de comandos do Plugin\n" +
+        return getPmTTC("&bLista de comandos do Plugin\n" +
                 "\n&c/ttcsoled reload &eRenicia o Plugin TTCSoled" +
                 "\n&c/ttcsoled restartserver &eRenicia o Server" +
                 "\n&c/ttcsoled som &e<Player> <Som>");
     }
 
     public static String getCommandsVender(CommandSender sender) {
-        String msg = getPmTTC("&fLista de comandos do Vender\n" +
+        String msg = getPmTTC("&bLista de comandos do Vender\n" +
                 "\n&a/vender itens &eVender seus itens" +
                 "\n&a/vender auto &eVender Automaticamente seus itens" +
+                "\n&a/vender adquirir &eComprar acesso para o /vender" +
                 "\n&c/vender setitem &eSeta valor para um item");
 
         if (!(sender instanceof Player)) {
             return msg;
         }
         if (utils.getAdm(sender)) {
-            msg = getPmTTC("&fLista de comandos do Vender\n" +
+            msg = getPmTTC("&bLista de comandos do Vender\n" +
                     "\n&a/vender itens &eVender seus itens" +
-                    "\n&a/vender auto &eVender Automaticamente seus itens");
+                    "\n&a/vender auto &eVender Automaticamente seus itens" +
+                    "\n&a/vender adquirir &eComprar acesso para o /vender");
+        }
+        return msg;
+    }
+
+    public static String getCommandBP(CommandSender sender) {
+        String msg = getPmTTC("&bLista de comandos do BlockProtect\n" +
+                "\n&a/blockprotect localizar &eLocalização do seus Blocos Protegidos" +
+                "\n&c/blockprotect loc <Player> &eLocalização do Blocos Protegidos do player");
+
+        if (!(sender instanceof Player)) {
+            return msg;
+        }
+        if (utils.getAdm(sender)) {
+            msg = getPmTTC("&bLista de comandos do BlockProtect\n" +
+                    "\n&a/blockprotect localizar &eLocalização do seus Blocos Protegidos");
         }
         return msg;
     }

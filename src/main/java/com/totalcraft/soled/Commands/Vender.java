@@ -5,10 +5,12 @@ import com.totalcraft.soled.Utils.Utils;
 import com.totalcraft.soled.Utils.VenderUtils;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
@@ -33,6 +35,7 @@ public class Vender implements CommandExecutor {
                 case "itens":
                 case "setitem":
                 case "auto":
+                case "adquirir":
                     break;
                 default:
                     sender.sendMessage(getCommandsVender(sender));
@@ -116,6 +119,28 @@ public class Vender implements CommandExecutor {
 
                 playerVender.put(player.getName(), 0);
                 VenderUtils.venderAuto(player, VenderUtils.priceItems);
+            }
+            if (args.length > 0 && args[0].equalsIgnoreCase("adquirir")) {
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage(getPmConsole());
+                    return true;
+                }
+                Player player = (Player) sender;
+                PermissionUser user = PermissionsEx.getUser(player);
+
+                if (user.has("ttcsoled.vender")) {
+                    player.sendMessage(getPmTTC("&cVocê já tem acesso ao /vender"));
+                    return true;
+                }
+
+                ItemStack fragment = new ItemStack(Material.getMaterial(4374), 1, (short) 0);
+                if (!player.getInventory().containsAtLeast(fragment, 1)) {
+                    player.sendMessage(getPmTTC("&cVocê precisa de 1 IC2 Fragment para adquirir o /vender"));
+                    return true;
+                }
+                player.getInventory().removeItem(fragment);
+                user.addPermission("ttcsoled.vender");
+                player.sendMessage(getPmTTC("&aVocê adquiriu acesso ao /vender !!"));
             }
         }
         return true;

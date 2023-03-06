@@ -2,6 +2,7 @@ package com.totalcraft.soled.Utils;
 
 import com.totalcraft.soled.Commands.Vender;
 import com.totalcraft.soled.Configs.PriceItems;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -18,6 +19,7 @@ import static com.totalcraft.soled.Utils.PrefixMsgs.getPmTTC;
 
 public class VenderUtils {
     public static Map<String, Double> priceItems = new HashMap<>();
+    static Economy economy = Bukkit.getServicesManager().getRegistration(Economy.class).getProvider();
 
     public void addItem(int id, int meta, double valor) {
         priceItems.put(id + ":" + meta, valor);
@@ -192,6 +194,7 @@ public class VenderUtils {
                     double total = (valor * profit / 100) + valor;
                     if (total > 0) {
                         entry.setValue(0);
+                        economy.depositPlayer(playerObjeto.getName(), total);
                         String valorTotal = String.format("%s", Vender.formatter.format(total));
                         playerObjeto.sendMessage(getPmTTC("&aVocê vendeu os itens no seu inventário por &e" + valorTotal + " &aReais!"));
                     }

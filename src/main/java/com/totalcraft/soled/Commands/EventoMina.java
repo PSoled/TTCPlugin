@@ -16,6 +16,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
@@ -141,6 +142,10 @@ public class EventoMina extends JavaPlugin implements Listener {
                 Player player = (Player) sender;
                 if (!eventoAtivo) {
                     sender.sendMessage(getPmTTC("&cO Evento Mina não está ocorrendo !"));
+                    return true;
+                }
+                if (minaPlayers.contains(player.getName())) {
+                    player.sendMessage(getPmTTC("&cVocê já está no Evento Mina. &fUtilize /mina sair caso precisar"));
                     return true;
                 }
                 if (utils.getAdm(sender)) {
@@ -330,22 +335,9 @@ public class EventoMina extends JavaPlugin implements Listener {
     }
 
     public void eventoStop() {
-        System.out.println("A");
         eventoStop = true;
         if (eventoAtivo) {
-            for (Player player : mPlayers) {
-                player.teleport(playerLocations.get(player.getName()));
-                PlayerInventory inventory = player.getInventory();
-                inventory.remove(Material.COOKED_BEEF);
-                for (int i = 0; i < inventory.getSize(); i++) {
-                    ItemStack item = inventory.getItem(i);
-                    if (item != null && item.getType() == pickaxe.getType()) {
-                        inventory.clear(i);
-                    }
-                }
-                player.playSound(player.getLocation(), EXPLODE, 1, 1);
-            }
-            System.out.println("C");
+            Bukkit.getScheduler().runTask(plugin, this::clearPlayer);
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "rg flag mina build -w spawn deny");
             playerLocations.clear();
             minaPlayers.clear();
@@ -357,5 +349,25 @@ public class EventoMina extends JavaPlugin implements Listener {
             eventoStop = false;
             scheduledFuture.cancel(true);
         }
+    }
+
+    public void clearPlayer() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (Player player : mPlayers) {
+                    player.teleport(playerLocations.get(player.getName()));
+                    PlayerInventory inventory = player.getInventory();
+                    inventory.remove(Material.COOKED_BEEF);
+                    for (int i = 0; i < inventory.getSize(); i++) {
+                        ItemStack item = inventory.getItem(i);
+                        if (item != null && item.getType() == pickaxe.getType()) {
+                            inventory.clear(i);
+                        }
+                    }
+                    player.playSound(player.getLocation(), EXPLODE, 1, 1);
+                }
+            }
+        }.runTask(plugin);
     }
 }

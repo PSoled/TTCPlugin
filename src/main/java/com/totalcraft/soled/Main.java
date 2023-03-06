@@ -1,11 +1,8 @@
 package com.totalcraft.soled;
 
 import com.totalcraft.soled.Commands.*;
-import com.totalcraft.soled.Configs.BflyData;
-import com.totalcraft.soled.Configs.JailData;
-import com.totalcraft.soled.Configs.MainConfig;
-import com.totalcraft.soled.Configs.PriceItems;
-import com.totalcraft.soled.Listeners.Events;
+import com.totalcraft.soled.Configs.*;
+import com.totalcraft.soled.Listeners.EventManager;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.*;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,17 +11,7 @@ public class Main extends JavaPlugin implements Listener {
     @Override
     public void onLoad() {
         MainConfig mainConfig = new MainConfig(this);
-        mainConfig.setConfigs();
-
-        BflyData bflySave = new BflyData(this);
-        bflySave.loadFlyData();
-
-        JailData jailData = new JailData(this);
-        jailData.loadJailData();
-
-        PriceItems priceItems = new PriceItems(this);
-        priceItems.getConfigPrice();
-        PriceItems.saveConfigPrice();
+        mainConfig.initializeConfigs();
     }
 
     @Override
@@ -41,11 +28,14 @@ public class Main extends JavaPlugin implements Listener {
         getCommand("jail").setExecutor(new Jail());
         getCommand("unjail").setExecutor(new UnJail());
         getCommand("vender").setExecutor(new Vender());
+        getCommand("blockprotect").setExecutor(new BlockProtect());
 
+        ConsoleFilter.register(getLogger());
+        BlockProtectData blockProtectData = new BlockProtectData(this);
+        blockProtectData.loadProtectedBlocks();
         Jail.jailTime();
         Bfly.bflyTime();
-        getServer().getPluginManager().registerEvents(this, this);
-        getServer().getPluginManager().registerEvents(new Events(this), this);
+        EventManager.registerAll(this);
     }
 
     @Override

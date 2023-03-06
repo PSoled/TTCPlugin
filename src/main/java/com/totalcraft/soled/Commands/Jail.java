@@ -53,7 +53,13 @@ public class Jail implements CommandExecutor {
                 return true;
             }
             String playerName = args[0];
-            int time = Integer.parseInt(args[1]);
+            int time;
+            try {
+                time = Integer.parseInt(args[1]);
+            } catch (NumberFormatException a) {
+                sender.sendMessage(getPmTTC("&cO AMIGÃO SE É PRA TANTO ASSIM, VAMO USAR O /BAN"));
+                return true;
+            }
             Player playerJail = Bukkit.getPlayer(playerName);
 
             if (!args[1].matches("\\d+")) {

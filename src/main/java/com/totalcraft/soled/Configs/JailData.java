@@ -20,7 +20,7 @@ public class JailData {
     public static HashMap<String, Integer> jailListPlayer = new HashMap<>();
 
     public void loadJailData() {
-        jailFile = new File(main.getDataFolder(), "jail.yml");
+        jailFile = new File(main.getDataFolder(), "data/jail.yml");
         jailConfig = YamlConfiguration.loadConfiguration(jailFile);
 
         for (String playerName : jailConfig.getKeys(false)) {
@@ -31,8 +31,10 @@ public class JailData {
 
     public static void saveJailData() {
         for (String key : jailConfig.getKeys(false)) {
-            if (!jailListPlayer.containsKey(key)) {
-                jailConfig.set(key, null);
+            if (jailListPlayer != null) {
+                if (!jailListPlayer.containsKey(key)) {
+                    jailConfig.set(key, null);
+                }
             }
         }
         for (Map.Entry<String, Integer> entry : jailListPlayer.entrySet()) {

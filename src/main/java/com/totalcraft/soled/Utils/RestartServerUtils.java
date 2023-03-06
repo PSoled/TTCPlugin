@@ -20,7 +20,6 @@ public class RestartServerUtils {
         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "whitelist on");
         restartFuture = restartScheduler.scheduleAtFixedRate(() -> {
             if (timeRestart < 20) {
-                restartFuture.cancel(true);
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     player.kickPlayer(getPmTTC("&cReniciando o Servidor"));
                 }
@@ -33,6 +32,7 @@ public class RestartServerUtils {
                         restartFuture.cancel(true);
                     }, 60, TimeUnit.SECONDS);
                 }, 30, TimeUnit.SECONDS);
+                restartFuture.cancel(true);
                 return;
             }
 

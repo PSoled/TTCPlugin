@@ -49,3 +49,8 @@ commands:
     description: Executa o comando de Vender
     usage: /vender
     executor: com.totalcraft.soled.Commands.Vender
+
+  blockprotect:
+    description: Executa o comando da Proteção de blocos
+    usage: /blockprotect
+    executor: com.totalcraft.soled.Commands.BlockProtect

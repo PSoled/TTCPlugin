@@ -35,6 +35,9 @@ public class MainConfig {
                 "\nLocalização do Jail de Mundo e X Y Z" +
                 "\n");
 
+
+
+
         configModule();
         configMina();
         configJail();
@@ -51,6 +54,20 @@ public class MainConfig {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void initializeConfigs() {
+        setConfigs();
+
+        BflyData bflySave = new BflyData(main);
+        bflySave.loadFlyData();
+
+        JailData jailData = new JailData(main);
+        jailData.loadJailData();
+
+        PriceItems priceItems = new PriceItems(main);
+        priceItems.getConfigPrice();
+        PriceItems.saveConfigPrice();
     }
 
 
