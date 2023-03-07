@@ -15,12 +15,15 @@ import static com.totalcraft.soled.Utils.PrefixMsgs.*;
 
 public class CommandsPlugin implements CommandExecutor {
     private final PluginManager pluginManager;
+    private final RestartServerUtils restartServerUtils;
 
-    public CommandsPlugin(PluginManager pluginManager) {
+    public CommandsPlugin(PluginManager pluginManager, Plugin plugin) {
         this.pluginManager = pluginManager;
+        restartServerUtils = new RestartServerUtils(plugin);
     }
     Utils utils = new Utils();
-    RestartServerUtils restartServerUtils = new RestartServerUtils();
+
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("ttcsoled")) {

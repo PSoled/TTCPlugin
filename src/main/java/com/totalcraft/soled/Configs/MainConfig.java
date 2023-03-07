@@ -56,20 +56,6 @@ public class MainConfig {
         }
     }
 
-    public void initializeConfigs() {
-        setConfigs();
-
-        BflyData bflySave = new BflyData(main);
-        bflySave.loadFlyData();
-
-        JailData jailData = new JailData(main);
-        jailData.loadJailData();
-
-        PriceItems priceItems = new PriceItems(main);
-        priceItems.getConfigPrice();
-        PriceItems.saveConfigPrice();
-    }
-
 
     public void setRankupModule(boolean value) {
         rankupModule = value;

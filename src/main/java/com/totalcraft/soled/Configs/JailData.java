@@ -30,13 +30,6 @@ public class JailData {
     }
 
     public static void saveJailData() {
-        for (String key : jailConfig.getKeys(false)) {
-            if (jailListPlayer != null) {
-                if (!jailListPlayer.containsKey(key)) {
-                    jailConfig.set(key, null);
-                }
-            }
-        }
         for (Map.Entry<String, Integer> entry : jailListPlayer.entrySet()) {
             jailConfig.set(entry.getKey(), entry.getValue());
         }

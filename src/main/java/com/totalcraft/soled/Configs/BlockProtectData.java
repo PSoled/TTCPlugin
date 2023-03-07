@@ -61,12 +61,13 @@ public class BlockProtectData {
     }
 
     public static String getLocBlock(String name) {
+        StringBuilder result = new StringBuilder();
         for (Location loc : protectedBlock.keySet()) {
             String comp = protectedBlock.get(loc);
             if (comp.equals(name)) {
-                return "X: " + loc.getBlockX() + " Y: " + loc.getBlockY() + " Z: " + loc.getBlockZ() + "\n";
+                result.append("X: ").append(loc.getBlockX()).append(" Y: ").append(loc.getBlockY()).append(" Z: ").append(loc.getBlockZ()).append("\n");
             }
         }
-        return "null";
+        return (result.length() == 0) ? "null" : result.toString();
     }
 }

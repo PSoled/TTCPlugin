@@ -26,7 +26,7 @@ public class BlockPlace implements Listener {
             if (!user.has("ttcsoled.admin") && !player.isOp()) {
                 for (Location loc : BlockProtectData.protectedBlock.keySet()) {
                     String blockProtect = BlockProtectData.protectedBlock.get(loc);
-                    if (block.getTypeId() == 1503 && blockLocation.distance(loc) <= 30 && !player.getName().equals(blockProtect)) {
+                    if (block.getTypeId() == 1503 && blockLocation.distance(loc) <= 50 && !player.getName().equals(blockProtect)) {
                         event.setCancelled(true);
                         player.sendMessage(getPmTTC("&cHá blocos protegido por perto, Se afaste para colocar a sua Pedreira"));
                         blockCancelled = true;
@@ -34,7 +34,7 @@ public class BlockPlace implements Listener {
                     }
                     if (blockLocation.distance(loc) <= 5 && !player.getName().equals(blockProtect)) {
                         event.setCancelled(true);
-                        player.sendMessage(getPmTTC("&cVocê pode colocar blocos perto de um bloco protegido"));
+                        player.sendMessage(getPmTTC("&cVocê não pode colocar blocos perto de um bloco protegido"));
                         blockCancelled = true;
                         break;
                     }

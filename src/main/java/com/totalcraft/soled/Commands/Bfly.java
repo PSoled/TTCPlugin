@@ -18,6 +18,7 @@ import static com.totalcraft.soled.Utils.PrefixMsgs.getPmConsole;
 import static com.totalcraft.soled.Utils.PrefixMsgs.getPmTTC;
 
 public class Bfly extends Main implements CommandExecutor {
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
@@ -26,7 +27,6 @@ public class Bfly extends Main implements CommandExecutor {
         }
         Player player = (Player) sender;
         String playerName = player.getName();
-        Economy economy = Bukkit.getServicesManager().getRegistration(Economy.class).getProvider();
 
         if (cmd.getName().equalsIgnoreCase("sfly")) {
             if (BflyData.flyListPlayer.containsKey(playerName)) {
@@ -35,10 +35,10 @@ public class Bfly extends Main implements CommandExecutor {
                     player.setFlying(true);
                     player.sendMessage(getPmTTC("&aSeu Fly foi reativado"));
                 }
-                player.sendMessage(getPmTTC("&eVocê ainda tem " + BflyData.flyListPlayer.get(playerName)+ " Minutos de Fly"));
+                player.sendMessage(getPmTTC("&eVocê ainda tem " + BflyData.flyListPlayer.get(playerName) + " Minutos de Fly"));
                 return true;
             }
-
+            Economy economy = Bukkit.getServicesManager().getRegistration(Economy.class).getProvider();
             if (economy.has(playerName, 2000)) {
                 economy.withdrawPlayer(playerName, 2000);
                 player.sendMessage(getPmTTC("&aVocê comprou Fly por 1 Hora Por 2000"));
@@ -58,16 +58,20 @@ public class Bfly extends Main implements CommandExecutor {
 
     static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     static ScheduledFuture<?> scheduledFuture;
+
     public static void bflyTime() {
         scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
             for (String name : BflyData.flyListPlayer.keySet()) {
                 int valor = BflyData.flyListPlayer.get(name);
                 if (valor < 1) {
                     Player player = Bukkit.getPlayer(name);
+                    if (player != null) {
+                        player.sendMessage(getPmTTC("&c&lO tempo do seu fly acabou!"));
+                        player.setFlying(false);
+                        player.setAllowFlight(false);
+                    }
+                    BflyData.flyConfig.set(name, null);
                     BflyData.flyListPlayer.remove(name);
-                    player.sendMessage(getPmTTC("&c&lO tempo do seu fly acabou!"));
-                    player.setFlying(false);
-                    player.setAllowFlight(false);
                     BflyData.saveFlyData();
                 } else {
                     valor--;
@@ -77,6 +81,8 @@ public class Bfly extends Main implements CommandExecutor {
             }
         }, 60, 60, TimeUnit.SECONDS);
     }
+
+
     public static void cancelBflyTime() {
         if (scheduledFuture != null) {
             scheduledFuture.cancel(false);

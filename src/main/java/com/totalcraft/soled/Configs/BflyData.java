@@ -27,13 +27,6 @@ public class BflyData {
         }
     }
     public static void saveFlyData() {
-        for (String key : flyConfig.getKeys(false)) {
-            if (BflyData.flyListPlayer != null) {
-                if (!BflyData.flyListPlayer.containsKey(key)) {
-                    flyConfig.set(key, null);
-                }
-            }
-        }
         for (Map.Entry<String, Integer> entry : flyListPlayer.entrySet()) {
             flyConfig.set(entry.getKey(), entry.getValue());
         }

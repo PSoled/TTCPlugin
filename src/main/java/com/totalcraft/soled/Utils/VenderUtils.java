@@ -19,7 +19,6 @@ import static com.totalcraft.soled.Utils.PrefixMsgs.getPmTTC;
 
 public class VenderUtils {
     public static Map<String, Double> priceItems = new HashMap<>();
-    static Economy economy = Bukkit.getServicesManager().getRegistration(Economy.class).getProvider();
 
     public void addItem(int id, int meta, double valor) {
         priceItems.put(id + ":" + meta, valor);
@@ -168,6 +167,7 @@ public class VenderUtils {
     static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     static ScheduledFuture<?> scheduledFuture, cancelTask;
     public static void venderAuto(Player player, Map<String, Double> list) {
+        Economy economy = Bukkit.getServicesManager().getRegistration(Economy.class).getProvider();
         player.sendMessage(getPmTTC("&eVender auto " + (list.equals(VenderUtils.priceItems) ?  "normal" : "&dNetherStar") + " &aAtivado"));
         if (cancelTask == null) {
             cancelTaskVender();

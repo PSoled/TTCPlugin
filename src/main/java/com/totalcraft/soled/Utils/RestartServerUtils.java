@@ -2,37 +2,34 @@ package com.totalcraft.soled.Utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitTask;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
-import static org.bukkit.Sound.NOTE_PLING;
 import static com.totalcraft.soled.Utils.PrefixMsgs.getPmTTC;
+import static org.bukkit.Sound.NOTE_PLING;
 
 public class RestartServerUtils {
-    int timeRestart = 60;
-    ScheduledExecutorService restartScheduler = Executors.newScheduledThreadPool(1);
-    ScheduledFuture<?> restartFuture;
+
+    private final Plugin plugin;
+
+    public RestartServerUtils(Plugin plugin) {
+        this.plugin = plugin;
+    }
+
+    BukkitTask restart;
+    static int timeRestart = 60;
 
     public void restartServer() {
         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "whitelist on");
-        restartFuture = restartScheduler.scheduleAtFixedRate(() -> {
+        restart = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             if (timeRestart < 20) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    player.kickPlayer(getPmTTC("&cReniciando o Servidor"));
+                    player.kickPlayer(getPmTTC("&cServidor Reniciando"));
                 }
-                restartFuture = restartScheduler.schedule(() -> {
-                    Bukkit.reload();
-                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "save-all");
-                    restartFuture.cancel(true);
-                    restartFuture = restartScheduler.schedule(() -> {
-                        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "restart");
-                        restartFuture.cancel(true);
-                    }, 60, TimeUnit.SECONDS);
-                }, 30, TimeUnit.SECONDS);
-                restartFuture.cancel(true);
+                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "save-all");
+                Bukkit.getScheduler().runTaskLater(plugin, Bukkit::reload, 20 * 20);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "restart"), 20 * 50);
+                restart.cancel();
                 return;
             }
 
@@ -45,9 +42,8 @@ public class RestartServerUtils {
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "anunciar &c&lReniciando o Server em &f&l" + timeRestart + " Segundos");
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "anunciar &f&l------------------------------------");
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "anunciar &f&l------------------------------------");
-
             timeRestart -= 20;
-        }, 0, 20, TimeUnit.SECONDS);
+        }, 0, 20 * 15);
     }
 }
 

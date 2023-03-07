@@ -24,7 +24,6 @@ public class Vender implements CommandExecutor {
 
     Utils utils = new Utils();
     VenderUtils venderUtils = new VenderUtils();
-    Economy economy = Bukkit.getServicesManager().getRegistration(Economy.class).getProvider();
     public static DecimalFormat formatter = new DecimalFormat("#,##0.###");
     public static HashMap<String, Integer> playerVender = new HashMap<>();
 
@@ -65,7 +64,7 @@ public class Vender implements CommandExecutor {
                     player.sendMessage(getPmTTC("&cVocê não tem itens para vender"));
                     return true;
                 }
-
+                Economy economy = Bukkit.getServicesManager().getRegistration(Economy.class).getProvider();
                 String playerName = player.getName();
                 double profit = VenderUtils.getProfit(player);
                 double total = (valor * profit / 100) + valor;

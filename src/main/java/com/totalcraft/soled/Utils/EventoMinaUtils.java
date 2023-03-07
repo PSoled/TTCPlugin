@@ -9,12 +9,13 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.List;
 import java.util.Random;
 
 public class EventoMinaUtils {
 
 
-    public static void placeRandomBlocks() {
+    public static void placeRandomBlocks(List<String> listBlock) {
         World world = Bukkit.getWorld(MainConfig.worldLocatinaMina);
         int x1 = MainConfig.x1Reset;
         int y1 = MainConfig.y1Reset;
@@ -31,22 +32,20 @@ public class EventoMinaUtils {
         int minZ = Math.min(z1, z2);
         int maxZ = Math.max(z1, z2);
 
-// Colocar blocos aleatórios na área definida
         Random random = new Random();
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 for (int z = minZ; z <= maxZ; z++) {
                     Location loc = new Location(world, x, y, z);
                     if (loc1.distance(loc) <= loc1.distance(loc2)) {
-                        // Escolher um bloco aleatório com base em suas porcentagens de chance
                         int totalChance = 0;
-                        for (String block : MainConfig.blocks) {
+                        for (String block : listBlock) {
                             String[] blockData = block.split(":");
                             totalChance += Integer.parseInt(blockData[2]);
                         }
                         int randomChance = random.nextInt(totalChance) + 1;
                         Material material;
-                        for (String block : MainConfig.blocks) {
+                        for (String block : listBlock) {
                             String[] blockData = block.split(":");
                             randomChance -= Integer.parseInt(blockData[2]);
                             if (randomChance <= 0) {

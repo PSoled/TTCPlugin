@@ -57,15 +57,10 @@ public class Jail implements CommandExecutor {
             try {
                 time = Integer.parseInt(args[1]);
             } catch (NumberFormatException a) {
-                sender.sendMessage(getPmTTC("&cO AMIGÃO SE É PRA TANTO ASSIM, VAMO USAR O /BAN"));
+                sender.sendMessage(getPmTTC("&cTem alguma coisa errado ai meu filho"));
                 return true;
             }
             Player playerJail = Bukkit.getPlayer(playerName);
-
-            if (!args[1].matches("\\d+")) {
-                sender.sendMessage(getPmTTC("&cO tempo precisa ser um número inteiro!"));
-                return true;
-            }
 
             if (playerJail == null) {
                 sender.sendMessage(getPmTTC("&cEste Player não está online!"));
@@ -98,12 +93,12 @@ public class Jail implements CommandExecutor {
             for (String name : JailData.jailListPlayer.keySet()) {
                 int valor = JailData.jailListPlayer.get(name);
                 if (valor < 1) {
-                    Player player = Bukkit.getPlayer(name);
                     JailData.jailListPlayer.remove(name);
+                    JailData.jailConfig.set(name , null);
                     Bukkit.broadcastMessage(getPmTTC(name + " &cCumpriu sua pena da prisão"));
-                    Player playerJail = Bukkit.getPlayer(name);
-                    PermissionUser userJail = PermissionsEx.getPermissionManager().getUser(playerJail);
+                    PermissionUser userJail = PermissionsEx.getPermissionManager().getUser(Bukkit.getPlayer(name));
                     userJail.setGroups(new String[]{"Civil"});
+                    Player player = Bukkit.getPlayer(name);
                     if (player != null) {
                         Bukkit.dispatchCommand(player, "spawn");
                     }
