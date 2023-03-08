@@ -1,5 +1,6 @@
 package com.totalcraft.soled.Listeners;
 
+import com.totalcraft.soled.Commands.BlockProtect;
 import com.totalcraft.soled.Configs.BlockProtectData;
 import com.totalcraft.soled.Configs.MainConfig;
 import org.bukkit.Location;
@@ -20,33 +21,6 @@ public class BlockPlace implements Listener {
         Player player = event.getPlayer();
         Block block = event.getBlockPlaced();
         Location blockLocation = block.getLocation();
-        if (block.getLocation().getWorld().getName().equals("minerar")) {
-            boolean blockCancelled = false;
-            PermissionUser user = PermissionsEx.getUser(player);
-            if (!user.has("ttcsoled.admin") && !player.isOp()) {
-                for (Location loc : BlockProtectData.protectedBlock.keySet()) {
-                    String blockProtect = BlockProtectData.protectedBlock.get(loc);
-                    if (block.getTypeId() == 1503 && blockLocation.distance(loc) <= 50 && !player.getName().equals(blockProtect)) {
-                        event.setCancelled(true);
-                        player.sendMessage(getPmTTC("&cHá blocos protegido por perto, Se afaste para colocar a sua Pedreira"));
-                        blockCancelled = true;
-                        break;
-                    }
-                    if (blockLocation.distance(loc) <= 5 && !player.getName().equals(blockProtect)) {
-                        event.setCancelled(true);
-                        player.sendMessage(getPmTTC("&cVocê não pode colocar blocos perto de um bloco protegido"));
-                        blockCancelled = true;
-                        break;
-                    }
-                }
-                if (!blockCancelled) {
-                    if (block.getTypeId() == 1503 || block.getTypeId() == 194 || block.getTypeId() == 195) {
-                        player.sendMessage(getPmTTC("&eVocê colocou que é protegido no Mundo do Minerar"));
-                        BlockProtectData.protectedBlock.put(block.getLocation(), player.getName());
-                        BlockProtectData.saveProtectedBlocks();
-                    }
-                }
-            }
-        }
+        event.setCancelled(BlockProtect.blockProtectPlace(player, block, blockLocation));
     }
 }

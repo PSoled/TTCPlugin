@@ -1,16 +1,19 @@
 package com.totalcraft.soled.Listeners;
 
-import com.totalcraft.soled.Configs.BlockProtectData;
+import com.totalcraft.soled.Commands.BlockProtect;
+import com.totalcraft.soled.Commands.CollectBlocks;
+import com.totalcraft.soled.Commands.EventoMina;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import ru.tehkode.permissions.PermissionUser;
-import ru.tehkode.permissions.bukkit.PermissionsEx;
+import org.bukkit.inventory.ItemStack;
 
-import static com.totalcraft.soled.Configs.BlockProtectData.blockConfig;
 import static com.totalcraft.soled.Utils.PrefixMsgs.getPmTTC;
 
 public class BlockBreak implements Listener {
@@ -19,39 +22,26 @@ public class BlockBreak implements Listener {
         Player player = event.getPlayer();
         Block block = event.getBlock();
         Location blockLocation = block.getLocation();
+        ItemStack itemHand = player.getItemInHand();
         if (block.getLocation().getWorld().getName().equals("minerar")) {
-            PermissionUser user = PermissionsEx.getUser(player);
-            for (Location loc : BlockProtectData.protectedBlock.keySet()) {
-                String blockProtect = BlockProtectData.protectedBlock.get(loc);
-                if (blockLocation.distance(loc) <= 0 && player.getName().equals(blockProtect)) {
-                    player.sendMessage(getPmTTC("&cVocê retirou um bloco protegido"));
-                    blockConfig.set("protected-blocks." + loc.getWorld().getName() + "." + loc.getBlockX() + "." + loc.getBlockY() + "." + loc.getBlockZ(), null);
-                    BlockProtectData.protectedBlock.remove(loc);
-                    BlockProtectData.saveProtectedBlocks();
-                    break;
-                }
-                if (blockLocation.distance(loc) <= 0 && (user.has("ttcsoled.admin") || player.isOp())) {
-                    player.sendMessage(getPmTTC("&cVocê removeu um bloco protegido do player &f" + BlockProtectData.protectedBlock.get(loc)));
-                    blockConfig.set("protected-blocks." + loc.getWorld().getName() + "." + loc.getBlockX() + "." + loc.getBlockY() + "." + loc.getBlockZ(), null);
-                    BlockProtectData.protectedBlock.remove(loc);
-                    BlockProtectData.saveProtectedBlocks();
-                    break;
-                }
-                if (blockLocation.distance(loc) <= 3 && (user.has("ttcsoled.admin") || player.isOp())) {
-                    break;
-                }
-                if (blockLocation.distance(loc) <= 0 && !player.getName().equals(blockProtect)) {
-                    event.setCancelled(true);
-                    player.sendMessage(getPmTTC("&cBloco protegido por &f" + blockProtect));
-                    break;
-                }
-                if (blockLocation.distance(loc) <= 3 && !player.getName().equals(blockProtect)) {
-                    event.setCancelled(true);
-                    player.sendMessage(getPmTTC("&cHá um bloco protegido por perto"));
-                    break;
+            event.setCancelled(BlockProtect.blockProtectBreak(player, blockLocation));
+        }
+        if (EventoMina.minaPlayers.contains(player.getName())) {
+            if (itemHand.getTypeId() == 30477 || itemHand.getTypeId() == 4386 || itemHand.getTypeId() == 4388) {
+                event.setCancelled(true);
+                Bukkit.getServer().dispatchCommand(player, "mina sair");
+                EventoMina.minaPlayers.remove(player.getName());
+                Bukkit.broadcastMessage(getPmTTC(player.getName() + " &Ctentou usar itens errados no Evento Mina Rs"));
+            }
+        }
+        if (!player.getWorld().getName().equals("world") && !player.getWorld().getName().equals("spawn")) {
+            if (CollectBlocks.collectBlock.containsKey(player.getName())) {
+                for (Entity item : player.getNearbyEntities(7, 7, 7)) {
+                    if (item instanceof Item) {
+                        item.teleport(player);
+                    }
                 }
             }
-
         }
     }
 }

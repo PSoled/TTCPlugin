@@ -54,3 +54,8 @@ commands:
     description: Executa o comando da Proteção de blocos
     usage: /blockprotect
     executor: com.totalcraft.soled.Commands.BlockProtect
+
+  bcollect:
+    description: Executa o comando do Coletor de blocos
+    usage: /bcollect
+    executor: com.totalcraft.soled.Commands.CollectBlocks

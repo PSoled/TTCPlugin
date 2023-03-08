@@ -15,5 +15,6 @@ public class EventManager {
         pm.registerEvents(new BlockPlace(), plugin);
         pm.registerEvents(new BlockBreak(), plugin);
         pm.registerEvents(new PlayerInteract(), plugin);
+        pm.registerEvents(new PlayerToggleFlight(), plugin);
     }
 }

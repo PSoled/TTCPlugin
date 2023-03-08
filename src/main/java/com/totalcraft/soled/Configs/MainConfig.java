@@ -3,7 +3,6 @@ package com.totalcraft.soled.Configs;
 import com.totalcraft.soled.Commands.Modules;
 import com.totalcraft.soled.Main;
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -26,7 +25,7 @@ public class MainConfig {
     public void setConfigs() {
         configFile = new File(main.getDataFolder(), "config.yml");
         config = YamlConfiguration.loadConfiguration(configFile);
-        blocks = config.getStringList("blocksReset");
+
 
         config.options().header("-- Plugin TTC --\n\nModules para desativar e ativar" +
                 "\nLocalização da mina de Mundo e X Y Z" +
@@ -35,12 +34,11 @@ public class MainConfig {
                 "\nLocalização do Jail de Mundo e X Y Z" +
                 "\n");
 
-
-
-
         configModule();
         configMina();
         configJail();
+        blocks = config.getStringList("blocksReset");
+        config.set("blocksReset", blocks);
 
         config.options().copyDefaults(true);
         saveConfig();
@@ -109,7 +107,6 @@ public class MainConfig {
         config.addDefault("x2Reset", x2Reset);
         config.addDefault("y2Reset", y2Reset);
         config.addDefault("z2Reset", z2Reset);
-        config.set("blocksReset", blocks);
     }
 
     public void configJail() {

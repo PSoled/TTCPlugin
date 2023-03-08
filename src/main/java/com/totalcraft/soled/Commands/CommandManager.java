@@ -22,5 +22,6 @@ public class CommandManager {
         plugin.getCommand("unjail").setExecutor(new UnJail());
         plugin.getCommand("vender").setExecutor(new Vender());
         plugin.getCommand("blockprotect").setExecutor(new BlockProtect());
+        plugin.getCommand("bcollect").setExecutor(new CollectBlocks());
     }
 }

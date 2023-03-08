@@ -1,8 +1,6 @@
 package com.totalcraft.soled;
 
-import com.totalcraft.soled.Commands.Bfly;
 import com.totalcraft.soled.Commands.CommandManager;
-import com.totalcraft.soled.Commands.Jail;
 import com.totalcraft.soled.Configs.InitializeConfigs;
 import com.totalcraft.soled.Listeners.EventManager;
 import org.bukkit.event.Listener;
@@ -11,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Main extends JavaPlugin implements Listener {
     InitializeConfigs initializeConfigs = new InitializeConfigs(this);
     CommandManager commandManager = new CommandManager(this);
+    TaskManager taskManager = new TaskManager(this);
 
     @Override
     public void onLoad() {
@@ -21,15 +20,13 @@ public class Main extends JavaPlugin implements Listener {
     public void onEnable() {
         commandManager.registerCommands();
         initializeConfigs.onEnable();
+        taskManager.TaskDebug();
         EventManager.registerAll(this);
-        Jail.jailTime();
-        Bfly.bflyTime();
     }
 
     @Override
     public void onDisable() {
-        Bfly.cancelBflyTime();
-        Jail.canceljailTime();
+        taskManager.TaskCancel();
     }
 }
 

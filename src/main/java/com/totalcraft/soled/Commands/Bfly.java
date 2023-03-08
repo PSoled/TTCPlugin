@@ -9,6 +9,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -49,20 +51,23 @@ public class Bfly extends Main implements CommandExecutor {
 
                 return true;
             } else {
-                player.sendMessage(getPmTTC("&cVocê precisa de 2000 de Money para comprar o Fly"));
+                player.sendMessage(getPmTTC("&cÉ meu camarada, tu precisa de 2000 Conto para comprar esta parada"));
             }
 
         }
         return true;
     }
 
-    static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    static ScheduledFuture<?> scheduledFuture;
+    public static ScheduledExecutorService schedulerBfly = Executors.newScheduledThreadPool(1);
+    public static ScheduledFuture<?> scheduledBfly;
 
     public static void bflyTime() {
-        scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
-            for (String name : BflyData.flyListPlayer.keySet()) {
-                int valor = BflyData.flyListPlayer.get(name);
+        scheduledBfly = schedulerBfly.scheduleAtFixedRate(() -> {
+            Iterator<Map.Entry<String, Integer>> iterator = BflyData.flyListPlayer.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<String, Integer> entry = iterator.next();
+                String name = entry.getKey();
+                int valor = entry.getValue();
                 if (valor < 1) {
                     Player player = Bukkit.getPlayer(name);
                     if (player != null) {
@@ -70,22 +75,15 @@ public class Bfly extends Main implements CommandExecutor {
                         player.setFlying(false);
                         player.setAllowFlight(false);
                     }
+                    iterator.remove();
                     BflyData.flyConfig.set(name, null);
-                    BflyData.flyListPlayer.remove(name);
                     BflyData.saveFlyData();
                 } else {
                     valor--;
-                    BflyData.flyListPlayer.put(name, valor);
+                    entry.setValue(valor);
                     BflyData.saveFlyData();
                 }
             }
         }, 60, 60, TimeUnit.SECONDS);
-    }
-
-
-    public static void cancelBflyTime() {
-        if (scheduledFuture != null) {
-            scheduledFuture.cancel(false);
-        }
     }
 }

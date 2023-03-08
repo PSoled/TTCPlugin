@@ -85,11 +85,11 @@ public class Jail implements CommandExecutor {
         return true;
     }
 
-    static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    static ScheduledFuture<?> scheduledFuture;
+    public static ScheduledExecutorService schedulerJail = Executors.newScheduledThreadPool(1);
+    public static ScheduledFuture<?> scheduledJail;
 
     public static void jailTime() {
-        scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
+        scheduledJail = schedulerJail.scheduleAtFixedRate(() -> {
             for (String name : JailData.jailListPlayer.keySet()) {
                 int valor = JailData.jailListPlayer.get(name);
                 if (valor < 1) {
@@ -110,12 +110,6 @@ public class Jail implements CommandExecutor {
                 }
             }
         }, 1, 1, TimeUnit.HOURS);
-    }
-
-    public static void canceljailTime() {
-        if (scheduledFuture != null) {
-            scheduledFuture.cancel(false);
-        }
     }
 }
 

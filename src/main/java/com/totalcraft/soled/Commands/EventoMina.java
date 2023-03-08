@@ -28,7 +28,6 @@ import static com.totalcraft.soled.Utils.PrefixMsgs.*;
 import static org.bukkit.Sound.*;
 
 public class EventoMina extends JavaPlugin implements Listener {
-    Utils utils = new Utils();
     public boolean eventoAtivo;
     public int timeLeft = 120;
     public int minaDuration = 5;
@@ -37,15 +36,11 @@ public class EventoMina extends JavaPlugin implements Listener {
     public static List<String> minaPlayers = new ArrayList<>();
     List<Player> mPlayers = new ArrayList<>();
     public static ItemStack pickaxe = EventoMinaUtils.createPickaxe(5, 3, 3);
-    Material vajra = Material.getMaterial(30477);
-    Material godPick = Material.getMaterial(4386);
-    Material godStaff = Material.getMaterial(4388);
     int vTimeLeft = timeLeft;
     int vMinaDuration = minaDuration;
     private boolean bQuestionTask;
     ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     ScheduledFuture<?> scheduledFuture;
-    private BukkitTask verificationPlayer;
     int question = 15;
     private final Plugin plugin;
 
@@ -72,7 +67,7 @@ public class EventoMina extends JavaPlugin implements Listener {
 
             if (args.length > 0 && args[0].equalsIgnoreCase("start")) {
                 if (sender instanceof Player) {
-                    if (utils.getAdm(sender)) {
+                    if (Utils.getAdm(sender)) {
                         sender.sendMessage(getPmNotAdm());
                         return true;
                     }
@@ -148,7 +143,7 @@ public class EventoMina extends JavaPlugin implements Listener {
                     player.sendMessage(getPmTTC("&cVocê já está no Evento Mina. &fUtilize /mina sair caso precisar"));
                     return true;
                 }
-                if (utils.getAdm(sender)) {
+                if (Utils.getAdm(sender)) {
                     for (ItemStack item : player.getInventory().getContents()) {
                         for (ItemStack armor : player.getInventory().getArmorContents()) {
                             if (item != null && item.getType() != Material.AIR || armor != null && armor.getType() != Material.AIR) {
@@ -166,40 +161,11 @@ public class EventoMina extends JavaPlugin implements Listener {
 
                 player.getInventory().addItem(pickaxe);
                 player.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 64));
-
-                verificationPlayer = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-                    if (!eventoAtivo) {
-                        verificationPlayer.cancel();
-                        return;
-                    }
-                    Iterator<Player> it = mPlayers.iterator();
-                    while (it.hasNext()) {
-                        Player minaPlayer = it.next();
-                        if (minaPlayer == null) {
-                            continue;
-                        }
-                        if (minaPlayer.isFlying() && utils.getAdm(minaPlayer)) {
-                            minaPlayer.setFlying(false);
-                            minaPlayer.sendMessage(getPmTTC("&cSeu fly foi desativado no evento"));
-                        }
-                        for (ItemStack item : minaPlayer.getInventory().getContents()) {
-                            if (item == null || (item.getType() != vajra && item.getType() != godPick && item.getType() != godStaff)) {
-                                continue;
-                            }
-                            Bukkit.getScheduler().runTask(plugin, () -> {
-                                Bukkit.getServer().dispatchCommand(minaPlayer, "mina sair");
-                                it.remove();
-                            });
-                            Bukkit.broadcastMessage(getPmTTC(minaPlayer.getName() + " &Ctentou usar itens errados no Evento Mina Rs"));
-                            break;
-                        }
-                    }
-                }, 100L, 30L);
             }
 
             if (args.length > 0 && args[0].equalsIgnoreCase("stop")) {
                 if (sender instanceof Player) {
-                    if (utils.getAdm(sender)) {
+                    if (Utils.getAdm(sender)) {
                         sender.sendMessage(getPmNotAdm());
                         return true;
                     }
@@ -216,7 +182,7 @@ public class EventoMina extends JavaPlugin implements Listener {
 
             if (args.length > 0 && args[0].equalsIgnoreCase("cancel")) {
                 if (sender instanceof Player) {
-                    if (utils.getAdm(sender)) {
+                    if (Utils.getAdm(sender)) {
                         sender.sendMessage(getPmNotAdm());
                         return true;
                     }
@@ -260,7 +226,7 @@ public class EventoMina extends JavaPlugin implements Listener {
 
             if (args.length > 0 && args[0].equalsIgnoreCase("reset")) {
                 if (sender instanceof Player) {
-                    if (utils.getAdm(sender)) {
+                    if (Utils.getAdm(sender)) {
                         sender.sendMessage(getPmNotAdm());
                         return true;
                     }
@@ -271,7 +237,7 @@ public class EventoMina extends JavaPlugin implements Listener {
 
             if (args.length > 0 && args[0].equalsIgnoreCase("stats")) {
                 if (sender instanceof Player) {
-                    if (utils.getAdm(sender)) {
+                    if (Utils.getAdm(sender)) {
                         sender.sendMessage(getPmNotAdm());
                         return true;
                     }
