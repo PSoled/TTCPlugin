@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
+import java.util.Iterator;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -90,11 +91,13 @@ public class Jail implements CommandExecutor {
 
     public static void jailTime() {
         scheduledJail = schedulerJail.scheduleAtFixedRate(() -> {
-            for (String name : JailData.jailListPlayer.keySet()) {
+            Iterator<String> it = JailData.jailListPlayer.keySet().iterator();
+            while (it.hasNext()) {
+                String name = it.next();
                 int valor = JailData.jailListPlayer.get(name);
                 if (valor < 1) {
-                    JailData.jailListPlayer.remove(name);
-                    JailData.jailConfig.set(name , null);
+                    it.remove();
+                    JailData.jailConfig.set(name, null);
                     Bukkit.broadcastMessage(getPmTTC(name + " &cCumpriu sua pena da prisão"));
                     PermissionUser userJail = PermissionsEx.getPermissionManager().getUser(Bukkit.getPlayer(name));
                     userJail.setGroups(new String[]{"Civil"});

@@ -52,14 +52,13 @@ public class CollectBlocks implements CommandExecutor {
 
     public static void BCTime() {
         scheduledBC = schedulerBC.scheduleAtFixedRate(() -> {
-            Iterator<Map.Entry<String, Integer>> iterator = collectBlock.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<String, Integer> entry = iterator.next();
+            Iterator<Map.Entry<String, Integer>> it = collectBlock.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<String, Integer> entry = it.next();
                 String name = entry.getKey();
                 int timeLeft = entry.getValue();
-
                 if (timeLeft < 1) {
-                    iterator.remove();
+                    it.remove();
                     Player player = Bukkit.getPlayer(name);
                     if (player != null) {
                         player.sendMessage(getPmTTC("&cAcabou o tempo do seu coletor de blocos"));

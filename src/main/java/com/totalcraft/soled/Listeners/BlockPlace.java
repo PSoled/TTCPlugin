@@ -21,6 +21,8 @@ public class BlockPlace implements Listener {
         Player player = event.getPlayer();
         Block block = event.getBlockPlaced();
         Location blockLocation = block.getLocation();
-        event.setCancelled(BlockProtect.blockProtectPlace(player, block, blockLocation));
+        if (player.getWorld().getName().equals("minerar")) {
+            event.setCancelled(BlockProtect.blockProtectPlace(player, block, blockLocation));
+        }
     }
 }

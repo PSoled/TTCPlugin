@@ -63,9 +63,9 @@ public class Bfly extends Main implements CommandExecutor {
 
     public static void bflyTime() {
         scheduledBfly = schedulerBfly.scheduleAtFixedRate(() -> {
-            Iterator<Map.Entry<String, Integer>> iterator = BflyData.flyListPlayer.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<String, Integer> entry = iterator.next();
+            Iterator<Map.Entry<String, Integer>> it = BflyData.flyListPlayer.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<String, Integer> entry = it.next();
                 String name = entry.getKey();
                 int valor = entry.getValue();
                 if (valor < 1) {
@@ -75,7 +75,7 @@ public class Bfly extends Main implements CommandExecutor {
                         player.setFlying(false);
                         player.setAllowFlight(false);
                     }
-                    iterator.remove();
+                    it.remove();
                     BflyData.flyConfig.set(name, null);
                     BflyData.saveFlyData();
                 } else {

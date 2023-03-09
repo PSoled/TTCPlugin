@@ -27,7 +27,6 @@ public class RestartServerUtils {
                     player.kickPlayer(getPmTTC("&cServidor Reniciando"));
                 }
                 Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "save-all");
-                Bukkit.getScheduler().runTaskLater(plugin, Bukkit::reload, 20 * 20);
                 Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "restart"), 20 * 50);
                 restart.cancel();
                 return;

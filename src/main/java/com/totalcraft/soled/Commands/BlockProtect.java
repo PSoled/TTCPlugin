@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
+import java.util.Iterator;
 import java.util.Objects;
 
 import static com.totalcraft.soled.Configs.BlockProtectData.blockConfig;
@@ -70,19 +71,21 @@ public class BlockProtect implements CommandExecutor {
 
     public static boolean blockProtectBreak(Player player, Location blockLocation) {
         PermissionUser user = PermissionsEx.getUser(player);
-        for (Location loc : BlockProtectData.protectedBlock.keySet()) {
+        Iterator<Location> it = BlockProtectData.protectedBlock.keySet().iterator();
+        while (it.hasNext()) {
+            Location loc = it.next();
             String owner = BlockProtectData.protectedBlock.get(loc);
             if (blockLocation.distance(loc) <= 0 && player.getName().equals(owner)) {
                 player.sendMessage(getPmTTC("&cVocê retirou um bloco protegido"));
                 blockConfig.set("protected-blocks." + loc.getWorld().getName() + "." + loc.getBlockX() + "." + loc.getBlockY() + "." + loc.getBlockZ(), null);
-                BlockProtectData.protectedBlock.remove(loc);
+                it.remove();
                 BlockProtectData.saveProtectedBlocks();
                 break;
             }
             if (blockLocation.distance(loc) <= 0 && (user.has("ttcsoled.admin") || player.isOp())) {
                 player.sendMessage(getPmTTC("&cVocê removeu um bloco protegido do player &f" + BlockProtectData.protectedBlock.get(loc)));
                 blockConfig.set("protected-blocks." + loc.getWorld().getName() + "." + loc.getBlockX() + "." + loc.getBlockY() + "." + loc.getBlockZ(), null);
-                BlockProtectData.protectedBlock.remove(loc);
+                it.remove();
                 BlockProtectData.saveProtectedBlocks();
                 break;
             }

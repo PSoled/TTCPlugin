@@ -9,7 +9,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Main extends JavaPlugin implements Listener {
     InitializeConfigs initializeConfigs = new InitializeConfigs(this);
     CommandManager commandManager = new CommandManager(this);
-    TaskManager taskManager = new TaskManager(this);
 
     @Override
     public void onLoad() {
@@ -20,13 +19,13 @@ public class Main extends JavaPlugin implements Listener {
     public void onEnable() {
         commandManager.registerCommands();
         initializeConfigs.onEnable();
-        taskManager.TaskDebug();
+        TaskManager.InitializeTasks();
         EventManager.registerAll(this);
     }
 
     @Override
     public void onDisable() {
-        taskManager.TaskCancel();
+        TaskManager.TaskCancel();
     }
 }
 
