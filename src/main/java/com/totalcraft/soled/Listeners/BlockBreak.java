@@ -1,13 +1,10 @@
 package com.totalcraft.soled.Listeners;
 
 import com.totalcraft.soled.Commands.BlockProtect;
-import com.totalcraft.soled.Commands.CollectBlocks;
 import com.totalcraft.soled.Commands.EventoMina;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -32,15 +29,6 @@ public class BlockBreak implements Listener {
                 Bukkit.getServer().dispatchCommand(player, "mina sair");
                 EventoMina.minaPlayers.remove(player.getName());
                 Bukkit.broadcastMessage(getPmTTC(player.getName() + " &Ctentou usar itens errados no Evento Mina Rs"));
-            }
-        }
-        if (!player.getWorld().getName().equals("world") && !player.getWorld().getName().equals("spawn")) {
-            if (CollectBlocks.collectBlock.containsKey(player.getName())) {
-                for (Entity item : player.getNearbyEntities(7, 7, 7)) {
-                    if (item instanceof Item) {
-                        item.teleport(player);
-                    }
-                }
             }
         }
     }

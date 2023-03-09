@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PrefixMsgs {
-    static Utils utils = new Utils();
 
     public static String getPmTTC(String message) {
         return ChatColor.translateAlternateColorCodes('&', "&7&l[&6&lTTC&7&l]&r ") + ChatColor.translateAlternateColorCodes('&', message);
@@ -97,7 +96,7 @@ public class PrefixMsgs {
         if (!(sender instanceof Player)) {
             return msg;
         }
-        if (utils.getAdm(sender)) {
+        if (Utils.getAdm(sender)) {
             msg = getPmTTC("&bLista de comandos da Mina\n" +
                     "\n&a/mina entrar &eEntrar no Evento Mina" +
                     "\n&a/mina sair &eSair do Evento Mina");
@@ -122,7 +121,7 @@ public class PrefixMsgs {
         if (!(sender instanceof Player)) {
             return msg;
         }
-        if (utils.getAdm(sender)) {
+        if (Utils.getAdm(sender)) {
             msg = getPmTTC("&bLista de comandos do Vender\n" +
                     "\n&a/vender itens &eVender seus itens" +
                     "\n&a/vender auto &eVender Automaticamente seus itens" +
@@ -139,11 +138,19 @@ public class PrefixMsgs {
         if (!(sender instanceof Player)) {
             return msg;
         }
-        if (utils.getAdm(sender)) {
+        if (Utils.getAdm(sender)) {
             msg = getPmTTC("&bLista de comandos do BlockProtect\n" +
                     "\n&a/blockprotect localizar &eLocalização do seus Blocos Protegidos");
         }
         return msg;
+    }
+
+    public static String getCommmandoCB() {
+        return getPmTTC("&bLista de comando do CollectBlocks\n" +
+                "\n&a/bcollect comprar &eCompra coletor de blocos por 5K por 10Mins" +
+                "\n&a/bcollect filtro <Id> &eFiltra para o ID de bloco seja coletado" +
+                "\n&a/bcollect filtro clear &eLimpar o Filtro" +
+                "\n&a/bcollect tempo &eVer tempo restante do coletor de blocos");
     }
 
 }
