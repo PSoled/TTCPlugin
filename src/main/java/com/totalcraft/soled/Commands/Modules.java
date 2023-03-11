@@ -13,10 +13,8 @@ import org.bukkit.entity.Player;
 import static com.totalcraft.soled.Utils.PrefixMsgs.*;
 
 public class Modules implements CommandExecutor {
-    Utils utils = new Utils();
 
-    public static String rankup = "Comando";
-    public static String vender = "Comando";
+    public static String rankup,vender, rtp, bcollect = "Comando";
     public static String groupchange = "Evento";
 
     private static MainConfig mainInstance;
@@ -52,13 +50,29 @@ public class Modules implements CommandExecutor {
             mainInstance.setVenderModule(false);
             sender.sendMessage(getPmCommandAdm(vender, "/vender", false));
         });
+        put("rtp on", () -> {
+            mainInstance.setRtpModule(true);
+            sender.sendMessage(getPmCommandAdm(rtp, "/rtp", true));
+        });
+        put("rtp off", () -> {
+            mainInstance.setRtpModule(false);
+            sender.sendMessage(getPmCommandAdm(rtp, "/rtp", false));
+        });
+        put("bcollect on", () -> {
+            mainInstance.setBcollectModule(true);
+            sender.sendMessage(getPmCommandAdm(bcollect, "/bcollect", true));
+        });
+        put("bcollect off", () -> {
+            mainInstance.setBcollectModule(false);
+            sender.sendMessage(getPmCommandAdm(bcollect, "/bcollect", false));
+        });
         put(("list"), () -> sender.sendMessage(getListModule()));
     }};
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
-            if (utils.getAdm(sender)) {
+            if (Utils.getAdm(sender)) {
                 sender.sendMessage(getPmNotAdm());
                 return true;
             }

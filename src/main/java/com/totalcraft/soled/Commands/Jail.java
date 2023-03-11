@@ -53,7 +53,7 @@ public class Jail implements CommandExecutor {
                 sender.sendMessage(getPmTTC("&cUse: /jail <Player> <Horas>"));
                 return true;
             }
-            String playerName = args[0];
+            String playerName = args[0].toLowerCase();
             int time;
             try {
                 time = Integer.parseInt(args[1]);
@@ -103,7 +103,7 @@ public class Jail implements CommandExecutor {
                     userJail.setGroups(new String[]{"Civil"});
                     Player player = Bukkit.getPlayer(name);
                     if (player != null) {
-                        Bukkit.dispatchCommand(player, "spawn");
+                        player.teleport(new Location(Bukkit.getWorld("spawn"),0, 65 ,0));
                     }
                     JailData.saveJailData();
                 } else {

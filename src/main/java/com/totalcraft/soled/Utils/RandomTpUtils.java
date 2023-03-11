@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 import static com.totalcraft.soled.Utils.PrefixMsgs.getPmTTC;
 
 public class RandomTpUtils {
-    private static final int MAX_RANGE = 15000 * 2;
+    private static final int MAX_RANGE = 10000 * 2;
     private static final SecureRandom random = new SecureRandom();
 
     public static Location getRandomTp(World world, Player player) {

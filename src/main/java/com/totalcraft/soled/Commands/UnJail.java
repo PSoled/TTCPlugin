@@ -2,6 +2,7 @@ package com.totalcraft.soled.Commands;
 
 import com.totalcraft.soled.Configs.JailData;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -28,7 +29,7 @@ public class UnJail implements CommandExecutor {
                 sender.sendMessage(getPmTTC("&cUse: /unjail <Player>"));
                 return true;
             }
-            String playerName = args[0];
+            String playerName = args[0].toLowerCase();
             Player playerJail = Bukkit.getPlayer(playerName);
 
             if (!JailData.jailListPlayer.containsKey(playerName)) {
@@ -37,9 +38,9 @@ public class UnJail implements CommandExecutor {
             }
 
             if (playerJail != null) {
-                Bukkit.dispatchCommand(playerJail, "spawn");
+                playerJail.teleport(new Location(Bukkit.getWorld("spawn"),0, 65 ,0));
             }
-
+            JailData.jailConfig.set(playerName, null);
             JailData.jailListPlayer.remove(playerName);
             PermissionUser userJail = PermissionsEx.getPermissionManager().getUser(playerJail);
             userJail.setGroups(new String[]{"Civil"});

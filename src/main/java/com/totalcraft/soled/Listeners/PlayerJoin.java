@@ -1,8 +1,6 @@
 package com.totalcraft.soled.Listeners;
 
 import com.totalcraft.soled.Commands.Jail;
-import com.totalcraft.soled.Configs.JailData;
-import com.totalcraft.soled.Configs.MainConfig;
 import com.totalcraft.soled.Utils.RankupUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -19,6 +17,9 @@ import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import static com.totalcraft.soled.Commands.EventoMina.pickaxe;
+import static com.totalcraft.soled.Configs.JailData.jailListPlayer;
+import static com.totalcraft.soled.Configs.MainConfig.eventGroupChangeModule;
+import static com.totalcraft.soled.Listeners.PlayerQuit.playerQuitMina;
 import static com.totalcraft.soled.Utils.PrefixMsgs.getPmTTC;
 import static org.bukkit.Sound.NOTE_PLING;
 
@@ -37,12 +38,12 @@ public class PlayerJoin implements Listener {
                 player.playSound(player.getLocation(), NOTE_PLING, 1, 1);
             }
         }
-        if (MainConfig.eventGroupChangeModule) {
+        if (eventGroupChangeModule) {
             String playerName = event.getPlayer().getName();
             rankupUtils.eventSetRank(playerName);
         }
         String playerName = event.getPlayer().getName();
-        if (PlayerQuit.playerQuitMina.contains(playerName)) {
+        if (playerQuitMina.contains(playerName)) {
             Player player = event.getPlayer();
             player.removePotionEffect(PotionEffectType.INVISIBILITY);
             PlayerInventory inventory = player.getInventory();
@@ -56,12 +57,12 @@ public class PlayerJoin implements Listener {
             player.sendMessage(getPmTTC("&cVocê saiu durante Evento Mina"));
         }
 
-        if (JailData.jailListPlayer.containsKey(playerName)) {
+        if (jailListPlayer.containsKey(playerName)) {
             BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
             scheduler.scheduleSyncDelayedTask(plugin, () -> {
                 Player player = event.getPlayer();
                 player.teleport(Jail.locationJail);
-                int time = JailData.jailListPlayer.get(playerName);
+                int time = jailListPlayer.get(playerName);
                 player.sendMessage(getPmTTC("&cVocê deve ainda " + time + " Horas de pena"));
             }, 40L);
         }

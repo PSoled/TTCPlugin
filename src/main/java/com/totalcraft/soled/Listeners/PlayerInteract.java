@@ -10,6 +10,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import static com.totalcraft.soled.Utils.BanItemUtils.getBanItem;
+
 public class PlayerInteract implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
@@ -23,6 +25,9 @@ public class PlayerInteract implements Listener {
         }
         if (loc.getWorld().getName().equals("minerar")) {
             event.setCancelled(BlockProtectUtils.blockProtectInteract(player, loc, item));
+        }
+        if (getBanItem(player, item)) {
+            event.setCancelled(true);
         }
     }
 }

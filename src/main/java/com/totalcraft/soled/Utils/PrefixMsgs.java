@@ -69,6 +69,8 @@ public class PrefixMsgs {
         Map<String, String[]> moduleStatus = new HashMap<>();
         moduleStatus.put("Rankup", new String[]{ChatColor.BLUE + "Comando " + ChatColor.YELLOW + "Rankup", MainConfig.rankupModule ? ChatColor.GREEN + " On" : ChatColor.RED + " Off"});
         moduleStatus.put("Vender", new String[]{ChatColor.BLUE + "Comando " + ChatColor.YELLOW + "Vender", MainConfig.venderModule ? ChatColor.GREEN + " On" : ChatColor.RED + " Off"});
+        moduleStatus.put("Rtp", new String[]{ChatColor.BLUE + "Comando " + ChatColor.YELLOW + "Rtp", MainConfig.rtpModule ? ChatColor.GREEN + " On" : ChatColor.RED + " Off"});
+        moduleStatus.put("Bcollect", new String[]{ChatColor.BLUE + "Comando " + ChatColor.YELLOW + "Bcollect", MainConfig.bcollectModule ? ChatColor.GREEN + " On" : ChatColor.RED + " Off"});
         moduleStatus.put("EventoGroupChange", new String[]{ChatColor.DARK_AQUA + "Evento " + ChatColor.YELLOW + " Groupchange", MainConfig.eventGroupChangeModule ? ChatColor.GREEN + " On" : ChatColor.RED + " Off"});
 
         StringBuilder sb = new StringBuilder();
@@ -153,4 +155,19 @@ public class PrefixMsgs {
                 "\n&a/bcollect tempo &eVer tempo restante do coletor de blocos");
     }
 
+    public static String getListRtp() {
+        return getPmTTC("&bLista de Comando /rtp\n" +
+                "\n&6/rtp &0-- &fRandomTp no mundo que você está." +
+                "\n&6/rtp &aworld &0-- &fRandomTp no Mundo Normal." +
+                "\n&6/rtp &aminerar &0-- &fRandomTp no Mundo de Minerar." +
+                "\n&6/rtp &anether &0-- &fRandomTp no Nether." +
+                "\n&6/rtp &aatum &0-- &fRandomTp no Atum." +
+                "\n&6/rtp &atwilight &0-- &fRandomTp na Twilight.");
+    }
+
+    public static String getCommandBanItem() {
+        return getPmTTC("&bLista de Comando do Ban Item\n" +
+                "\n&c/banitem add <Id> <Meta> &eEu acho que bane o item :/" +
+                "\n&c/banitem remove <Id> <Met> &eDeve dar unban no item :v");
+    }
 }

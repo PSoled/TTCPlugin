@@ -16,5 +16,11 @@ public class EventManager {
         pm.registerEvents(new BlockBreak(), plugin);
         pm.registerEvents(new PlayerInteract(), plugin);
         pm.registerEvents(new PlayerToggleFlight(), plugin);
+        pm.registerEvents(new InventoryClose(), plugin);
+        pm.registerEvents(new PlayerItemHeld(), plugin);
+        pm.registerEvents(new InventoryClick(), plugin);
+        pm.registerEvents(new InventoryDrag(), plugin);
+        pm.registerEvents(new PlayerDropItem(), plugin);
+        pm.registerEvents(new PlayerPickupItem(plugin), plugin);
     }
 }

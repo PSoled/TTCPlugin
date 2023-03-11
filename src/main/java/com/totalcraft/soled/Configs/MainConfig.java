@@ -11,7 +11,7 @@ public class MainConfig {
     public static File configFile;
     public static YamlConfiguration config;
     private final Main main;
-    public static boolean rankupModule, eventGroupChangeModule, venderModule;
+    public static boolean rankupModule, eventGroupChangeModule, venderModule, rtpModule, bcollectModule;
     public static String worldJail = "spawn";
     public static int jailLocationX, jailLocationY, jailLocationZ;
     public static String worldLocatinaMina = "spawn";
@@ -66,6 +66,16 @@ public class MainConfig {
         config.set("venderModule", value);
         saveConfig();
     }
+    public void setRtpModule(boolean value) {
+        rtpModule = value;
+        config.set("rtpModule", value);
+        saveConfig();
+    }
+    public void setBcollectModule(boolean value) {
+        bcollectModule = value;
+        config.set("bcollectModule", value);
+        saveConfig();
+    }
 
     public void setEventGroupChangeModule(boolean value) {
         eventGroupChangeModule = value;
@@ -76,9 +86,13 @@ public class MainConfig {
     public void configModule() {
         rankupModule = config.getBoolean("rankupModule");
         venderModule = config.getBoolean("venderModule");
+        rtpModule = config.getBoolean("rtpModule");
+        bcollectModule = config.getBoolean("bcollectModule");
         eventGroupChangeModule = config.getBoolean("eventGroupChangeModule");
         config.addDefault("rankupModule", rankupModule);
         config.addDefault("venderModule", venderModule);
+        config.addDefault("rtpModule", rtpModule);
+        config.addDefault("bcollectModule", bcollectModule);
         config.addDefault("eventGroupChangeModule", eventGroupChangeModule);
     }
 

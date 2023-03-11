@@ -41,7 +41,7 @@ public class CollectBlocksUtils {
 
     public static void collectBlockInteract(Player player) {
         if (CollectBlocks.collectBlock.containsKey(player.getName())) {
-            for (Entity ItemCB : player.getNearbyEntities(7, 7, 7)) {
+            for (Entity ItemCB : player.getNearbyEntities(10, 10, 10)) {
                 if (ItemCB instanceof Item) {
                     Item itemStack = (Item) ItemCB;
                     if (CollectBlocks.BlockFilter.containsKey(player.getName())) {

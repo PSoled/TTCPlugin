@@ -1,6 +1,5 @@
 package com.totalcraft.soled.Listeners;
 
-import com.totalcraft.soled.Commands.EventoMina;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,6 +11,7 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.totalcraft.soled.Commands.EventoMina.minaPlayers;
 import static org.bukkit.Sound.NOTE_BASS_DRUM;
 public class PlayerQuit implements Listener {
     public static List<String> playerQuitMina = new ArrayList<>();
@@ -24,9 +24,9 @@ public class PlayerQuit implements Listener {
             }
         }
         String playerName = event.getPlayer().getName();
-        if (EventoMina.minaPlayers.contains(playerName)) {
+        if (minaPlayers.contains(playerName)) {
             playerQuitMina.add(playerName);
-            EventoMina.minaPlayers.remove(playerName);
+            minaPlayers.remove(playerName);
         }
     }
 }

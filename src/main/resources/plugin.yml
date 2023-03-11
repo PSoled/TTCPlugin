@@ -64,3 +64,8 @@ commands:
     description: Executa o comando do Random TP
     usage: /rtp
     executor: com.totalcraft.soled.Commands.RandomTP
+
+  banitem:
+    description: Executa o comando de Banir Item
+    usage: /banitem
+    executor: com.totalcraft.soled.Commands.BanItem
