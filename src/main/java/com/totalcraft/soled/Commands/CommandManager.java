@@ -23,5 +23,6 @@ public class CommandManager {
         plugin.getCommand("vender").setExecutor(new Vender());
         plugin.getCommand("blockprotect").setExecutor(new BlockProtect());
         plugin.getCommand("bcollect").setExecutor(new CollectBlocks());
+        plugin.getCommand("rtp").setExecutor(new RandomTp());
     }
 }

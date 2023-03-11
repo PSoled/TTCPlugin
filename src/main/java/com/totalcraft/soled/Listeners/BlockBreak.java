@@ -1,7 +1,7 @@
 package com.totalcraft.soled.Listeners;
 
-import com.totalcraft.soled.Commands.BlockProtect;
 import com.totalcraft.soled.Commands.EventoMina;
+import com.totalcraft.soled.Utils.BlockProtectUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -21,7 +21,7 @@ public class BlockBreak implements Listener {
         Location blockLocation = block.getLocation();
         ItemStack itemHand = player.getItemInHand();
         if (block.getLocation().getWorld().getName().equals("minerar")) {
-            event.setCancelled(BlockProtect.blockProtectBreak(player, blockLocation));
+            event.setCancelled(BlockProtectUtils.blockProtectBreak(player, blockLocation));
         }
         if (EventoMina.minaPlayers.contains(player.getName())) {
             if (itemHand.getTypeId() == 30477 || itemHand.getTypeId() == 4386 || itemHand.getTypeId() == 4388) {

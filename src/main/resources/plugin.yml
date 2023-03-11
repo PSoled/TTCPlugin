@@ -59,3 +59,8 @@ commands:
     description: Executa o comando do Coletor de blocos
     usage: /bcollect
     executor: com.totalcraft.soled.Commands.CollectBlocks
+
+  rtp:
+    description: Executa o comando do Random TP
+    usage: /rtp
+    executor: com.totalcraft.soled.Commands.RandomTP

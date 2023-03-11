@@ -1,15 +1,15 @@
 package com.totalcraft.soled;
 
 import com.totalcraft.soled.Commands.Bfly;
-import com.totalcraft.soled.Commands.CollectBlocks;
 import com.totalcraft.soled.Commands.Jail;
+import com.totalcraft.soled.Utils.CollectBlocksUtils;
 
 public class TaskManager {
 
     public static void InitializeTasks() {
         Bfly.bflyTime();
         Jail.jailTime();
-        CollectBlocks.BCTime();
+        CollectBlocksUtils.collectBlockTime();
     }
 
     public static void TaskCancel() {
@@ -19,8 +19,8 @@ public class TaskManager {
         if (Jail.scheduledJail != null) {
             Jail.scheduledJail.cancel(false);
         }
-        if (CollectBlocks.scheduledBC != null) {
-            CollectBlocks.scheduledBC.cancel(true);
+        if (CollectBlocksUtils.scheduledBC != null) {
+            CollectBlocksUtils.scheduledBC.cancel(true);
         }
     }
 }

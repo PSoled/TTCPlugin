@@ -169,9 +169,7 @@ public class VenderUtils {
     public static void venderAuto(Player player, Map<String, Double> list) {
         Economy economy = Bukkit.getServicesManager().getRegistration(Economy.class).getProvider();
         player.sendMessage(getPmTTC("&eVender auto " + (list.equals(VenderUtils.priceItems) ?  "normal" : "&dNetherStar") + " &aAtivado"));
-        if (cancelTask == null) {
-            cancelTaskVender();
-        }
+        cancelTaskVender();
         if (scheduledFuture == null) {
             scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
                 Iterator<Map.Entry<String, Integer>> it = Vender.playerVender.entrySet().iterator();

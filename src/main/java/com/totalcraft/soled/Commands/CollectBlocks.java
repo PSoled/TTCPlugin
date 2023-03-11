@@ -7,18 +7,16 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 import static com.totalcraft.soled.Utils.PrefixMsgs.*;
 
 public class CollectBlocks implements CommandExecutor {
     public static HashMap<String, Integer> collectBlock = new HashMap<>();
     public static HashMap<String, Integer> BlockFilter = new HashMap<>();
-    public static List<Integer> oresFilter = Arrays.asList(4 ,15, 16, 2762, 24, 3, 12, 249, 4362, 2402, 2001, 13, 1750, 14, 351, 331, 264, 388, 30243, 248, 4359, 3346, 4321, 4322, 4323, 4324, 4325, 4326, 4327, 4328, 714, 4330, 4345, 1475, 2100, 25264, 6278, 6319, 6320, 25263, 263 , 318);
+    public static List<Integer> oresFilter = Arrays.asList(4, 15, 16, 2762, 24, 3, 12, 249, 4362, 2402, 2001, 13, 1750, 14, 351, 331, 264, 388, 30243, 248, 4329, 3346, 4321, 4322, 4323, 4324, 4325, 4326, 4327, 4328, 714, 4330, 4345, 1475, 2100, 25264, 6278, 6319, 6320, 25263, 263, 318, 280, 27972);
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -77,7 +75,7 @@ public class CollectBlocks implements CommandExecutor {
                 try {
                     id = Integer.parseInt(args[1]);
                 } catch (NumberFormatException a) {
-                    sender.sendMessage(getPmTTC("&cTem alguma coisa errado ai meu filho"));
+                    sender.sendMessage(getPmTTC("&cVocê deve colocar somente o ID do item, Exemplo:\n&eId e MetaData do Dark silicon é 2100:1, Você colocar apenas 2100"));
                     return true;
                 }
                 if (id == 0) {
@@ -89,28 +87,5 @@ public class CollectBlocks implements CommandExecutor {
             }
         }
         return true;
-    }
-
-    public static ScheduledExecutorService schedulerBC = Executors.newScheduledThreadPool(1);
-    public static ScheduledFuture<?> scheduledBC;
-
-    public static void BCTime() {
-        scheduledBC = schedulerBC.scheduleAtFixedRate(() -> {
-            Iterator<Map.Entry<String, Integer>> it = collectBlock.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry<String, Integer> entry = it.next();
-                String name = entry.getKey();
-                int timeLeft = entry.getValue();
-                if (timeLeft < 1) {
-                    it.remove();
-                    Player player = Bukkit.getPlayer(name);
-                    if (player != null) {
-                        player.sendMessage(getPmTTC("&cAcabou o tempo do seu coletor de blocos"));
-                    }
-                } else {
-                    collectBlock.put(name, timeLeft - 1);
-                }
-            }
-        }, 60, 60, TimeUnit.SECONDS);
     }
 }
