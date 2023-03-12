@@ -92,5 +92,13 @@
             <systemPath>${basedir}/libs/worldedit-5.5.7.jar</systemPath>
         </dependency>
 
+        <dependency>
+            <groupId>me.ryanhamshire</groupId>
+            <artifactId>GriefPrevention</artifactId>
+            <version>7.7</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/libs/GriefPrevention_Ref.jar</systemPath>
+        </dependency>
+
     </dependencies>
 </project>

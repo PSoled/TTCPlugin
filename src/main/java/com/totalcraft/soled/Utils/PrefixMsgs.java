@@ -14,6 +14,10 @@ public class PrefixMsgs {
         return ChatColor.translateAlternateColorCodes('&', "&7&l[&6&lTTC&7&l]&r ") + ChatColor.translateAlternateColorCodes('&', message);
     }
 
+    public static String getFormatColor(String message) {
+        return ChatColor.translateAlternateColorCodes('&', message);
+    }
+
     public static String getPmRankup(String playerName, String rankName) {
         return getPmTTC("&f&lO Player &b&l" + playerName + " &f&lUpou para o Rank " + rankName);
     }

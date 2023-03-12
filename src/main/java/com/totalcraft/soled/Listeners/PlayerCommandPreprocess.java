@@ -1,34 +1,39 @@
 package com.totalcraft.soled.Listeners;
 
-import org.bukkit.Bukkit;
+import me.ryanhamshire.GriefPrevention.Claim;
+import me.ryanhamshire.GriefPrevention.GriefPrevention;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.potion.PotionEffectType;
-import ru.tehkode.permissions.PermissionUser;
-import ru.tehkode.permissions.bukkit.PermissionsEx;
 
-import static com.totalcraft.soled.Utils.PrefixMsgs.getPmTTC;
+import java.util.List;
+
+import static com.totalcraft.soled.Utils.ClaimDeleteUtils.claimContainsBlock;
+import static com.totalcraft.soled.Utils.Utils.cancelTpStaff;
 
 public class PlayerCommandPreprocess implements Listener {
     @EventHandler
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         String command = event.getMessage();
-        String[] commandParts = command.split(" ");
-        if (commandParts.length >= 2 && commandParts[0].equalsIgnoreCase("/tp")) {
-            PermissionUser user = PermissionsEx.getUser(event.getPlayer());
-            if (user.has("totalessentials.commands.tp")) {
-                Player target = Bukkit.getPlayer(commandParts[1]);
-                if (target != null && (target.getName().equalsIgnoreCase("PlayerSoled") || target.getName().equalsIgnoreCase("Ythan") || target.getName().equalsIgnoreCase("Gilberto"))) {
-                    if (target.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-                        if (!user.has("ttcsoled.tpadmin") && !event.getPlayer().isOp()) {
-                            event.setCancelled(true);
-                            event.getPlayer().sendMessage(getPmTTC("&cSeu superior está no vanish, meu chará"));
-                            target.sendMessage(getPmTTC(event.getPlayer().getName() + " &cTentou teleportar em você, mas você está de vanish"));
-                        }
-                    }
+        Player player = event.getPlayer();
+        World world = player.getWorld();
+        if (cancelTpStaff(command, player)) {
+            event.setCancelled(true);
+        }
+        if (command.startsWith("/abandonallclaims")) {
+            List<Claim> claims = GriefPrevention.instance.dataStore.getPlayerData(player.getName()).claims;
+            for (Claim claim : claims) {
+                if (claimContainsBlock(player, claim, world, true)) {
+                    event.setCancelled(true);
                 }
+            }
+        }
+        if (command.startsWith("/abandonclaim")) {
+            Claim claim = GriefPrevention.instance.dataStore.getClaimAt(player.getLocation(), false, null);
+            if (claimContainsBlock(player, claim, world, false)) {
+                event.setCancelled(true);
             }
         }
     }
