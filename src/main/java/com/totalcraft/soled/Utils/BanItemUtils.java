@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.totalcraft.soled.Configs.BanItemCfg.banItemList;
+import static com.totalcraft.soled.Configs.MainConfig.banItemList;
 import static com.totalcraft.soled.Utils.PrefixMsgs.getPmTTC;
 
 public class BanItemUtils {

@@ -8,15 +8,15 @@ import java.io.IOException;
 import java.util.List;
 
 public class MainConfig {
-    public static File configFile;
-    public static YamlConfiguration config;
+    public static File configFile, banItemFile;
+    public static YamlConfiguration config, banItemConfig;
     private final Main main;
     public static boolean rankupModule, eventGroupChangeModule, venderModule, rtpModule, bcollectModule;
     public static String worldJail = "spawn";
     public static int jailLocationX, jailLocationY, jailLocationZ;
     public static String worldLocatinaMina = "spawn";
     public static int xLocatinaMina, yLocatinaMina, zLocatinaMina, x1Reset, x2Reset, y1Reset, y2Reset, z1Reset, z2Reset;
-    public static List<String> blocks;
+    public static List<String> blocks,banItemList, blockLimit;
 
     public MainConfig(Main main) {
         this.main = main;
@@ -25,8 +25,6 @@ public class MainConfig {
     public void setConfigs() {
         configFile = new File(main.getDataFolder(), "config.yml");
         config = YamlConfiguration.loadConfiguration(configFile);
-
-
         config.options().header("-- Plugin TTC --\n\nModules para desativar e ativar" +
                 "\nLocalização da mina de Mundo e X Y Z" +
                 "\nLocalização de X Y Z a X Y Z do Reset da mina" +
@@ -39,10 +37,15 @@ public class MainConfig {
         configJail();
         blocks = config.getStringList("blocksReset");
         config.set("blocksReset", blocks);
-
+        blockLimit = config.getStringList("blocksLimit");
+        config.set("blocksLimit", blockLimit);
+        
         config.options().copyDefaults(true);
         saveConfig();
 
+        banItemFile = new File(main.getDataFolder(), "banitem.yml");
+        banItemConfig = YamlConfiguration.loadConfiguration(banItemFile);
+        banItemList = banItemConfig.getStringList("ItensBans");
         Modules.setMainInstance(this);
     }
 
@@ -135,5 +138,13 @@ public class MainConfig {
         config.addDefault("JailLocationX", jailLocationX);
         config.addDefault("JailLocationY", jailLocationY);
         config.addDefault("JailLocationZ", jailLocationZ);
+    }
+    public static void saveBanItem() {
+        banItemConfig.set("ItensBans", banItemList);
+        try {
+            banItemConfig.save(banItemFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

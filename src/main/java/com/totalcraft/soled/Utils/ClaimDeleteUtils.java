@@ -6,18 +6,19 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import static com.totalcraft.soled.Configs.MainConfig.blockLimit;
 import static com.totalcraft.soled.Utils.PrefixMsgs.getFormatColor;
 import static com.totalcraft.soled.Utils.PrefixMsgs.getPmTTC;
 
 public class ClaimDeleteUtils {
-    static List<String> blockLimit = Arrays.asList("35:5", "35:10");
     public static boolean claimContainsBlock(Player player, Claim claim, World world, boolean allClaims) {
-        List<String> stringList = new ArrayList<>();
         boolean hasBlock = false;
+
+        List<String> stringList = new ArrayList<>();
         if (claim != null) {
             if (claim.getOwnerName().equalsIgnoreCase(player.getName())) {
                 Location lesserBoundaryCorner = claim.getLesserBoundaryCorner();
@@ -49,7 +50,7 @@ public class ClaimDeleteUtils {
                     }
                 }
                 if (hasBlock) {
-                    String message = allClaims ? "&cNo terreno &6X: &f"+ (x1 + x2) / 2 + " &6Z: &f"+ (z1 + z2) / 2 + " &ccontém blocos de limite nestas localizações e não pode ser abandonado" : "&cNeste terreno contém blocos de limite nestas localizações e não pode ser abandonado";
+                    String message = allClaims ? "&cNo terreno &6X: &f" + (x1 + x2) / 2 + " &6Z: &f" + (z1 + z2) / 2 + " &ccontém blocos de limite nestas localizações e não pode ser abandonado" : "&cNeste terreno contém blocos de limite nestas localizações e não pode ser abandonado";
                     player.sendMessage(getPmTTC(message) + "\n ");
                     for (String list : stringList) {
                         player.sendMessage(list);
@@ -61,3 +62,4 @@ public class ClaimDeleteUtils {
         return hasBlock;
     }
 }
+

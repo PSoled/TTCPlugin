@@ -28,8 +28,5 @@ public class InitializeConfigs {
 
         BlockProtectData blockProtectData = new BlockProtectData(main);
         blockProtectData.loadProtectedBlocks();
-
-        BanItemCfg banItemCfg = new BanItemCfg(main);
-        banItemCfg.loadBanItem();
     }
 }

@@ -172,6 +172,6 @@ public class PrefixMsgs {
     public static String getCommandBanItem() {
         return getPmTTC("&bLista de Comando do Ban Item\n" +
                 "\n&c/banitem add <Id> <Meta> &eEu acho que bane o item :/" +
-                "\n&c/banitem remove <Id> <Met> &eDeve dar unban no item :v");
+                "\n&c/banitem remove <Id> <Meta> &eDeve dar unban no item :v");
     }
 }

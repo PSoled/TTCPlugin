@@ -1,5 +1,6 @@
 package com.totalcraft.soled.Listeners;
 
+import com.totalcraft.soled.Utils.Utils;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.World;
@@ -22,18 +23,21 @@ public class PlayerCommandPreprocess implements Listener {
         if (cancelTpStaff(command, player)) {
             event.setCancelled(true);
         }
-        if (command.startsWith("/abandonallclaims")) {
-            List<Claim> claims = GriefPrevention.instance.dataStore.getPlayerData(player.getName()).claims;
-            for (Claim claim : claims) {
-                if (claimContainsBlock(player, claim, world, true)) {
+        if (Utils.getAdm(player)) {
+            if (command.startsWith("/abandonclaim")) {
+                Claim claim = GriefPrevention.instance.dataStore.getClaimAt(player.getLocation(), false, null);
+                if (claimContainsBlock(player, claim, world, false)) {
                     event.setCancelled(true);
                 }
             }
-        }
-        if (command.startsWith("/abandonclaim")) {
-            Claim claim = GriefPrevention.instance.dataStore.getClaimAt(player.getLocation(), false, null);
-            if (claimContainsBlock(player, claim, world, false)) {
-                event.setCancelled(true);
+            if (command.startsWith("/abandonallclaims")) {
+                List<Claim> claims = GriefPrevention.instance.dataStore.getPlayerData(player.getName()).claims;
+                for (Claim claim : claims) {
+                    if (claimContainsBlock(player, claim, world, true)) {
+                        event.setCancelled(true);
+
+                    }
+                }
             }
         }
     }

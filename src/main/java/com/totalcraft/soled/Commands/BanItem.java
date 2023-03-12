@@ -1,13 +1,13 @@
 package com.totalcraft.soled.Commands;
 
-import com.totalcraft.soled.Configs.BanItemCfg;
+import com.totalcraft.soled.Configs.MainConfig;
 import com.totalcraft.soled.Utils.Utils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static com.totalcraft.soled.Configs.BanItemCfg.banItemList;
+import static com.totalcraft.soled.Configs.MainConfig.banItemList;
 import static com.totalcraft.soled.Utils.PrefixMsgs.*;
 
 public class BanItem implements CommandExecutor {
@@ -45,12 +45,12 @@ public class BanItem implements CommandExecutor {
                 }
 
                 banItemList.add(id + ":" + meta);
-                BanItemCfg.saveBanItem();
+                MainConfig.saveBanItem();
                 sender.sendMessage(getPmTTC("&bItem Banido com Sucesso"));
             }
             if (args.length > 0 && args[0].equalsIgnoreCase("remove")) {
                 if (args.length != 3) {
-                    sender.sendMessage(getPmTTC("&cUse /banitem add <Id> <Meta>"));
+                    sender.sendMessage(getPmTTC("&cUse /banitem remove <Id> <Meta>"));
                     return true;
                 }
                 int id, meta;
@@ -62,7 +62,7 @@ public class BanItem implements CommandExecutor {
                     return true;
                 }
                 banItemList.remove(id + ":" + meta);
-                BanItemCfg.saveBanItem();
+                MainConfig.saveBanItem();
                 sender.sendMessage(getPmTTC("&bItem Desbanido com Sucesso"));
             }
         }
