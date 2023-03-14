@@ -53,7 +53,6 @@ public class RandomTp implements CommandExecutor {
                 }
             }
             World world = player.getWorld();
-            RandomTpUtils.randomTpTime();
             if (args.length > 0 && args[0].equalsIgnoreCase("nether")) {
                 world = Bukkit.getWorld("DIM-1");
             }

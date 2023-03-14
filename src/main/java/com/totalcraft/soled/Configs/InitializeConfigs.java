@@ -2,6 +2,8 @@ package com.totalcraft.soled.Configs;
 
 import com.totalcraft.soled.Main;
 
+import static com.totalcraft.soled.Configs.BlockProtectData.clearProtectedBLocks;
+
 public class InitializeConfigs {
 
     private final Main main;
@@ -28,5 +30,6 @@ public class InitializeConfigs {
 
         BlockProtectData blockProtectData = new BlockProtectData(main);
         blockProtectData.loadProtectedBlocks();
+        clearProtectedBLocks();
     }
 }

@@ -17,7 +17,7 @@ import static com.totalcraft.soled.Utils.PrefixMsgs.*;
 public class CollectBlocks implements CommandExecutor {
     public static HashMap<String, Integer> collectBlock = new HashMap<>();
     public static HashMap<String, Integer> BlockFilter = new HashMap<>();
-    public static List<Integer> oresFilter = Arrays.asList(4, 15, 16, 2762, 24, 3, 12, 249, 4362, 2402, 2001, 13, 1750, 14, 351, 331, 264, 388, 30243, 248, 4329, 3346, 4321, 4322, 4323, 4324, 4325, 4326, 4327, 4328, 714, 4330, 4345, 1475, 2100, 25264, 6278, 6319, 6320, 25263, 263, 318, 280, 27972);
+    public static List<Integer> oresFilter = Arrays.asList(4, 15, 16, 2762, 24, 3, 12, 249, 4362, 2402, 2001, 13, 1750, 14, 351, 331, 264, 388, 30243, 248, 4329, 3346, 4321, 4322, 4323, 4324, 4325, 4326, 4327, 4328, 714, 4330, 4345, 1475, 2100, 25264, 6278, 6319, 6320, 25263, 263, 318, 280, 27972, 2761);
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

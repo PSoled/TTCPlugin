@@ -69,3 +69,8 @@ commands:
     description: Executa o comando de Banir Item
     usage: /banitem
     executor: com.totalcraft.soled.Commands.BanItem
+
+  blocklimit:
+    description: Executa o comando de Verificar blocos de limite no terreno
+    usage: /blocklimit
+    executor: com.totalcraft.soled.Commands.BlockLimit

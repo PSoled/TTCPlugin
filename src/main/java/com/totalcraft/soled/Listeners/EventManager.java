@@ -9,7 +9,7 @@ public class EventManager {
         pm.registerEvents(new PlayerJoin(plugin), plugin);
         pm.registerEvents(new PlayerQuit(), plugin);
         pm.registerEvents(new GroupChange(), plugin);
-        pm.registerEvents(new PlayerCommandPreprocess(), plugin);
+        pm.registerEvents(new PlayerCommandPreprocess(plugin), plugin);
         pm.registerEvents(new Teleport(), plugin);
         pm.registerEvents(new ChangedWorld(plugin), plugin);
         pm.registerEvents(new BlockPlace(), plugin);
@@ -22,5 +22,6 @@ public class EventManager {
         pm.registerEvents(new InventoryDrag(), plugin);
         pm.registerEvents(new PlayerDropItem(), plugin);
         pm.registerEvents(new PlayerPickupItem(plugin), plugin);
+        pm.registerEvents(new ClaimResize(plugin), plugin);
     }
 }

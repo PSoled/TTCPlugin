@@ -6,6 +6,8 @@ import com.totalcraft.soled.Listeners.EventManager;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import static com.totalcraft.soled.Utils.CollectBlocksUtils.reimbursementMoney;
+
 public class Main extends JavaPlugin implements Listener {
     InitializeConfigs initializeConfigs = new InitializeConfigs(this);
     CommandManager commandManager = new CommandManager(this);
@@ -26,6 +28,7 @@ public class Main extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         TaskManager.TaskCancel();
+        reimbursementMoney();
     }
 }
 

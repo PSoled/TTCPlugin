@@ -8,12 +8,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.security.SecureRandom;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 import static com.totalcraft.soled.Utils.PrefixMsgs.getPmTTC;
 
@@ -114,23 +108,4 @@ public class RandomTpUtils {
         return random.nextInt(MAX_RANGE) - MAX_RANGE / 2;
     }
 
-    public static ScheduledExecutorService schedulerRTP = Executors.newScheduledThreadPool(1);
-    public static ScheduledFuture<?> scheduledRTP;
-
-    public static void randomTpTime() {
-        scheduledRTP = schedulerRTP.scheduleAtFixedRate(() -> {
-            Iterator<Map.Entry<String, Integer>> it = RandomTp.cooldown.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry<String, Integer> entry = it.next();
-                String name = entry.getKey();
-                int timeLeft = entry.getValue();
-                if (timeLeft < 1) {
-                    it.remove();
-                    scheduledRTP.cancel(true);
-                } else {
-                    RandomTp.cooldown.put(name, timeLeft - 1);
-                }
-            }
-        }, 0, 1, TimeUnit.SECONDS);
-    }
 }

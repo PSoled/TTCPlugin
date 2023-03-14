@@ -33,6 +33,41 @@ public class BlockProtectData {
         }
     }
 
+    public static void clearProtectedBLocks() {
+        ConfigurationSection blocksSection = blockConfig.getConfigurationSection("protected-blocks");
+        for (String worldName : blocksSection.getKeys(false)) {
+            ConfigurationSection worldSection = blocksSection.getConfigurationSection(worldName);
+            for (String xStr : worldSection.getKeys(false)) {
+                ConfigurationSection xSection = worldSection.getConfigurationSection(xStr);
+                for (String yStr : xSection.getKeys(false)) {
+                    ConfigurationSection ySection = xSection.getConfigurationSection(yStr);
+                    for (String zStr : ySection.getKeys(false)) {
+                        ConfigurationSection zSection = ySection.getConfigurationSection(zStr);
+                        if (zSection != null) {
+                            String playerName = zSection.getString(zStr);
+                            if (playerName == null || playerName.isEmpty()) {
+                                zSection.getParent().set(zStr, null);
+                            }
+                        }
+                    }
+                    if (ySection.getKeys(false).isEmpty()) {
+                        ySection.getParent().set(yStr, null);
+                    }
+                }
+                if (xSection.getKeys(false).isEmpty()) {
+                    xSection.getParent().set(xStr, null);
+                }
+            }
+            if (worldSection.getKeys(false).isEmpty()) {
+                worldSection.getParent().set(worldName, null);
+            }
+        }
+        try {
+            blockConfig.save(blockFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void loadProtectedBlocks() {
         blockFile = new File(main.getDataFolder(), "data/blockprotect.yml");
@@ -54,6 +89,11 @@ public class BlockProtectData {
                         }
                     }
                 }
+            }
+            try {
+                blockConfig.save(blockFile);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         } catch (Exception a) {
             System.out.println("O arquivo blockprotect.yml não está criado corretamente");
