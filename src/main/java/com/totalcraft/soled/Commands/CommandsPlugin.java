@@ -2,6 +2,7 @@ package com.totalcraft.soled.Commands;
 
 import com.totalcraft.soled.Utils.RestartServerUtils;
 import com.totalcraft.soled.Utils.Utils;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -11,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
+import static com.totalcraft.soled.Utils.BlockProtectUtils.clearBlocksProtect;
 import static com.totalcraft.soled.Utils.PrefixMsgs.*;
 
 public class CommandsPlugin implements CommandExecutor {
@@ -21,14 +23,12 @@ public class CommandsPlugin implements CommandExecutor {
         this.pluginManager = pluginManager;
         restartServerUtils = new RestartServerUtils(plugin);
     }
-    Utils utils = new Utils();
-
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("ttcsoled")) {
             if (sender instanceof Player) {
-                if (utils.getAdm(sender)) {
+                if (Utils.getAdm(sender)) {
                     sender.sendMessage(getPmNotAdm());
                     return true;
                 }
@@ -74,7 +74,7 @@ public class CommandsPlugin implements CommandExecutor {
             }
 
             if (args.length > 0 && args[0].equalsIgnoreCase("teste")) {
-                Bukkit.reload();
+                clearBlocksProtect();
             }
         }
         return true;

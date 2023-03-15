@@ -9,6 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.totalcraft.soled.Configs.MainConfig.blockLimit;
@@ -88,6 +89,15 @@ public class GriefPreventionUtils {
             }
         }
         return numDivisions;
+    }
+
+    public static boolean hasPermClaim(Player player, Claim claim) {
+        ArrayList<String> builderTrust = new ArrayList<>();
+        ArrayList<String> containerTrust = new ArrayList<>();
+        ArrayList<String> accessTrust = new ArrayList<>();
+        ArrayList<String> managerTrust = new ArrayList<>();
+        claim.getPermissions(builderTrust, containerTrust, accessTrust, managerTrust);
+        return !accessTrust.contains(player.getName().toLowerCase()) && !accessTrust.contains("public");
     }
 }
 

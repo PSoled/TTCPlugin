@@ -64,13 +64,13 @@ public class CollectBlocksUtils {
                                 ItemCB.remove();
                             }
                         } else {
-                            ItemCB.teleport(player);
+                            ItemCB.teleport(player.getLocation());
                         }
                     } else {
                         if (itemStack.getItemStack().getTypeId() == 4 || itemStack.getItemStack().getTypeId() == 3 || itemStack.getItemStack().getTypeId() == 13) {
                             ItemCB.remove();
                         } else {
-                            ItemCB.teleport(player);
+                            ItemCB.teleport(player.getLocation());
                         }
                     }
                 }

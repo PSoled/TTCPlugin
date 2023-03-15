@@ -45,16 +45,18 @@ public class PlayerCommandPreprocess implements Listener {
         if (Utils.getAdm(player)) {
             GriefPreventionUtils griefPreventionUtils = new GriefPreventionUtils(plugin);
             if (command.startsWith("/abandonclaim")) {
-                cooldownCmd.put(player.getName(), 15);
                 Claim claim = GriefPrevention.instance.dataStore.getClaimAt(player.getLocation(), false, null);
-                int delay = griefPreventionUtils.claimContainsBlock(player, claim, world, false, false, true);
-                event.setCancelled(true);
-                player.sendMessage("\n" + getPmTTC("&c&lVerificando o terreno, Aguarde&r") + "\n ");
-                Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                    if (!hasBlock.get(player.getName())) {
-                        player.performCommand("abandonclaim");
-                    }
-                }, 10L * delay);
+                if (claim.getOwnerName().equalsIgnoreCase(player.getName())) {
+                    cooldownCmd.put(player.getName(), 15);
+                    int delay = griefPreventionUtils.claimContainsBlock(player, claim, world, false, false, true);
+                    event.setCancelled(true);
+                    player.sendMessage("\n" + getPmTTC("&c&lVerificando o terreno, Aguarde&r") + "\n ");
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                        if (!hasBlock.get(player.getName())) {
+                            player.performCommand("abandonclaim");
+                        }
+                    }, 10L * delay);
+                }
             }
             if (command.startsWith("/abandonallclaims")) {
                 msgAgain.put(player.getName(), false);

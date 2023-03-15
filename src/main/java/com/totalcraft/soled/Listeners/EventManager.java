@@ -23,5 +23,6 @@ public class EventManager {
         pm.registerEvents(new PlayerDropItem(), plugin);
         pm.registerEvents(new PlayerPickupItem(plugin), plugin);
         pm.registerEvents(new ClaimResize(plugin), plugin);
+        pm.registerEvents(new PlayerMove(), plugin);
     }
 }

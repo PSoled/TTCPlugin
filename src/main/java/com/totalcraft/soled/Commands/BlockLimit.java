@@ -14,7 +14,7 @@ import static com.totalcraft.soled.Listeners.PlayerCommandPreprocess.cooldownCmd
 import static com.totalcraft.soled.Utils.PrefixMsgs.getPmConsole;
 import static com.totalcraft.soled.Utils.PrefixMsgs.getPmTTC;
 
-public class BlockLimit implements CommandExecutor {
+public class    BlockLimit implements CommandExecutor {
     private final Plugin plugin;
 
     public BlockLimit(Plugin plugin) {

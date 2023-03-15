@@ -3,6 +3,7 @@ package com.totalcraft.soled.Configs;
 import com.totalcraft.soled.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -26,6 +27,7 @@ public class BlockProtectData {
         for (Location loc : protectedBlock.keySet()) {
             blockConfig.set("protected-blocks." + loc.getWorld().getName() + "." + loc.getBlockX() + "." + loc.getBlockY() + "." + loc.getBlockZ(), protectedBlock.get(loc));
         }
+
         try {
             blockConfig.save(blockFile);
         } catch (IOException e) {
@@ -43,6 +45,13 @@ public class BlockProtectData {
                     ConfigurationSection ySection = xSection.getConfigurationSection(yStr);
                     for (String zStr : ySection.getKeys(false)) {
                         ConfigurationSection zSection = ySection.getConfigurationSection(zStr);
+                        int x = Integer.parseInt(xStr);
+                        int y = Integer.parseInt(yStr);
+                        int z = Integer.parseInt(zStr);
+                        World world = Bukkit.getWorld(worldName);
+                        if (world.getBlockAt(x, y, z).getType() == Material.AIR) {
+                            ySection.set(zStr, null);
+                        }
                         if (zSection != null) {
                             String playerName = zSection.getString(zStr);
                             if (playerName == null || playerName.isEmpty()) {
@@ -90,13 +99,9 @@ public class BlockProtectData {
                     }
                 }
             }
-            try {
-                blockConfig.save(blockFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         } catch (Exception a) {
-            System.out.println("O arquivo blockprotect.yml não está criado corretamente");
+            System.out.println("O arquivo blockprotect.yml não está criado corretamente" + a.getMessage());
+            a.printStackTrace();
         }
     }
 

@@ -2,6 +2,7 @@ package com.totalcraft.soled.Utils;
 
 import com.totalcraft.soled.Configs.BlockProtectData;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -11,9 +12,24 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 import java.util.Iterator;
 
 import static com.totalcraft.soled.Configs.BlockProtectData.blockConfig;
+import static com.totalcraft.soled.Configs.BlockProtectData.clearProtectedBLocks;
 import static com.totalcraft.soled.Utils.PrefixMsgs.getPmTTC;
 
 public class BlockProtectUtils {
+    public static void clearBlocksProtect() {
+        Iterator<Location> it = BlockProtectData.protectedBlock.keySet().iterator();
+        while (it.hasNext()) {
+            Location loc = it.next();
+            Block block = loc.getWorld().getBlockAt(loc);
+            System.out.println(loc.getX() + " " + loc.getY() + " " + loc.getZ());
+            if (block.getType() == Material.AIR) {
+                System.out.println("b");
+                it.remove();
+            }
+        }
+        clearProtectedBLocks();
+    }
+
     public static boolean blockProtectBreak(Player player, Location blockLocation) {
         PermissionUser user = PermissionsEx.getUser(player);
         Iterator<Location> it = BlockProtectData.protectedBlock.keySet().iterator();
@@ -48,7 +64,9 @@ public class BlockProtectUtils {
         }
         return false;
     }
+
     static boolean blockCancelled = false;
+
     public static boolean blockProtectPlace(Player player, Block block, Location blockLocation) {
         if (block.getLocation().getWorld().getName().equals("minerar")) {
             PermissionUser user = PermissionsEx.getUser(player);
