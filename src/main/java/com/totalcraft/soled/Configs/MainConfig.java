@@ -7,9 +7,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import static com.totalcraft.soled.Utils.WorldGuardUtils.regionsFly;
+
 public class MainConfig {
-    public static File configFile, banItemFile;
-    public static YamlConfiguration config, banItemConfig;
+    public static File configFile, banItemFile, blockLimitFile;
+    public static YamlConfiguration config, banItemConfig, blockLimitConfig;
     private final Main main;
     public static boolean rankupModule, eventGroupChangeModule, venderModule, rtpModule, bcollectModule;
     public static String worldJail = "spawn";
@@ -35,17 +37,12 @@ public class MainConfig {
         configModule();
         configMina();
         configJail();
+        regionsFly = config.getStringList("Region Sem Fly");
+        config.set("Region Sem Fly", regionsFly);
         blocks = config.getStringList("blocksReset");
         config.set("blocksReset", blocks);
-        blockLimit = config.getStringList("blocksLimit");
-        config.set("blocksLimit", blockLimit);
-        
         config.options().copyDefaults(true);
         saveConfig();
-
-        banItemFile = new File(main.getDataFolder(), "banitem.yml");
-        banItemConfig = YamlConfiguration.loadConfiguration(banItemFile);
-        banItemList = banItemConfig.getStringList("ItensBans");
         Modules.setMainInstance(this);
     }
 

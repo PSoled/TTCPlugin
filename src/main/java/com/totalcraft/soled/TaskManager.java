@@ -4,6 +4,7 @@ import com.totalcraft.soled.Commands.Bfly;
 import com.totalcraft.soled.Commands.Jail;
 import com.totalcraft.soled.Commands.RandomTp;
 import com.totalcraft.soled.Utils.CollectBlocksUtils;
+import com.totalcraft.soled.Utils.VenderUtils;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -34,6 +35,14 @@ public class TaskManager {
             CollectBlocksUtils.scheduledBC.cancel(true);
         }
         scheduledTimes.cancel(true);
+
+        if (VenderUtils.scheduledVender != null)  {
+            VenderUtils.scheduledVender.cancel(true);
+        }
+
+        if (VenderUtils.cancelTask != null) {
+            VenderUtils.cancelTask.cancel(true);
+        }
     }
 
     public static ScheduledExecutorService schedulerTimes = Executors.newScheduledThreadPool(1);

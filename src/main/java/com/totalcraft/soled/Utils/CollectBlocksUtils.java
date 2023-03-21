@@ -1,6 +1,5 @@
 package com.totalcraft.soled.Utils;
 
-import com.totalcraft.soled.Commands.CollectBlocks;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -29,6 +28,7 @@ public class CollectBlocksUtils {
             }
         }
     }
+
     public static ScheduledExecutorService schedulerBC = Executors.newScheduledThreadPool(1);
     public static ScheduledFuture<?> scheduledBC;
 
@@ -56,25 +56,10 @@ public class CollectBlocksUtils {
         if (collectBlock.containsKey(player.getName())) {
             for (Entity ItemCB : player.getNearbyEntities(10, 10, 10)) {
                 if (ItemCB instanceof Item) {
-                    Item itemStack = (Item) ItemCB;
-                    if (CollectBlocks.BlockFilter.containsKey(player.getName())) {
-                        int id = CollectBlocks.BlockFilter.get(player.getName());
-                        if (!(itemStack.getItemStack().getTypeId() == id)) {
-                            if (CollectBlocks.oresFilter.contains(itemStack.getItemStack().getTypeId())) {
-                                ItemCB.remove();
-                            }
-                        } else {
-                            ItemCB.teleport(player.getLocation());
-                        }
-                    } else {
-                        if (itemStack.getItemStack().getTypeId() == 4 || itemStack.getItemStack().getTypeId() == 3 || itemStack.getItemStack().getTypeId() == 13) {
-                            ItemCB.remove();
-                        } else {
-                            ItemCB.teleport(player.getLocation());
-                        }
-                    }
+                    ItemCB.teleport(player.getLocation());
                 }
             }
         }
     }
 }
+

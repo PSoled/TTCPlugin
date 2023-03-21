@@ -164,14 +164,14 @@ public class VenderUtils {
         return 0;
     }
 
-    static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    static ScheduledFuture<?> scheduledFuture, cancelTask;
+    public static ScheduledExecutorService schedulerVender = Executors.newScheduledThreadPool(1);
+    public static ScheduledFuture<?> scheduledVender, cancelTask;
     public static void venderAuto(Player player, Map<String, Double> list) {
         Economy economy = Bukkit.getServicesManager().getRegistration(Economy.class).getProvider();
         player.sendMessage(getPmTTC("&eVender auto " + (list.equals(VenderUtils.priceItems) ?  "normal" : "&dNetherStar") + " &aAtivado"));
         cancelTaskVender();
-        if (scheduledFuture == null) {
-            scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
+        if (scheduledVender == null) {
+            scheduledVender = schedulerVender.scheduleAtFixedRate(() -> {
                 Iterator<Map.Entry<String, Integer>> it = Vender.playerVender.entrySet().iterator();
                 while (it.hasNext()) {
                     Map.Entry<String, Integer> entry = it.next();
@@ -202,9 +202,9 @@ public class VenderUtils {
     }
 
     public static void cancelTaskVender() {
-        cancelTask = scheduler.scheduleAtFixedRate(() -> {
+        cancelTask = schedulerVender.scheduleAtFixedRate(() -> {
             if (Vender.playerVender == null) {
-                scheduledFuture.cancel(true);
+                scheduledVender.cancel(true);
                 cancelTask.cancel(true);
             }
         }, 0, 1, TimeUnit.SECONDS);

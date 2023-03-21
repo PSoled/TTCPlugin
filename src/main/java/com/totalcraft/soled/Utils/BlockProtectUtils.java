@@ -21,9 +21,7 @@ public class BlockProtectUtils {
         while (it.hasNext()) {
             Location loc = it.next();
             Block block = loc.getWorld().getBlockAt(loc);
-            System.out.println(loc.getX() + " " + loc.getY() + " " + loc.getZ());
             if (block.getType() == Material.AIR) {
-                System.out.println("b");
                 it.remove();
             }
         }
@@ -41,17 +39,17 @@ public class BlockProtectUtils {
                 blockConfig.set("protected-blocks." + loc.getWorld().getName() + "." + loc.getBlockX() + "." + loc.getBlockY() + "." + loc.getBlockZ(), null);
                 it.remove();
                 BlockProtectData.saveProtectedBlocks();
-                break;
+                return false;
             }
             if (blockLocation.distance(loc) <= 0 && (user.has("ttcsoled.admin") || player.isOp())) {
                 player.sendMessage(getPmTTC("&cVocê removeu um bloco protegido do player &f" + BlockProtectData.protectedBlock.get(loc)));
                 blockConfig.set("protected-blocks." + loc.getWorld().getName() + "." + loc.getBlockX() + "." + loc.getBlockY() + "." + loc.getBlockZ(), null);
                 it.remove();
                 BlockProtectData.saveProtectedBlocks();
-                break;
+                return false;
             }
             if (blockLocation.distance(loc) <= 3 && (user.has("ttcsoled.admin") || player.isOp())) {
-                break;
+                return false;
             }
             if (blockLocation.distance(loc) <= 0 && !player.getName().equals(owner)) {
                 player.sendMessage(getPmTTC("&cBloco protegido por &f" + owner));

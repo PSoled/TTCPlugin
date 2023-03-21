@@ -21,7 +21,9 @@ public class BlockBreak implements Listener {
         Location blockLocation = block.getLocation();
         ItemStack itemHand = player.getItemInHand();
         if (block.getLocation().getWorld().getName().equals("minerar")) {
-            event.setCancelled(BlockProtectUtils.blockProtectBreak(player, blockLocation));
+            if (BlockProtectUtils.blockProtectBreak(player, blockLocation)) {
+                event.setCancelled(true);
+            }
         }
         if (minaPlayers.contains(player.getName())) {
             if (itemHand.getTypeId() == 30477 || itemHand.getTypeId() == 4386 || itemHand.getTypeId() == 4388) {

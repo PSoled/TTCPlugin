@@ -91,15 +91,20 @@ public class GriefPreventionUtils {
         return numDivisions;
     }
 
+    public static boolean hasPermEntry(Player player, Claim claim) {
+        ArrayList<String> allPerms = new ArrayList<>();
+        claim.getPermissions(allPerms, allPerms, allPerms, allPerms);
+        return !allPerms.contains(player.getName()) && !allPerms.contains(player.getName().toLowerCase()) && !allPerms.contains("public");
+    }
+
     public static boolean hasPermClaim(Player player, Claim claim) {
-        ArrayList<String> builderTrust = new ArrayList<>();
-        ArrayList<String> containerTrust = new ArrayList<>();
-        ArrayList<String> accessTrust = new ArrayList<>();
-        ArrayList<String> managerTrust = new ArrayList<>();
-        claim.getPermissions(builderTrust, containerTrust, accessTrust, managerTrust);
-        return !accessTrust.contains(player.getName().toLowerCase()) && !accessTrust.contains("public");
+        ArrayList<String> allPerms = new ArrayList<>();
+        ArrayList<String> screwThis = new ArrayList<>();
+        claim.getPermissions(allPerms, allPerms, screwThis, allPerms);
+        return !allPerms.contains(player.getName()) && !allPerms.contains(player.getName().toLowerCase());
     }
 }
+
 
 
 

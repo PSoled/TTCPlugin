@@ -100,5 +100,21 @@
             <systemPath>${basedir}/libs/GriefPrevention_Ref.jar</systemPath>
         </dependency>
 
+        <dependency>
+            <groupId>me.dpohvar.powernbt</groupId>
+            <artifactId>PowerNBT</artifactId>
+            <version>0.5.4</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/libs/PowerNBT.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sk89q</groupId>
+            <artifactId>worldguard</artifactId>
+            <version>5.7.5</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/libs/WorldGuard.jar</systemPath>
+        </dependency>
+
     </dependencies>
 </project>

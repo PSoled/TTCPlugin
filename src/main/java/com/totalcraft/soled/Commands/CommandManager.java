@@ -26,5 +26,6 @@ public class CommandManager {
         plugin.getCommand("rtp").setExecutor(new RandomTp());
         plugin.getCommand("banitem").setExecutor(new BanItem());
         plugin.getCommand("blocklimit").setExecutor(new BlockLimit(plugin));
+        plugin.getCommand("filterblock").setExecutor(new FilterBlock());
     }
 }

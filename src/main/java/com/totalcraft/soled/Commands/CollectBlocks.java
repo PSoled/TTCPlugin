@@ -16,8 +16,7 @@ import static com.totalcraft.soled.Utils.PrefixMsgs.*;
 
 public class CollectBlocks implements CommandExecutor {
     public static HashMap<String, Integer> collectBlock = new HashMap<>();
-    public static HashMap<String, Integer> BlockFilter = new HashMap<>();
-    public static List<Integer> oresFilter = Arrays.asList(4, 15, 16, 2762, 24, 3, 12, 249, 4362, 2402, 2001, 13, 1750, 14, 351, 331, 264, 388, 30243, 248, 4329, 3346, 4321, 4322, 4323, 4324, 4325, 4326, 4327, 4328, 714, 4330, 4345, 1475, 2100, 25264, 6278, 6319, 6320, 25263, 263, 318, 280, 27972, 2761);
+    public static List<Integer> oresFilter = Arrays.asList(49 ,66 ,287 ,85 ,5 ,2761 ,50 ,255, 4, 15, 16, 2762, 24, 3, 12, 249, 4362, 2402, 2001, 13, 1750, 14, 351, 331, 264, 388, 30243, 248, 4329, 3346, 4321, 4322, 4323, 4324, 4325, 4326, 4327, 4328, 714, 4330, 4345, 1475, 2100, 25264, 6278, 6319, 6320, 25263, 263, 318, 280, 27972, 2761);
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -63,32 +62,6 @@ public class CollectBlocks implements CommandExecutor {
                 } else {
                     player.sendMessage(getPmTTC("&cVocê já está com o bcollect comprado"));
                 }
-            }
-
-            if (args.length > 0 && args[0].equalsIgnoreCase("filtro")) {
-                if (args.length > 1 && args[1].equalsIgnoreCase("clear")) {
-                    player.sendMessage(getPmTTC("&eVocê limpou seu filtro de itens"));
-                    BlockFilter.remove(player.getName());
-                    return true;
-                }
-                if (args.length != 2) {
-                    player.sendMessage(getPmTTC("&cUso /bcollect filtro clear"));
-                    player.sendMessage(getPmTTC("&cUso /bcollect filtro <Id>"));
-                    return true;
-                }
-                int id;
-                try {
-                    id = Integer.parseInt(args[1]);
-                } catch (NumberFormatException a) {
-                    sender.sendMessage(getPmTTC("&cVocê deve colocar somente o ID do item, Exemplo:\n&eId e MetaData do Dark silicon é 2100:1, Você colocar apenas 2100"));
-                    return true;
-                }
-                if (id == 0) {
-                    player.sendMessage(getPmTTC("&cSinto-lhe informar que não existe uma forma de você coletar o vento :/"));
-                    return true;
-                }
-                player.sendMessage(getPmTTC("&eVocê filtrou seu coletor para todo bloco de ID " + id));
-                BlockFilter.put(player.getName(), id);
             }
         }
         return true;

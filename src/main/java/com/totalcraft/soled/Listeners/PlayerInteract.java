@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import static com.totalcraft.soled.Utils.BanItemUtils.getBanItem;
 
 public class PlayerInteract implements Listener {
+
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();

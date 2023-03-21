@@ -8,6 +8,7 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 
 import static com.totalcraft.soled.Commands.EventoMina.minaPlayers;
 import static com.totalcraft.soled.Utils.PrefixMsgs.getPmTTC;
+import static com.totalcraft.soled.Utils.WorldGuardUtils.CancelFlyRegion;
 
 public class PlayerToggleFlight implements Listener {
 
@@ -21,6 +22,11 @@ public class PlayerToggleFlight implements Listener {
                     player.setFlying(false);
                     event.setCancelled(true);
                 }
+            }
+        }
+        if (event.isFlying()) {
+            if (CancelFlyRegion(player)) {
+                event.setCancelled(true);
             }
         }
     }

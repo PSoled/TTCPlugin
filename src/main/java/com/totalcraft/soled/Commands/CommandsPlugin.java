@@ -2,7 +2,6 @@ package com.totalcraft.soled.Commands;
 
 import com.totalcraft.soled.Utils.RestartServerUtils;
 import com.totalcraft.soled.Utils.Utils;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -12,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-import static com.totalcraft.soled.Utils.BlockProtectUtils.clearBlocksProtect;
 import static com.totalcraft.soled.Utils.PrefixMsgs.*;
 
 public class CommandsPlugin implements CommandExecutor {
@@ -74,7 +72,7 @@ public class CommandsPlugin implements CommandExecutor {
             }
 
             if (args.length > 0 && args[0].equalsIgnoreCase("teste")) {
-                clearBlocksProtect();
+                Bukkit.reload();
             }
         }
         return true;

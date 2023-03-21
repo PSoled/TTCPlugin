@@ -1,44 +1,51 @@
 package com.totalcraft.soled.Listeners;
 
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
-import com.totalcraft.soled.Commands.BlockProtect;
-import com.totalcraft.soled.Configs.BlockProtectData;
-import com.totalcraft.soled.Configs.MainConfig;
+import com.sk89q.jnbt.NBTInputStream;
 import com.totalcraft.soled.Utils.BlockProtectUtils;
 import com.totalcraft.soled.Utils.Utils;
+import me.dpohvar.powernbt.nbt.NBTBase;
+import me.dpohvar.powernbt.nbt.NBTContainerBlock;
+import me.dpohvar.powernbt.nbt.NBTTagCompound;
+import me.dpohvar.powernbt.nbt.NBTTagString;
+import net.minecraft.server.v1_5_R3.TileEntity;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.v1_5_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_5_R3.block.CraftBlock;
-import org.bukkit.craftbukkit.v1_5_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_5_R3.block.CraftBlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import ru.tehkode.permissions.PermissionUser;
-import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
-import static com.totalcraft.soled.Configs.BlockProtectData.blockConfig;
+import static com.totalcraft.soled.Commands.FilterBlock.filterChest;
 import static com.totalcraft.soled.Utils.PrefixMsgs.getPmTTC;
 
 public class BlockPlace implements Listener {
-    List<Integer> blockMinerar = Arrays.asList(2007, 1510, 2003, 54, 146, 975, 251, 61, 250, 1023, 194, 195, 1503);
+
+    List<Integer> blockMinerar = Arrays.asList(2007, 1510, 2003, 54, 146, 975, 251, 61, 250, 1023, 194, 195, 1503, 2516, 2513);
 
     @EventHandler
-    public void onBlockPlace(BlockPlaceEvent event) {
+    public void onBlockPlace(BlockPlaceEvent event) throws InstantiationException, IllegalAccessException {
         Player player = event.getPlayer();
         Block block = event.getBlockPlaced();
         Location blockLocation = block.getLocation();
+        ItemStack itemHand = player.getItemInHand();
         if (player.getWorld().getName().equals("minerar")) {
-            event.setCancelled(BlockProtectUtils.blockProtectPlace(player, block, blockLocation));
+            if (BlockProtectUtils.blockProtectPlace(player, block, blockLocation)) {
+                event.setCancelled(true);
+            }
         }
         if (Utils.getAdm(player)) {
             if (player.getWorld().getName().equals("minerar")) {

@@ -154,8 +154,8 @@ public class PrefixMsgs {
     public static String getCommmandoCB() {
         return getPmTTC("&bLista de comando do CollectBlocks\n" +
                 "\n&a/bcollect comprar &eCompra coletor de blocos por 5k por 10Mins" +
-                "\n&a/bcollect filtro <Id> &eFiltra para o ID de bloco seja coletado" +
-                "\n&a/bcollect filtro clear &eLimpar o Filtro" +
+//                "\n&a/bcollect filtro <Id> &eFiltra para o ID de bloco seja coletado" +
+//                "\n&a/bcollect filtro clear &eLimpar o Filtro" +
                 "\n&a/bcollect tempo &eVer tempo restante do coletor de blocos");
     }
 

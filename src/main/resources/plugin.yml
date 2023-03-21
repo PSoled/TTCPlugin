@@ -74,3 +74,8 @@ commands:
     description: Executa o comando de Verificar blocos de limite no terreno
     usage: /blocklimit
     executor: com.totalcraft.soled.Commands.BlockLimit
+
+  filterblock:
+    description: Executa o comando de Filtro para coletar Blocos
+    usage: /filterblock
+    executor: com.totalcraft.soled.Commands.FilterBlock

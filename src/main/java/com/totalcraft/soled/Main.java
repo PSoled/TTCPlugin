@@ -6,7 +6,7 @@ import com.totalcraft.soled.Listeners.EventManager;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import static com.totalcraft.soled.Utils.BlockProtectUtils.clearBlocksProtect;
+import static com.totalcraft.soled.Configs.FilterBlockData.saveFilterBlock;
 import static com.totalcraft.soled.Utils.CollectBlocksUtils.reimbursementMoney;
 
 public class Main extends JavaPlugin implements Listener {
@@ -29,8 +29,9 @@ public class Main extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         TaskManager.TaskCancel();
-        clearBlocksProtect();
         reimbursementMoney();
+        saveFilterBlock();
     }
+
 }
 
