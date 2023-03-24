@@ -8,16 +8,14 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static com.totalcraft.soled.Commands.FilterBlock.filterBoolean;
 import static com.totalcraft.soled.Commands.FilterBlock.filterChest;
+import static com.totalcraft.soled.Utils.PrefixMsgs.getFormatColor;
 
 public class FilterBlockData {
     private final Main main;
@@ -26,6 +24,8 @@ public class FilterBlockData {
     }
     public static File filterFile;
     public static YamlConfiguration filterConfig;
+    public static ItemStack redBlock = new ItemStack(35, 1, (short) 14);
+    public static ItemStack greenBlock = new ItemStack(35, 1, (short) 5);
 
     public static void saveFilterBlock() {
         for (Map.Entry<String, Inventory> entry : filterChest.entrySet()) {
@@ -54,20 +54,32 @@ public class FilterBlockData {
         filterFile = new File(main.getDataFolder(), "data/filterblock.yml");
         filterConfig = YamlConfiguration.loadConfiguration(filterFile);
         filterChest = new HashMap<>();
-        filterBoolean = new HashMap<>();
+        ItemMeta redMeta = redBlock.getItemMeta();
+        ItemMeta greenMeta = greenBlock.getItemMeta();
+        redMeta.setDisplayName(getFormatColor("&bFiltro de bloco &cDesativado"));
+        greenMeta.setDisplayName(getFormatColor("&bFiltro de bloco &aAtivado"));
+        redBlock.setItemMeta(redMeta);
+        greenBlock.setItemMeta(greenMeta);
 
         ConfigurationSection section = filterConfig.getConfigurationSection("");
         if (section != null) {
             for (String playerName : section.getKeys(false)) {
                 List<String> itemIds = filterConfig.getStringList(playerName);
-                Inventory inventory = Bukkit.createInventory(null, 9, ChatColor.WHITE + "Filtro: " + ChatColor.BLACK + playerName);
+                Inventory inventory = Bukkit.createInventory(null, 18, ChatColor.WHITE + "Filtro: " + ChatColor.BLACK + playerName);
+                inventory.setItem(17, redBlock);
 
                 for (String itemId : itemIds) {
                     String[] parts = itemId.split(":");
                     int id = Integer.parseInt(parts[0]);
                     int meta = parts.length > 1 ? Integer.parseInt(parts[1]) : 0;
-                    ItemStack item = new ItemStack(id, 1, (short) meta);
-                    inventory.addItem(item);
+                    if (id == 35 && meta == 14) {
+                        inventory.setItem(17, redBlock);
+                    } else if (id == 35 && meta == 5) {
+                        inventory.setItem(17, greenBlock);
+                    } else {
+                        ItemStack item = new ItemStack(id, 1, (short) meta);
+                        inventory.addItem(item);
+                    }
                 }
 
                 filterChest.put(playerName, inventory);

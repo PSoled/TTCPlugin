@@ -12,8 +12,8 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 
 import static com.totalcraft.soled.Commands.CollectBlocks.oresFilter;
-import static com.totalcraft.soled.Commands.FilterBlock.filterBoolean;
 import static com.totalcraft.soled.Commands.FilterBlock.filterChest;
+import static com.totalcraft.soled.Configs.FilterBlockData.greenBlock;
 import static com.totalcraft.soled.Utils.BanItemUtils.getBanItem;
 
 public class PlayerPickupItem implements Listener {
@@ -47,40 +47,38 @@ public class PlayerPickupItem implements Listener {
         ItemStack itemS = item.getItemStack();
         if (itemS != null) {
             if (filterChest.get(player.getName()) != null) {
-                if (filterBoolean.get(player.getName()) != null) {
-                    if (filterBoolean.get(player.getName())) {
-                        Inventory invFilter = filterChest.get(player.getName());
-                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                            PlayerInventory inventory = player.getInventory();
-                            for (int i = 0; i < inventory.getSize(); i++) {
-                                boolean continua = false;
-                                ItemStack inv = inventory.getItem(i);
-                                if (inv != null) {
-                                    for (ItemStack itemStack : invFilter.getContents()) {
-                                        if (itemStack != null) {
-                                            if (inv.getTypeId() == itemStack.getTypeId() && inv.getDurability() == itemStack.getDurability()) {
-                                                continua = true;
-                                            }
-                                        }
-                                    }
-                                    if (continua) {
-                                        continue;
-                                    }
-                                    if (invFilter.firstEmpty() > 0) {
-                                        for (int id : oresFilter) {
-                                            if (inv.getTypeId() == id) {
-                                                inventory.clear(i);
-                                            }
-                                        }
-                                    } else {
-                                        if (inv.getTypeId() == 3 || inv.getTypeId() == 4 || inv.getTypeId() == 13) {
-                                            inventory.clear(i);
+                Inventory invFilter = filterChest.get(player.getName());
+                if (invFilter.contains(greenBlock)) {
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                        PlayerInventory inventory = player.getInventory();
+                        for (int i = 0; i < inventory.getSize(); i++) {
+                            boolean continua = false;
+                            ItemStack inv = inventory.getItem(i);
+                            if (inv != null) {
+                                for (ItemStack itemStack : invFilter.getContents()) {
+                                    if (itemStack != null) {
+                                        if (inv.getTypeId() == itemStack.getTypeId() && inv.getDurability() == itemStack.getDurability()) {
+                                            continua = true;
                                         }
                                     }
                                 }
+                                if (continua) {
+                                    continue;
+                                }
+                                if (invFilter.firstEmpty() > 0) {
+                                    for (int id : oresFilter) {
+                                        if (inv.getTypeId() == id) {
+                                            inventory.clear(i);
+                                        }
+                                    }
+                                } else {
+                                    if (inv.getTypeId() == 3 || inv.getTypeId() == 4 || inv.getTypeId() == 13) {
+                                        inventory.clear(i);
+                                    }
+                                }
                             }
-                        }, 2);
-                    }
+                        }
+                    }, 2);
                 }
             }
         }

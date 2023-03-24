@@ -7,6 +7,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -54,7 +55,8 @@ public class CollectBlocksUtils {
 
     public static void collectBlockInteract(Player player) {
         if (collectBlock.containsKey(player.getName())) {
-            for (Entity ItemCB : player.getNearbyEntities(10, 10, 10)) {
+            List<Entity> drops = player.getNearbyEntities(10, 10, 10);
+            for (Entity ItemCB : drops) {
                 if (ItemCB instanceof Item) {
                     ItemCB.teleport(player.getLocation());
                 }
