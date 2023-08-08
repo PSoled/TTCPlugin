@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="TTC-Soled:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/TTC_Soled_jar</output-path>
+    <root id="archive" name="TTC-Soled.jar">
+      <element id="module-output" name="TTC-Soled" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/PermissionsEx.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/Vault.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/craftbukkit.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/worldedit-5.5.7.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/TotalEssentials-1.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
