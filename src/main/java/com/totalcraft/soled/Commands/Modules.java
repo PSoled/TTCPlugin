@@ -14,7 +14,7 @@ import static com.totalcraft.soled.Utils.PrefixMsgs.*;
 
 public class Modules implements CommandExecutor {
 
-    public static String rankup,vender, rtp, bcollect = "Comando";
+    public static String rankup,vender, rtp, bcollect, leilao;
     public static String groupchange = "Evento";
 
     private static MainConfig mainInstance;
@@ -65,6 +65,14 @@ public class Modules implements CommandExecutor {
         put("bcollect off", () -> {
             mainInstance.setBcollectModule(false);
             sender.sendMessage(getPmCommandAdm(bcollect, "/bcollect", false));
+        });
+        put("leilao on", () -> {
+            mainInstance.setLeilaoModule(true);
+            sender.sendMessage(getPmCommandAdm(leilao, "/leilao", true));
+        });
+        put("leilao off", () -> {
+            mainInstance.setLeilaoModule(false);
+            sender.sendMessage(getPmCommandAdm(leilao, "/leilao", false));
         });
         put(("list"), () -> sender.sendMessage(getListModule()));
     }};

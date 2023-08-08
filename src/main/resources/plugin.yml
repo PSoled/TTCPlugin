@@ -79,3 +79,98 @@ commands:
     description: Executa o comando de Filtro para coletar Blocos
     usage: /filterblock
     executor: com.totalcraft.soled.Commands.FilterBlock
+
+  moises:
+    description: Executa o comando de Limpar o Agua e Lava do terreno
+    usage: /moises
+    executor: com.totalcraft.soled.Commands.Moises
+
+  clearchunk:
+    description: Executa o comando de Limpar a Chunk
+    usage: /clearchunk
+    executor: com.totalcraft.soled.Commands.ClearChunk
+
+  leilao:
+    description: Executa o comando de Leilão
+    usage: /leilao
+    executor: com.totalcraft.soled.Commands.Leilao
+
+  stps:
+    description: Executa o comando de TPS
+    usage: /stps
+    executor: com.totalcraft.soled.Commands.Tps
+
+  repair:
+    description: Executa o comando de Raparar
+    usage: /repair
+    executor: com.totalcraft.soled.Commands.Repair
+
+  valores:
+    description: Executa o comando de Valores mínimos
+    usage: /valores
+    executor: com.totalcraft.soled.Commands.MinValues
+
+  crate:
+    description: Executa o comando de Crate
+    usage: /crate
+    executor: com.totalcraft.soled.Commands.Crate
+
+  keys:
+    description: Executa o comando de Keys
+    usage: /keys
+    executor: com.totalcraft.soled.Commands.Keys
+
+  autofeed:
+    description: Executa o comando de Auto Feed
+    usage: /autofeed
+    executor: com.totalcraft.soled.Commands.AutoFeed
+
+  criarcomando:
+    description: Executa o comando de Criar comando
+    usage: /criarcomando
+    executor: com.totalcraft.soled.Commands.NewCommand
+
+  tempoafk:
+    description: Executa o comando de Tempo Afk
+    usage: /tempoafk
+    executor: com.totalcraft.soled.Commands.TempoAfk
+
+  setshop:
+    description: Executa o comando de Setar Shop
+    usage: /setshop
+    executor: com.totalcraft.soled.Commands.SetShop
+
+  ptsoled:
+    description: Executa o comando de Playtime
+    usage: /ptsoled
+    executor: com.totalcraft.soled.Commands.PTSoled
+
+  recompensa:
+    description: Executa o comando de recompensa
+    usage: /recompensa
+    executor: com.totalcraft.soled.Commands.Recompensa
+
+  quarry:
+    description: Executa o comando de achar Quarry
+    usage: /quarry
+    executor: com.totalcraft.soled.Commands.Quarry
+#
+#  sethome:
+#    description: Executa o comando de SetHome
+#    usage: /sethome
+#    executor: com.totalcraft.soled.Commands.SetHome
+#
+#  home:
+#    description: Executa o comando de Home
+#    usage: /home
+#    executor: com.totalcraft.soled.Commands.Home
+#
+#  homes:
+#    description: Executa o comando de Home
+#    usage: /homes
+#    executor: com.totalcraft.soled.Commands.Home
+#
+#  delhome:
+#    description: Executa o comando de Deletar Home
+#    usage: /delhome
+#    executor: com.totalcraft.soled.Commands.DelHome

@@ -1,6 +1,6 @@
 package com.totalcraft.soled.Commands;
 
-import com.totalcraft.soled.Configs.JailData;
+import com.totalcraft.soled.PlayerManager.PlayerBase;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -29,24 +29,27 @@ public class UnJail implements CommandExecutor {
                 sender.sendMessage(getPmTTC("&cUse: /unjail <Player>"));
                 return true;
             }
-            String playerName = args[0].toLowerCase();
-            Player playerJail = Bukkit.getPlayer(playerName);
-
-            if (!JailData.jailListPlayer.containsKey(playerName)) {
+            PlayerBase playerBase = PlayerBase.getPlayerBase(args[0]);
+            if (playerBase == null) {
+                sender.sendMessage(getPmTTC("&cEste player nunca entrou no servidor."));
+                return true;
+            }
+            Player playerJail = Bukkit.getPlayer(args[0]);
+            if (!playerBase.Jail) {
                 sender.sendMessage(getPmTTC("&cEste Player não está preso!"));
                 return true;
             }
-
             if (playerJail != null) {
-                playerJail.teleport(new Location(Bukkit.getWorld("spawn"),0, 65 ,0));
+                playerJail.teleport(new Location(Bukkit.getWorld("world"), 0, 65, 0));
             }
-            JailData.jailConfig.set(playerName, null);
-            JailData.jailListPlayer.remove(playerName);
-            PermissionUser userJail = PermissionsEx.getPermissionManager().getUser(playerJail);
-            userJail.setGroups(new String[]{"Civil"});
-            Bukkit.broadcastMessage(getPmTTC(playerName + " &cfoi retirado da prisão"));
-            JailData.saveJailData();
-
+            playerBase.setJailTime(0);
+            if (playerJail != null) {
+                playerBase.Jail = false;
+                PermissionUser user = PermissionsEx.getPermissionManager().getUser(playerJail);
+                user.setGroups(new String[]{"Civil"});
+            }
+            playerBase.saveData();
+            Bukkit.broadcastMessage(getPmTTC(playerBase.getName() + " &cfoi retirado da prisão"));
         }
         return true;
     }

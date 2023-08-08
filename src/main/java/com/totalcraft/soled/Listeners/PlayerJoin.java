@@ -1,6 +1,7 @@
 package com.totalcraft.soled.Listeners;
 
 import com.totalcraft.soled.Commands.Jail;
+import com.totalcraft.soled.PlayerManager.PlayerBase;
 import com.totalcraft.soled.Utils.RankupUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -17,7 +18,6 @@ import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import static com.totalcraft.soled.Commands.EventoMina.pickaxe;
-import static com.totalcraft.soled.Configs.JailData.jailListPlayer;
 import static com.totalcraft.soled.Configs.MainConfig.eventGroupChangeModule;
 import static com.totalcraft.soled.Listeners.PlayerQuit.playerQuitMina;
 import static com.totalcraft.soled.Utils.PrefixMsgs.getPmTTC;
@@ -29,19 +29,30 @@ public class PlayerJoin implements Listener {
     public PlayerJoin(Plugin plugin) {
         this.plugin = plugin;
     }
-    RankupUtils rankupUtils = new RankupUtils();
+
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void JoinEvent(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
         PermissionUser user = PermissionsEx.getUser(event.getPlayer());
         if (!user.has("ttcsoled.admin")) {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                player.playSound(player.getLocation(), NOTE_PLING, 1, 1);
+            for (Player on : Bukkit.getOnlinePlayers()) {
+                on.playSound(player.getLocation(), NOTE_PLING, 1, 1);
             }
         }
+    }
+
+    RankupUtils rankupUtils = new RankupUtils();
+
+    @EventHandler
+    public void ModuleEvent(PlayerJoinEvent event) {
         if (eventGroupChangeModule) {
             String playerName = event.getPlayer().getName();
             rankupUtils.eventSetRank(playerName);
         }
+    }
+
+    @EventHandler
+    public void eventMinaEvent(PlayerJoinEvent event) {
         String playerName = event.getPlayer().getName();
         if (playerQuitMina.contains(playerName)) {
             Player player = event.getPlayer();
@@ -56,15 +67,47 @@ public class PlayerJoin implements Listener {
             }
             player.sendMessage(getPmTTC("&cVocê saiu durante Evento Mina"));
         }
+    }
 
-        if (jailListPlayer.containsKey(playerName)) {
+    @EventHandler
+    public void jailEvent(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        PlayerBase playerBase = PlayerBase.getPlayerBase(player.getName());
+        if (playerBase == null) return;
+        if (playerBase.Jail) {
             BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
             scheduler.scheduleSyncDelayedTask(plugin, () -> {
-                Player player = event.getPlayer();
-                player.teleport(Jail.locationJail);
-                int time = jailListPlayer.get(playerName);
-                player.sendMessage(getPmTTC("&cVocê deve ainda " + time + " Horas de pena"));
+                int time = playerBase.getJailTime();
+                if (playerBase.Jail && time == 0) {
+                    PermissionUser user = PermissionsEx.getPermissionManager().getUser(player);
+                    user.setGroups(new String[]{"Civil"});
+                    playerBase.Jail = false;
+                    playerBase.saveData();
+                }
+                if (playerBase.Jail) {
+                    player.teleport(Jail.locationJail);
+                    PermissionUser userJail = PermissionsEx.getPermissionManager().getUser(player);
+                    userJail.setGroups(new String[]{"Prisoners"});
+                    player.sendMessage(getPmTTC("&cVocê deve ainda " + time + " Minutos de pena"));
+                }
             }, 40L);
         }
     }
+
+    @EventHandler
+    public void notifyReward(PlayerJoinEvent event) {
+        BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+        scheduler.scheduleSyncDelayedTask(plugin, () -> {
+            Player player = event.getPlayer();
+            PlayerBase playerBase = PlayerBase.getPlayerBase(player.getName());
+            if (playerBase != null && player.isOnline()) {
+                if (playerBase.getItemsGive().size() > 0) {
+                    player.sendMessage("");
+                    player.sendMessage(getPmTTC("&aVocê tem itens para recolher no &f/recompensa"));
+                    player.sendMessage("");
+                }
+            }
+        }, 80L);
+    }
 }
+

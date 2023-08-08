@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.totalcraft.soled.Utils.Utils.getAdm;
+
 public class PrefixMsgs {
 
     public static String getPmTTC(String message) {
@@ -23,7 +25,7 @@ public class PrefixMsgs {
     }
 
     public static String getPmNotAdm() {
-        return getPmTTC("&cEste comando só pode ser usado por um ADM!");
+        return getPmTTC("&cVocê não tem permissão para executar este comando.");
     }
 
     public static String getPmErro(int msgErro) {
@@ -39,7 +41,7 @@ public class PrefixMsgs {
     }
 
     public static String getPmConsole() {
-        return ChatColor.RED + "Este comando só pode ser executado por um jogador.";
+        return getPmTTC("&cEste comando só pode ser executado por um jogador.");
     }
 
     public static String getPmCommandAdm(String commandOrEvent, String command, boolean onOff) {
@@ -75,6 +77,7 @@ public class PrefixMsgs {
         moduleStatus.put("Vender", new String[]{ChatColor.BLUE + "Comando " + ChatColor.YELLOW + "Vender", MainConfig.venderModule ? ChatColor.GREEN + " On" : ChatColor.RED + " Off"});
         moduleStatus.put("Rtp", new String[]{ChatColor.BLUE + "Comando " + ChatColor.YELLOW + "Rtp", MainConfig.rtpModule ? ChatColor.GREEN + " On" : ChatColor.RED + " Off"});
         moduleStatus.put("Bcollect", new String[]{ChatColor.BLUE + "Comando " + ChatColor.YELLOW + "Bcollect", MainConfig.bcollectModule ? ChatColor.GREEN + " On" : ChatColor.RED + " Off"});
+        moduleStatus.put("Leilão", new String[]{ChatColor.BLUE + "Comando " + ChatColor.YELLOW + "Leilão", MainConfig.leilaoModule ? ChatColor.GREEN + " On" : ChatColor.RED + " Off"});
         moduleStatus.put("EventoGroupChange", new String[]{ChatColor.DARK_AQUA + "Evento " + ChatColor.YELLOW + " Groupchange", MainConfig.eventGroupChangeModule ? ChatColor.GREEN + " On" : ChatColor.RED + " Off"});
 
         StringBuilder sb = new StringBuilder();
@@ -102,7 +105,7 @@ public class PrefixMsgs {
         if (!(sender instanceof Player)) {
             return msg;
         }
-        if (Utils.getAdm(sender)) {
+        if (getAdm(sender)) {
             msg = getPmTTC("&bLista de comandos da Mina\n" +
                     "\n&a/mina entrar &eEntrar no Evento Mina" +
                     "\n&a/mina sair &eSair do Evento Mina");
@@ -112,7 +115,7 @@ public class PrefixMsgs {
 
     public static String getCommandsPlugin() {
         return getPmTTC("&bLista de comandos do Plugin\n" +
-                "\n&c/ttcsoled reload &eRenicia o Plugin TTCSoled" +
+                "\n&7/ttcsoled reload &7Renicia o Plugin TTCSoled" +
                 "\n&c/ttcsoled restartserver &eRenicia o Server" +
                 "\n&c/ttcsoled som &e<Player> <Som>");
     }
@@ -127,7 +130,7 @@ public class PrefixMsgs {
         if (!(sender instanceof Player)) {
             return msg;
         }
-        if (Utils.getAdm(sender)) {
+        if (getAdm(sender)) {
             msg = getPmTTC("&bLista de comandos do Vender\n" +
                     "\n&a/vender itens &eVender seus itens" +
                     "\n&a/vender auto &eVender Automaticamente seus itens" +
@@ -144,7 +147,7 @@ public class PrefixMsgs {
         if (!(sender instanceof Player)) {
             return msg;
         }
-        if (Utils.getAdm(sender)) {
+        if (getAdm(sender)) {
             msg = getPmTTC("&bLista de comandos do BlockProtect\n" +
                     "\n&a/blockprotect localizar &eLocalização do seus Blocos Protegidos");
         }
@@ -174,4 +177,24 @@ public class PrefixMsgs {
                 "\n&c/banitem add <Id> <Meta> &eEu acho que bane o item :/" +
                 "\n&c/banitem remove <Id> <Meta> &eDeve dar unban no item :v");
     }
+
+    public static String getInfoClearChunk() {
+        return getPmTTC("&bInfomações sobre ClearChunk" +
+                "\n&6Para saber a chunk que você está aperte F9 vezes no seu teclado" +
+                "\nChunk só será limpa se você estiver no seu terreno, e a chunk estiver totalmente dentro do terreno" +
+                "\nlecionando a Chunk com o item você pode dar o seguintes comandos" +
+                "\n\n&a/clearchunk confirm &epara confirmar a limpeza da chunk" +
+                "\n&a/clearchunk cancel &epara cancelar a limpeza da chunk");
+    }
+
+    public static String getInfoRecompensa(CommandSender sender) {
+        String info = getPmTTC("&bComandos da Recompensa" +
+                "\n&5>> &3/recompensa coletar &fColeta suas recompensas" +
+                "\n&5>> &3/recompensa ver &fInforma quais recompensas você tem para receber");
+        if (!getAdm(sender)) {
+            info += "\n§d>> §e/recompensa give <nick> <id> <meta> <quantidade> §fDar recompensa para o jogador";
+        }
+        return info;
+    }
+
 }

@@ -1,7 +1,7 @@
 package com.totalcraft.soled.Commands;
 
-import com.totalcraft.soled.Configs.JailData;
 import com.totalcraft.soled.Configs.MainConfig;
+import com.totalcraft.soled.PlayerManager.PlayerBase;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -11,17 +11,16 @@ import org.bukkit.entity.Player;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
-import java.util.Iterator;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import static com.totalcraft.soled.PlayerManager.PlayerBase.playersBase;
 import static com.totalcraft.soled.Utils.PrefixMsgs.*;
 
 public class Jail implements CommandExecutor {
     public static Location locationJail = new Location(Bukkit.getWorld(MainConfig.worldJail), MainConfig.jailLocationX, MainConfig.jailLocationY, MainConfig.jailLocationZ);
-
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("jail") && args.length >= 1 && args[0].equalsIgnoreCase("time")) {
@@ -30,13 +29,14 @@ public class Jail implements CommandExecutor {
                 return true;
             }
             Player player = (Player) sender;
-            String playerName = player.getName();
-            if (!JailData.jailListPlayer.containsKey(playerName)) {
+            PlayerBase playerBase = PlayerBase.getPlayerBase(player.getName());
+            if (playerBase == null) return true;
+            if (!playerBase.Jail) {
                 sender.sendMessage(getPmTTC("&cVocê não está preso"));
                 return true;
             }
-            int time = JailData.jailListPlayer.get(playerName);
-            sender.sendMessage(getPmTTC("&cVocê deve ainda " + time + " Horas de pena"));
+            int time = playerBase.getJailTime();
+            sender.sendMessage(getPmTTC("&cVocê deve ainda " + time + " Minutos de pena"));
             return true;
         }
 
@@ -53,7 +53,11 @@ public class Jail implements CommandExecutor {
                 sender.sendMessage(getPmTTC("&cUse: /jail <Player> <Horas>"));
                 return true;
             }
-            String playerName = args[0].toLowerCase();
+            PlayerBase playerBase = PlayerBase.getPlayerBase(args[0]);
+            if (playerBase == null) {
+                sender.sendMessage(getPmTTC("&cEste player nunca entrou no servidor."));
+                return true;
+            }
             int time;
             try {
                 time = Integer.parseInt(args[1]);
@@ -61,26 +65,20 @@ public class Jail implements CommandExecutor {
                 sender.sendMessage(getPmTTC("&cTem alguma coisa errado ai meu filho"));
                 return true;
             }
-            Player playerJail = Bukkit.getPlayer(playerName);
-
-            if (playerJail == null) {
-                sender.sendMessage(getPmTTC("&cEste Player não está online!"));
-                return true;
-            }
-
-            if (JailData.jailListPlayer.containsKey(playerName)) {
+            Player playerJail = Bukkit.getPlayer(args[0]);
+            if (playerBase.Jail) {
                 sender.sendMessage(getPmTTC("&cEste Player já está preso!"));
                 return true;
             }
-
-            JailData.jailListPlayer.put(playerName, time);
-            JailData.saveJailData();
-
-            PermissionUser userJail = PermissionsEx.getPermissionManager().getUser(playerJail);
-            userJail.setGroups(new String[]{"Prisoners"});
-            playerJail.teleport(locationJail);
-            Bukkit.broadcastMessage(getPmTTC(playerName + " &CFoi preso por " + time + (time == 1 ? " Hora" : " Horas")));
-
+            playerBase.Jail = true;
+            playerBase.setJailTime(time * 60);
+            playerBase.saveData();
+            if (playerJail != null) {
+                PermissionUser userJail = PermissionsEx.getPermissionManager().getUser(playerJail);
+                userJail.setGroups(new String[]{"Prisoners"});
+                playerJail.teleport(locationJail);
+            }
+            Bukkit.broadcastMessage(getPmTTC(playerBase.getName() + " &CFoi preso por " + time + (time == 1 ? " Hora" : " Horas")));
             return true;
         }
         return true;
@@ -91,28 +89,27 @@ public class Jail implements CommandExecutor {
 
     public static void jailTime() {
         scheduledJail = schedulerJail.scheduleAtFixedRate(() -> {
-            Iterator<String> it = JailData.jailListPlayer.keySet().iterator();
-            while (it.hasNext()) {
-                String name = it.next();
-                int valor = JailData.jailListPlayer.get(name);
-                if (valor < 1) {
-                    it.remove();
-                    JailData.jailConfig.set(name, null);
-                    Bukkit.broadcastMessage(getPmTTC(name + " &cCumpriu sua pena da prisão"));
-                    PermissionUser userJail = PermissionsEx.getPermissionManager().getUser(Bukkit.getPlayer(name));
-                    userJail.setGroups(new String[]{"Civil"});
+            for (String name : playersBase.keySet()) {
+                PlayerBase playerBase = playersBase.get(name);
+                int time = playerBase.getJailTime();
+                if (time == 0 && playerBase.Jail) {
+                    Bukkit.broadcastMessage(getPmTTC(playerBase.getName() + " &cCumpriu sua pena da prisão"));
                     Player player = Bukkit.getPlayer(name);
                     if (player != null) {
-                        player.teleport(new Location(Bukkit.getWorld("spawn"),0, 65 ,0));
+                        player.teleport(new Location(Bukkit.getWorld("spawn"), 0, 65, 0));
+                        playerBase.Jail = false;
+                        PermissionUser userJail = PermissionsEx.getPermissionManager().getUser(Bukkit.getPlayer(name));
+                        userJail.setGroups(new String[]{"Civil"});
+                        playerBase.saveData();
                     }
-                    JailData.saveJailData();
-                } else {
-                    valor--;
-                    JailData.jailListPlayer.put(name, valor);
-                    JailData.saveJailData();
+                }
+                if (playerBase.Jail && time > 0) {
+                    time--;
+                    playerBase.setJailTime(time);
+                    playerBase.saveData();
                 }
             }
-        }, 1, 1, TimeUnit.HOURS);
+        }, 1, 1, TimeUnit.MINUTES);
     }
 }
 

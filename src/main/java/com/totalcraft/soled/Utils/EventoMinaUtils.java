@@ -14,7 +14,6 @@ import java.util.Random;
 
 public class EventoMinaUtils {
 
-
     public static void placeRandomBlocks(List<String> listBlock) {
         World world = Bukkit.getWorld(MainConfig.worldLocatinaMina);
         int x1 = MainConfig.x1Reset;

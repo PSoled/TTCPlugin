@@ -1,6 +1,5 @@
 package com.totalcraft.soled.Utils;
 
-import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -15,13 +14,13 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import static com.totalcraft.soled.Commands.CollectBlocks.collectBlock;
+import static com.totalcraft.soled.Main.economy;
 import static com.totalcraft.soled.Utils.PrefixMsgs.getPmTTC;
 
 public class CollectBlocksUtils {
 
     public static void reimbursementMoney() {
         if (collectBlock != null) {
-            Economy economy = Bukkit.getServicesManager().getRegistration(Economy.class).getProvider();
             for (String name : collectBlock.keySet()) {
                 Player player = Bukkit.getPlayer(name);
                 economy.depositPlayer(name, 5000);

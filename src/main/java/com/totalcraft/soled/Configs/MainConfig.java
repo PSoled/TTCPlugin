@@ -2,6 +2,8 @@ package com.totalcraft.soled.Configs;
 
 import com.totalcraft.soled.Commands.Modules;
 import com.totalcraft.soled.Main;
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
@@ -10,10 +12,10 @@ import java.util.List;
 import static com.totalcraft.soled.Utils.WorldGuardUtils.regionsFly;
 
 public class MainConfig {
-    public static File configFile, banItemFile, blockLimitFile;
-    public static YamlConfiguration config, banItemConfig, blockLimitConfig;
+    public static File configFile, banItemFile, blockLimitFile, CancelSignFile;
+    public static YamlConfiguration config, banItemConfig, blockLimitConfig, CancelSignConfig;
     private final Main main;
-    public static boolean rankupModule, eventGroupChangeModule, venderModule, rtpModule, bcollectModule;
+    public static boolean rankupModule, eventGroupChangeModule, venderModule, rtpModule, bcollectModule, leilaoModule;
     public static String worldJail = "spawn";
     public static int jailLocationX, jailLocationY, jailLocationZ;
     public static String worldLocatinaMina = "spawn";
@@ -77,6 +79,12 @@ public class MainConfig {
         saveConfig();
     }
 
+    public void setLeilaoModule(boolean value) {
+        leilaoModule = value;
+        config.set("leilaoModule", value);
+        saveConfig();
+    }
+
     public void setEventGroupChangeModule(boolean value) {
         eventGroupChangeModule = value;
         config.set("eventGroupChangeModule", value);
@@ -88,11 +96,13 @@ public class MainConfig {
         venderModule = config.getBoolean("venderModule");
         rtpModule = config.getBoolean("rtpModule");
         bcollectModule = config.getBoolean("bcollectModule");
+        leilaoModule = config.getBoolean("leilaoModule");
         eventGroupChangeModule = config.getBoolean("eventGroupChangeModule");
         config.addDefault("rankupModule", rankupModule);
         config.addDefault("venderModule", venderModule);
         config.addDefault("rtpModule", rtpModule);
         config.addDefault("bcollectModule", bcollectModule);
+        config.addDefault("leilaoModule", leilaoModule);
         config.addDefault("eventGroupChangeModule", eventGroupChangeModule);
     }
 

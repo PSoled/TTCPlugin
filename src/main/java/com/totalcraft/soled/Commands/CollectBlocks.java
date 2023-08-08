@@ -1,8 +1,6 @@
 package com.totalcraft.soled.Commands;
 
 import com.totalcraft.soled.Configs.MainConfig;
-import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -51,9 +49,9 @@ public class CollectBlocks implements CommandExecutor {
             }
             if (args.length > 0 && args[0].equalsIgnoreCase("comprar")) {
                 if (!collectBlock.containsKey(player.getName())) {
-                    Economy economy = Bukkit.getServicesManager().getRegistration(Economy.class).getProvider();
-                    if (economy.has(player.getName(), 5000)) {
-                        economy.withdrawPlayer(player.getName(), 5000);
+//                    Economy economy = Bukkit.getServicesManager().getRegistration(Economy.class).getProvider();
+                    if (true) {
+//                        economy.withdrawPlayer(player.getName(), 5000);
                         collectBlock.put(player.getName(), 10);
                         player.sendMessage(getPmTTC("&aVocê comprou 10 Minutos de coletor de blocos por 5000 de money"));
                     } else {

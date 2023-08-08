@@ -35,53 +35,5 @@ public class PlayerPickupItem implements Listener {
             });
         }
     }
-
-    @EventHandler
-    public void filterBlocKEvent(PlayerPickupItemEvent event) {
-        Player player = event.getPlayer();
-        String world = player.getWorld().getName();
-        if (world.equals("spawn") || world.equals("world")) {
-            return;
-        }
-        Item item = event.getItem();
-        ItemStack itemS = item.getItemStack();
-        if (itemS != null) {
-            if (filterChest.get(player.getName()) != null) {
-                Inventory invFilter = filterChest.get(player.getName());
-                if (invFilter.contains(greenBlock)) {
-                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                        PlayerInventory inventory = player.getInventory();
-                        for (int i = 0; i < inventory.getSize(); i++) {
-                            boolean continua = false;
-                            ItemStack inv = inventory.getItem(i);
-                            if (inv != null) {
-                                for (ItemStack itemStack : invFilter.getContents()) {
-                                    if (itemStack != null) {
-                                        if (inv.getTypeId() == itemStack.getTypeId() && inv.getDurability() == itemStack.getDurability()) {
-                                            continua = true;
-                                        }
-                                    }
-                                }
-                                if (continua) {
-                                    continue;
-                                }
-                                if (invFilter.firstEmpty() > 0) {
-                                    for (int id : oresFilter) {
-                                        if (inv.getTypeId() == id) {
-                                            inventory.clear(i);
-                                        }
-                                    }
-                                } else {
-                                    if (inv.getTypeId() == 3 || inv.getTypeId() == 4 || inv.getTypeId() == 13) {
-                                        inventory.clear(i);
-                                    }
-                                }
-                            }
-                        }
-                    }, 2);
-                }
-            }
-        }
-    }
 }
 

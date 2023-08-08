@@ -1,5 +1,6 @@
 package com.totalcraft.soled.Listeners;
 
+import com.totalcraft.soled.PlayerManager.PlayerBase;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -7,8 +8,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
-
-import static com.totalcraft.soled.Configs.BflyData.flyListPlayer;
 
 public class ChangedWorld implements Listener {
     private final Plugin plugin;
@@ -20,8 +19,9 @@ public class ChangedWorld implements Listener {
     @EventHandler
     public void PlayerChangedWorld(PlayerChangedWorldEvent event) {
         Player player = event.getPlayer();
-        String name = player.getName();
-        if (flyListPlayer.containsKey(name)) {
+        PlayerBase playerBase = PlayerBase.getPlayerBase(player.getName());
+        if (playerBase == null) return;
+        if (playerBase.BFly) {
             String world = player.getWorld().getName();
             if (!world.equals("spawn")) {
                 BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
