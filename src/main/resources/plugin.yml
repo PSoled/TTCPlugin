@@ -150,10 +150,25 @@ commands:
     usage: /recompensa
     executor: com.totalcraft.soled.Commands.Recompensa
 
+  recompensas:
+    description: Executa o comando de recompensa
+    usage: /recompensa
+    executor: com.totalcraft.soled.Commands.Recompensa
+
   quarry:
     description: Executa o comando de achar Quarry
     usage: /quarry
     executor: com.totalcraft.soled.Commands.Quarry
+
+  playerafk:
+    description: Executa o comando de player afk
+    usage: /playerafk
+    executor: com.totalcraft.soled.Commands.PlayerAfk
+
+  savegod:
+    description: Executa o comando de Salvar God
+    usage: /savegod
+    executor: com.totalcraft.soled.Commands.SaveGod
 #
 #  sethome:
 #    description: Executa o comando de SetHome

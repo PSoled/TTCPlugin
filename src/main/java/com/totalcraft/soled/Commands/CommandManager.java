@@ -33,7 +33,10 @@ public class CommandManager {
         Main.get().getCommand("setshop").setExecutor(new SetShop());
         Main.get().getCommand("ptsoled").setExecutor(new PTSoled());
         Main.get().getCommand("recompensa").setExecutor(new Recompensa());
+        Main.get().getCommand("recompensas").setExecutor(new Recompensa());
         Main.get().getCommand("quarry").setExecutor(new Quarry());
+        Main.get().getCommand("playerafk").setExecutor(new PlayerAfk());
+        Main.get().getCommand("savegod").setExecutor(new SaveGod());
 //        Main.get().getCommand("sethome").setExecutor(new SetHome());
 //        Main.get().getCommand("home").setExecutor(new Home());
 //        Main.get().getCommand("homes").setExecutor(new Home());

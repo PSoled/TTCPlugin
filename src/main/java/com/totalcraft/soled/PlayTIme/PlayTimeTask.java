@@ -28,12 +28,19 @@ public class PlayTimeTask {
 
     public static void initializePlayTime() {
         scheduledPlayTimeSec = schedulerPlayTime.scheduleAtFixedRate(() -> {
+            ZonedDateTime date = ZonedDateTime.now(saoPauloZone);
+            int seconds = date.getSecond();
             for (Player player : Bukkit.getOnlinePlayers()) {
                 PlayerPT playerPT = getPlayerPT(player.getName());
                 if (playerPT != null) {
                     playerPT.addAll();
+                    if (seconds == 0) {
+                        rewardPlayer(playerPT, playerPT.getDaily(), rewardDaily);
+                        rewardPlayer(playerPT, playerPT.getWeekly(), rewardWeekly);
+                        rewardPlayer(playerPT, playerPT.getMonth(), rewardMonth);
+                        rewardPlayer(playerPT, playerPT.getReset(), rewardReset);
+                    }
                 }
-
             }
         }, 3, 1, TimeUnit.SECONDS);
 
@@ -43,14 +50,6 @@ public class PlayTimeTask {
             int minutes = date.getMinute();
             int weekly = date.getDayOfWeek().getValue();
             int month = date.getDayOfMonth();
-
-//            for (Map.Entry<String, PlayerPT> entry : PlayerPTData.entrySet()) {
-//                PlayerPT playerPT = entry.getValue();
-//                rewardPlayer(playerPT, playerPT.getDaily(), rewardDaily);
-//                rewardPlayer(playerPT, playerPT.getWeekly(), rewardWeekly);
-//                rewardPlayer(playerPT, playerPT.getMonth(), rewardMonth);
-//                rewardPlayer(playerPT, playerPT.getReset(), rewardReset);
-//            }
             if (hours == 6 && DailyVerifyPT) {
                 DailyVerifyPT = false;
                 PlayTimeConfig.set("DailyVerify", false);
@@ -89,8 +88,8 @@ public class PlayTimeTask {
                         player.sendMessage(getPmTTC(split[2]));
                     }
                     PlayerBase playerBase = getPlayerBase(playerPT.getName());
-                    if (playerBase != null) playerBase.addItemsGive(map.get(s));
-//                    playerPT.addAll();
+                    ItemStack i = map.get(s);
+                    if (playerBase != null) playerBase.addItemsGive(i.getTypeId(), i.getDurability(), i.getAmount());
                 }
             }
         }

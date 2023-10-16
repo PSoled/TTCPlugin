@@ -1,5 +1,6 @@
 package com.totalcraft.soled.Commands;
 
+import com.totalcraft.soled.PlayTIme.PlayerPT;
 import com.totalcraft.soled.Utils.RestartServerUtils;
 import com.totalcraft.soled.Utils.Utils;
 import org.bukkit.Bukkit;
@@ -9,11 +10,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
-import static com.totalcraft.soled.PlayerManager.RewardData.rewardDaily;
 import static com.totalcraft.soled.Tasks.MemoryRam.*;
 import static com.totalcraft.soled.Utils.PrefixMsgs.*;
 import static org.bukkit.Sound.ORB_PICKUP;
@@ -111,11 +110,9 @@ public class CommandsPlugin implements CommandExecutor {
                 sender.sendMessage("Ram 30 Mins: " + RAM_30MIN);
             }
             if (args.length > 0 && args[0].equalsIgnoreCase("teste")) {
-//                if (!(sender instanceof Player)) {
-//                    return true;
-//                }
-//                Player player = (Player) sender;
-                sender.sendMessage(rewardDaily.toString());
+                PlayerPT playerPT = PlayerPT.getPlayerPT(((Player) sender).getName());
+                assert playerPT != null;
+                playerPT.resetReset();
             }
         }
         return true;

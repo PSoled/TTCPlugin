@@ -28,7 +28,7 @@ public class DataSave {
         PDataConfig.set(path + "BFlyTime", player.getBFlyTime());
         PDataConfig.set(path + "AutoFeed", player.AutoFeed);
         PDataConfig.set(path + "AutoFeedTime", player.getAutoFeedTime());
-
+        PDataConfig.set(path + "SaveGod", player.getSaveGod());
         try {
             PDataConfig.save(PDataFile);
         } catch (IOException e) {

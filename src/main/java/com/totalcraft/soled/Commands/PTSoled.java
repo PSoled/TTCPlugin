@@ -101,18 +101,18 @@ public class PTSoled implements CommandExecutor {
         sb.append("\n\n§0>> §6Dia: ").append(getHours(playerPT.getDaily()));
         sb.append("\n§0>> §6Semana: ").append(getHours(playerPT.getWeekly()));
         sb.append("\n§0>> §6Mês: ").append(getHours(playerPT.getMonth()));
-        sb.append("\n§0>> §6Reset: ").append(getHours(playerPT.getReset()));
         sb.append("\n§0>> §6Dia Anterior: ").append(getHours(playerPT.getPreviousDaily()));
         sb.append("\n§0>> §6Semana Anterior: ").append(getHours(playerPT.getPreviousWeekly()));
         sb.append("\n§0>> §6Mês Anterior: ").append(getHours(playerPT.getPreviousMonth()));
         int num = 1;
         long resets = playerPT.getReset();
         for (long time : playerPT.getResetHistoric()) {
-            sb.append("\n§0>> §6Reset Anterior ").append(num).append(": ").append(getHours(time));
+            sb.append("\n§0>> §6Reset Anterior ").append(num).append("º: ").append(getHours(time));
             num++;
             resets += time;
         }
-        sb.append("\n\n§0>> §6Total jogado: ").append(getHours(resets));
+        sb.append("\n\n§0>> §6Atual Reset: ").append(getHours(playerPT.getReset()));
+        sb.append("\n§0>> §6Total Jogado: ").append(getHours(resets));
         return sb.toString();
     }
 

@@ -81,6 +81,14 @@ public class BlockProtectData {
     public void loadProtectedBlocks() {
         blockFile = new File(main.getDataFolder(), "data/blockprotect.yml");
         blockConfig = YamlConfiguration.loadConfiguration(blockFile);
+        if (!blockFile.exists()) {
+            blockConfig.set("protected-blocks.", "start");
+            try {
+                blockConfig.save(blockFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         ConfigurationSection protectedBlocksSection = blockConfig.getConfigurationSection("protected-blocks");
         try {
             for (String worldName : protectedBlocksSection.getKeys(false)) {

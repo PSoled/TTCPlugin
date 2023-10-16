@@ -6,6 +6,7 @@ import com.totalcraft.soled.PlayTIme.PlayTimeData;
 import com.totalcraft.soled.PlayerManager.MainPData;
 import com.totalcraft.soled.PlayerManager.RewardData;
 import com.totalcraft.soled.auction.ConfigAuction;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import static com.totalcraft.soled.Configs.BlockProtectData.clearProtectedBLocks;
 import static com.totalcraft.soled.Configs.ItemPrivateLog.saveLogItem;
 import static com.totalcraft.soled.Configs.MainConfig.*;
+import static com.totalcraft.soled.Main.ServerTest;
 import static com.totalcraft.soled.Utils.ChestShopUtils.ItemsCancelled;
 
 public class InitializeConfigs {
@@ -39,7 +41,7 @@ public class InitializeConfigs {
         saveLogItem();
         new AddressLog(main).loadAddressLog();
         new ConfigAuction(main).loadAuction();
-        new CrateConfig(main).loadCrate();
+        if (!ServerTest) new CrateConfig(main).loadCrate();
         new PlayTimeData().loadPlayTime();
         new MainPData().LoadPData();
         new RewardData().loadRewardData();

@@ -19,6 +19,7 @@ import static com.totalcraft.soled.auction.ConfigAuction.saveAuction;
 
 public class Main extends JavaPlugin implements Listener {
     private static Main main;
+    public static boolean ServerTest;
     public static Economy economy;
     //    public static JDA botTotalCraft, botTest;
     InitializeConfigs initializeConfigs = new InitializeConfigs(this);
@@ -31,6 +32,7 @@ public class Main extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        if (Bukkit.getMotd().equals("ServerTesteSoled")) ServerTest = true;
         main = this;
         initializeConfigs.onEnable();
         registerCommands();

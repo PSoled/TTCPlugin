@@ -1,8 +1,10 @@
 package com.totalcraft.soled.Tasks;
 
+import com.totalcraft.soled.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitScheduler;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
@@ -27,38 +29,43 @@ public class AfkPlayer {
 
     public static void startAfkTimer() {
         scheduledAfk = scheduler.scheduleAtFixedRate(() -> {
-            List<String> listNicks = new ArrayList<>();
             for (Player player : Bukkit.getOnlinePlayers()) {
-                listNicks.add(player.getName());
-                boolean create = true;
-                Location loc = player.getLocation();
-                if (timeAfk.containsKey(player.getName())) {
-                    Location checkLoc = playersLoc.get(player.getName());
-                    if (checkLoc.getX() == loc.getX() && checkLoc.getY() == loc.getY() && checkLoc.getZ() == loc.getZ()) {
-                        create = false;
-                        int time = timeAfk.get(player.getName()) + 1;
-                        timeAfk.put(player.getName(), time);
-                        if (time > 14 && teleportPlayer(player)) {
-                            player.teleport(new Location(Bukkit.getWorld("spawn"), 0, 100, 0));
-                            playersLoc.put(player.getName(), loc);
-                            player.sendMessage(getPmTTC("&cVocê foi teleportado pro spawn por afk."));
-                            player.sendMessage(getPmTTC("&fNão utilize sistemas de anti-afk, há punições para isso."));
+                    boolean create = true;
+                    Location loc = player.getLocation();
+                    if (timeAfk.containsKey(player.getName())) {
+                        Location checkLoc = playersLoc.get(player.getName());
+                        if (checkLoc.getX() == loc.getX() && checkLoc.getY() == loc.getY() && checkLoc.getZ() == loc.getZ() ) {
+                            create = false;
+                            int time = timeAfk.get(player.getName()) + 1;
+                            timeAfk.put(player.getName(), time);
+                            if (time > 14 && teleportPlayer(player)) {
+                                playersLoc.put(player.getName(), loc);
+                                player.sendMessage("");
+                                player.sendMessage(getPmTTC("&cVocê foi teleportado pro spawn por afk."));
+                                player.sendMessage(getPmTTC("&cNão utilize sistemas de anti-afk, há punições para isso."));
+                                player.sendMessage("");
+                                BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+                                scheduler.scheduleSyncDelayedTask(Main.get(), () -> {
+                                    player.teleport(new Location(Bukkit.getWorld("spawn"), -57, 86, -155));
+                                }, 0L);
+
+                            }
                         }
                     }
+                    if (create) {
+                        timeAfk.put(player.getName(), 0);
+                        playersLoc.put(player.getName(), loc);
+                    }
                 }
-                if (create) {
-                    timeAfk.put(player.getName(), 0);
-                    playersLoc.put(player.getName(), loc);
-                }
-            }
-            for (String nick : timeAfk.keySet()) {
-                if (!listNicks.contains(nick)) {
-                    timeAfk.remove(nick);
-                    playersLoc.remove(nick);
-                }
-            }
+//                for (String nick : timeAfk.keySet()) {
+//                    if (!listNicks.contains(nick)) {
+//                        timeAfk.remove(nick);
+//                        playersLoc.remove(nick);
+//                    }
+//                }
         }, 1, 1, TimeUnit.MINUTES);
     }
+
     private static boolean teleportPlayer(Player player) {
         PermissionUser user = PermissionsEx.getUser(player);
         String world = player.getWorld().getName();

@@ -31,6 +31,7 @@ com\totalcraft\soled\Crates\KeysShop.class
 com\totalcraft\soled\Listeners\PlayerItemHeld.class
 com\totalcraft\soled\Utils\ChestShopUtils.class
 com\totalcraft\soled\Commands\Moises.class
+com\totalcraft\soled\Commands\SaveGod.class
 com\totalcraft\soled\Commands\FilterBlock.class
 com\totalcraft\soled\Listeners\InventoryClose.class
 com\totalcraft\soled\Listeners\PlayerQuit.class
@@ -40,6 +41,7 @@ com\totalcraft\soled\Utils\PrefixMsgs.class
 com\totalcraft\soled\Commands\Jail.class
 com\totalcraft\soled\Listeners\PlayerDropItem.class
 com\totalcraft\soled\Commands\Bfly.class
+com\totalcraft\soled\Commands\PlayerAfk.class
 com\totalcraft\soled\Tasks\AfkPlayer.class
 com\totalcraft\soled\Utils\WorldGuardUtils.class
 com\totalcraft\soled\Listeners\ClaimResize.class
@@ -60,6 +62,7 @@ com\totalcraft\soled\Tasks\TpsServer.class
 com\totalcraft\soled\Utils\RankupUtils.class
 com\totalcraft\soled\Configs\ItemPrivateLog.class
 com\totalcraft\soled\Listeners\Teleport.class
+com\totalcraft\soled\Utils\PluginUtils.class
 com\totalcraft\soled\auction\PlayerAuction.class
 com\totalcraft\soled\Commands\Rankup.class
 com\totalcraft\soled\Listeners\FoodLevelChange.class

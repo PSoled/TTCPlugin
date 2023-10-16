@@ -23,7 +23,9 @@ public class DataLoad {
                 int JailTime = playerData.getInt("JailTime");
                 int BFlyTime = playerData.getInt("BFlyTime");
                 int AutoFeedTime = playerData.getInt("AutoFeedTime");
-                PlayerBase playerBase = new PlayerBase(player, ItemsGive, JailTime, BFlyTime, AutoFeedTime, Jail, BFly, AutoFeed);
+                String SaveGod = playerData.getString("SaveGod");
+                if (SaveGod == null) SaveGod = "null";
+                PlayerBase playerBase = new PlayerBase(player, ItemsGive, JailTime, BFlyTime, AutoFeedTime, Jail, BFly, AutoFeed, SaveGod);
                 playersBase.put(player, playerBase);
             }
         }

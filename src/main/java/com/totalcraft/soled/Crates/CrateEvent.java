@@ -197,14 +197,15 @@ public class CrateEvent implements Listener {
                 if (item.getItemMeta().hasLore()) {
                     String[] parts = item.getItemMeta().getLore().get(1).split(" ");
                     if (parts.length > 2) {
-                        long value = Long.parseLong(parts[1]);
                         if (parts[2].contains("Cash")) {
+                            long value = Long.parseLong(parts[1]);
                             ItemMeta buyKeyMeta = buyKey.getItemMeta();
                             buyKeyMeta.setDisplayName(getFormatColor("&eComprar Key Por:&b " + value + " Cash"));
                             buyKey.setItemMeta(buyKeyMeta);
                             invKey.setItem(49, buyKey);
                         }
                         if (parts[2].contains("Money")) {
+                            long value = Long.parseLong(parts[1]);
                             ItemMeta buyKeyMeta = buyKey.getItemMeta();
                             buyKeyMeta.setDisplayName(getFormatColor("&eComprar Key Por:&b " + value + " Money"));
                             buyKey.setItemMeta(buyKeyMeta);
@@ -238,8 +239,8 @@ public class CrateEvent implements Listener {
                     player.openInventory(invKeysShop);
                     return;
                 }
-                long value = Long.parseLong(itemName.split(" ")[3]);
                 if (itemName.contains("Cash")) {
+                    long value = Long.parseLong(itemName.split(" ")[3]);
                     if (player.getInventory().firstEmpty() == -1) {
                         player.sendMessage(getPmTTC("&cVocê precisa liberar 1 slot para comprar essa key"));
                         return;
@@ -248,6 +249,7 @@ public class CrateEvent implements Listener {
                     player.performCommand("comprarkey " + player.getName() + " " + keyName + " " + value);
                 }
                 if (itemName.contains("Money")) {
+                    long value = Long.parseLong(itemName.split(" ")[3]);
                     if (player.getInventory().firstEmpty() == -1) {
                         player.sendMessage(getPmTTC("&cVocê precisa liberar 1 slot para comprar essa key"));
                         return;

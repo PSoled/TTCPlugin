@@ -1,17 +1,19 @@
 package com.totalcraft.soled.Commands;
 
 import com.totalcraft.soled.PlayerManager.PlayerBase;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
-import static com.totalcraft.soled.PlayerManager.DataSave.SavePData;
 import static com.totalcraft.soled.PlayerManager.PlayerBase.getPlayerBase;
 import static com.totalcraft.soled.Utils.PrefixMsgs.*;
 import static com.totalcraft.soled.Utils.Utils.getAdm;
@@ -35,6 +37,10 @@ public class Recompensa implements CommandExecutor {
                     sender.sendMessage(getPmConsole());
                     return true;
                 }
+//                if (getAdm(sender)) {
+//                    sender.sendMessage(getPmTTC("&cComando desativado temporariamente."));
+//                    return true;
+//                }
                 Player player = (Player) sender;
                 PlayerBase playerBase = PlayerBase.getPlayerBase(player.getName());
                 if (playerBase != null) {
@@ -46,12 +52,18 @@ public class Recompensa implements CommandExecutor {
                         player.sendMessage(getPmTTC("&cVocê não tem itens para coletar na recompensa"));
                         return true;
                     }
-                    Iterator<ItemStack> iterator = playerBase.getItemsGive().iterator();
-                    while (iterator.hasNext()) {
-                        ItemStack item = iterator.next();
-                        player.getInventory().addItem(item);
-                        iterator.remove();
+                    List<ItemStack> copy = new ArrayList<>(playerBase.getItemsGive());
+                    Inventory inv = player.getInventory();
+                    for (ItemStack item : copy) {
+                        for (int i = 0; i < inv.getSize(); i++) {
+                            if (inv.getItem(i) == null) {
+                                inv.setItem(i, item);
+                                break;
+                            }
+                        }
                         if (player.getInventory().firstEmpty() == -1) break;
+                        playerBase.getItemsGive().remove(item);
+                        System.out.println(item);
                     }
                     playerBase.saveData();
                     player.sendMessage(getPmTTC("&aSuas recompensas foram coletadas"));
@@ -79,9 +91,13 @@ public class Recompensa implements CommandExecutor {
                 int id = Integer.parseInt(args[2]);
                 short meta = Short.parseShort(args[3]);
                 int amount = Integer.parseInt(args[4]);
-                ItemStack item = new ItemStack(id, amount, meta);
-                playerBase.addItemsGive(item);
+                playerBase.addItemsGive(id, meta, amount);
                 playerBase.saveData();
+                Player target = Bukkit.getPlayer(playerBase.getName());
+                ItemStack item = new ItemStack(id, amount, meta);
+                if (target != null) {
+                    target.sendMessage(getPmTTC("&aAdicionado item &f" + item.getType().name() + ":" + item.getDurability() + " &aNa sua Recompensa, Utilize &b/recompensa coletar &apara pegar"));
+                }
                 sender.sendMessage(getPmTTC("&aAdicionado item &f" + item.getType().name() + ":" + item.getDurability() + " &ade Recompensa para &f" + args[1] + " &aCom Sucesso"));
             }
 
